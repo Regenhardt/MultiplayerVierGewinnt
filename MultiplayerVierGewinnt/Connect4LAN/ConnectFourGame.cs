@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Connect4LAN.Network;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,15 +26,5 @@ namespace Connect4LAN
             this.player1 = player1;
             this.player2 = player2;
         }
-    }
-
-    /// <summary>
-    /// Structure representing a Player for Connect4
-    /// </summary>
-    public struct Player
-    {
-        Color Color;
-        string Name;
-        string IP;
-    }
+    }    
 }

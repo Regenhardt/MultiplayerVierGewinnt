@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -14,6 +15,7 @@ namespace Connect4LAN.Network
     class Host
     {
         private TcpListener socket;
+        private Player[] players;
 
         /// <summary>
         /// Opens a TCP Listner Port on the named port
@@ -22,23 +24,38 @@ namespace Connect4LAN.Network
         public Host(int port = 16569)
         {
             //insantiate the Socket
-            socket = new TcpListener(Dns.GetHostAddresses("localhost")[0], port) ;
+            socket = new TcpListener(Dns.GetHostAddresses("localhost")[0], port);
+            //only 2 players can play simultaniously
+            players = new Player[2];
+            //start accepting incoming requests and only allow 1 person to be in queue at a time
+            socket.Start(1);
         }
 
         /// <summary>
         /// Processes Incoming Requests
         /// </summary>
-        private void processIncomingRequests()
+        private async void processIncomingRequests()
         {
-            
+            //get the first client
+            var client = await socket.AcceptTcpClientAsync();
+            players[0] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync());
         }
+
+        private Player parseRequest(string v)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+
 
         /// <summary>
         /// Stops the Server
         /// </summary>
         public void Stop()
         {
-
+            socket.Stop();
         }
     }
 }

@@ -72,6 +72,7 @@
     <Compile Include="Network\Host.cs" />
     <Compile Include="Network\INetworkController.cs" />
     <Compile Include="Network\Client.cs" />
+    <Compile Include="Network\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
