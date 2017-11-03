@@ -5,8 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Connect4LAN"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+        Title="MainWindow" MaxHeight="350" MaxWidth="525">
+	<Grid>
+		<Grid.RowDefinitions>
+			<!-- Game & Chat -->
+			<RowDefinition Height="*" />
+			<!-- Advertisement -->
+			<RowDefinition Height="20" />
+		</Grid.RowDefinitions>
+		
+		<!-- Game & Chat -->
+		<Grid Row="0">
+			
+		</Grid>
+		
+		<!-- Advertisement -->
+		<Grid Row="1">
+			
+		</Grid>
     </Grid>
 </Window>
