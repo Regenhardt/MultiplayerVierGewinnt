@@ -24,10 +24,7 @@ namespace Connect4LAN.Network
 
 			//instaaite a new client and connect him 
 			Client client = new Client();
-			client.Connect("");
-
-
-			return true;
+			return client.Connect("localhost");
 		}
 	}
 #endif

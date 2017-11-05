@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,17 +15,46 @@ namespace Connect4LAN.Network
     {
         public event EventHandler ConnectionLost;
         public event EventHandler<string> Received;
-        
-        public bool Connect(string ipAddress, int port = 16569)
+
+		private TcpClient client;
+		
+
+		/// <summary>
+		/// Connects to designated IP Adresses.
+		/// Catchhes IO Exceptions and returns false in that case. Else it throws the error
+		/// </summary>
+		/// <param name="ipAddress"></param>
+		/// <param name="port"></param>
+		/// <returns></returns>
+		public bool Connect(string ipAddress, int port = 16569)
         {
-            throw new NotImplementedException();
+			try
+			{
+				//close current connection and reset the connection
+				if (client != null)
+					client.Close();
+				client = new TcpClient(ipAddress, port);
+				
+				return true;
+			}
+			catch (IOException)
+			{
+				return false;
+			}
+			catch (Exception)
+			{
+				throw;
+			}
         }
 
         public void Disconnect()
         {
-            throw new NotImplementedException();
+			if(client != null)
+				client.Close();
         }
+		
 
+		/// <exception cref="NotImplementedException"/>
         public IEnumerable<string> GetAvailableConnections()
         {
             throw new NotImplementedException();
