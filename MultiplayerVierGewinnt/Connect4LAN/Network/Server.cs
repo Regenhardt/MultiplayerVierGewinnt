@@ -12,7 +12,7 @@ namespace Connect4LAN.Network
     /// <summary>
     /// The Server wich hosts the Game
     /// </summary>
-    class Host
+    class Server
     {
         private TcpListener socket;
         private Player[] players;
@@ -21,7 +21,7 @@ namespace Connect4LAN.Network
         /// Opens a TCP Listner Port on the named port
         /// </summary>
         /// <param name="port">The Port on wich the listning shall be</param>
-        public Host(int port = 16569)
+        public Server(int port = 16569)
         {
             //insantiate the Socket
             socket = new TcpListener(Dns.GetHostAddresses("localhost")[0], port);
