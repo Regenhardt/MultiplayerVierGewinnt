@@ -14,7 +14,8 @@ namespace Connect4LAN.Network.Tests
 		[TestMethod()]
 		public void ServerTest()
 		{
-
+			Test test = new Test();
+			Assert.IsTrue(test.Execute());
 		}
 	}
 }

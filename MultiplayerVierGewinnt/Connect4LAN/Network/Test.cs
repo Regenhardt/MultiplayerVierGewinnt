@@ -16,6 +16,19 @@ namespace Connect4LAN.Network
 		{
 
 		}
+
+		public bool Execute()
+		{
+			//instantiate and start the server
+			Server server = new Server();
+
+			//instaaite a new client and connect him 
+			Client client = new Client();
+			client.Connect("");
+
+
+			return true;
+		}
 	}
 #endif
 }
