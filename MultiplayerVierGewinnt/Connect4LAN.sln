@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect4LAN", "Connect4LAN\Connect4LAN.csproj", "{A9F50896-116E-418A-A1D1-4C9CA76DB307}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect4LANTests", "Connect4LANTests\Connect4LANTests.csproj", "{96B71BED-ECF3-4A74-B291-08AB4292DC05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A9F50896-116E-418A-A1D1-4C9CA76DB307}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9F50896-116E-418A-A1D1-4C9CA76DB307}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9F50896-116E-418A-A1D1-4C9CA76DB307}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96B71BED-ECF3-4A74-B291-08AB4292DC05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96B71BED-ECF3-4A74-B291-08AB4292DC05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96B71BED-ECF3-4A74-B291-08AB4292DC05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96B71BED-ECF3-4A74-B291-08AB4292DC05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
