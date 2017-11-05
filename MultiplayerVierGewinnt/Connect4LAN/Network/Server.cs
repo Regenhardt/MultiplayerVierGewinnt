@@ -29,27 +29,33 @@ namespace Connect4LAN.Network
             players = new Player[2];
             //start accepting incoming requests and only allow 1 person to be in queue at a time
             socket.Start(1);
+
+			//process the incoming requests
+			processIncomingRequestsASync();
         }
 
         /// <summary>
         /// Processes Incoming Requests
         /// </summary>
-        private async void processIncomingRequests()
+        private async void processIncomingRequestsASync()
         {
             //get the first client
             var client = await socket.AcceptTcpClientAsync();
             players[0] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync());
-        }
+			//TODO JSON FOrmat
+			players[0].SendMessage("Waiting for one more player...");
+			players[1] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync());
 
-        private Player parseRequest(string v)
+			//initlize the game
+			ConnectFourGame game = new ConnectFourGame(players[0], players[1]);
+			
+		}
+
+        private Player parseRequest(string json)
         {
             throw new NotImplementedException();
         }
-
-
-
-
-
+		
         /// <summary>
         /// Stops the Server
         /// </summary>
