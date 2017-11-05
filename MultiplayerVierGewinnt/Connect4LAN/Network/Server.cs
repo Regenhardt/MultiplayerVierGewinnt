@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
+using System.Windows.Media;
 
 namespace Connect4LAN.Network
 {
@@ -42,20 +44,37 @@ namespace Connect4LAN.Network
 			socket.Start();
             //get the first client
             var client = await socket.AcceptTcpClientAsync();
-            players[0] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync());
+			players[0] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync(), Colors.Green, client);
 			//TODO JSON FOrmat
 			players[0].SendMessage("Waiting for one more player...");
-			players[1] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync());
+			client = await socket.AcceptTcpClientAsync();
+			players[1] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync(), Colors.Red, client);
 
 			//initlize the game
 			ConnectFourGame game = new ConnectFourGame(players[0], players[1]);
 			
 		}
 
-        private Player parseRequest(string json)
+        private Player parseRequest(string json, Color color, TcpClient client)
         {
-            throw new NotImplementedException();
-        }
+			//initilize the serilizer
+			JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+			//pray to god that his works :D
+			string name = serializer.Deserialize<dynamic>(json)["Name"];
+
+			//check if name is taken
+			if (players.Any(p => p != null && string.Equals(p.Name, name, StringComparison.OrdinalIgnoreCase)))
+				name += "_2";
+
+			//instantiate the new player
+			var player = new Player(color, name, null, client); //TODO: IP
+			//Tell him his color and Name
+			player.SendMessage(serializer.Serialize(new { Color = color.ToString(), Name = name }));
+
+			//return him
+			return player;
+		}
 		
         /// <summary>
         /// Stops the Server

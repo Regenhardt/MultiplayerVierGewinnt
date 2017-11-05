@@ -11,7 +11,9 @@ using System.Windows.Media;
 namespace Connect4LAN.Network
 {
     /// <summary>
-    /// Class representing a Player
+    /// The connected Player Serverside
+	/// 
+	/// Is the user for the Server
     /// </summary>
     class Player : INetworkController
 	{
@@ -89,6 +91,10 @@ namespace Connect4LAN.Network
 								lastMesssage = @in.ReadLine();
 								Received?.Invoke(this, lastMesssage);
 							}
+						}
+						catch (NullReferenceException)
+						{
+							//Object has been disposed -> Closed
 						}
 						catch (IOException)
 						{
