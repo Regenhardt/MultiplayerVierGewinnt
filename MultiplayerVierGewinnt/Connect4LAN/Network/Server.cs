@@ -30,7 +30,7 @@ namespace Connect4LAN.Network
             //only 2 players can play simultaniously
             players = new Player[2];
             //start accepting incoming requests and only allow 1 person to be in queue at a time
-            //socket.Start(1);
+            socket.Start(1);
 
 			//process the incoming requests
 			processIncomingRequestsASync();
@@ -40,8 +40,7 @@ namespace Connect4LAN.Network
         /// Processes Incoming Requests
         /// </summary>
         private async void processIncomingRequestsASync()
-        {
-			socket.Start();
+        {			
             //get the first client
             var client = await socket.AcceptTcpClientAsync();
 			players[0] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync(), Colors.Green, client);
