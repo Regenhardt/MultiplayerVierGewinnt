@@ -71,6 +71,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Network\Move.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="Network\INetworkController.cs" />
     <Compile Include="Network\Client.cs" />
