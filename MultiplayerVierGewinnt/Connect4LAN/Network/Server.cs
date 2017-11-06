@@ -20,13 +20,14 @@ namespace Connect4LAN.Network
         private Player[] players;
 
         /// <summary>
-        /// Opens a TCP Listner Port on the named port
+        /// Opens a TCP Listner Port on the specified port 
+		/// --> Starts the god damned server
         /// </summary>
         /// <param name="port">The Port on wich the listning shall be</param>
         public Server(int port = 16569)
         {
-            //insantiate the Socket
-            socket = new TcpListener(Dns.GetHostAddresses("localhost")[0], port);
+			//insantiate the Socket
+			socket = new TcpListener(Dns.GetHostAddresses("localhost")[0], port);
             //only 2 players can play simultaniously
             players = new Player[2];
             //start accepting incoming requests and only allow 1 person to be in queue at a time
@@ -35,6 +36,16 @@ namespace Connect4LAN.Network
 			//process the incoming requests
 			processIncomingRequestsASync();
         }
+
+
+		/// <summary>
+		/// 
+		/// </summary>///
+		/// <exception cref="Exception">Always</exception>
+		public void Start()
+		{
+			throw new Exception("Already Done nigga!");
+		}
 
         /// <summary>
         /// Processes Incoming Requests
@@ -45,7 +56,7 @@ namespace Connect4LAN.Network
             var client = await socket.AcceptTcpClientAsync();
 			players[0] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync(), Colors.Green, client);
 			//TODO JSON FOrmat
-			players[0].SendMessage("Waiting for one more player...");
+			players[0].NetworkAdapter.SendMessage("Waiting for one more player...");
 			client = await socket.AcceptTcpClientAsync();
 			players[1] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync(), Colors.Red, client);
 
@@ -67,9 +78,9 @@ namespace Connect4LAN.Network
 				name += "_2";
 
 			//instantiate the new player
-			var player = new Player(color, name, null, client); //TODO: IP
+			var player = new Player(color, name, new NetworkAdapter(client)); //TODO: IP
 			//Tell him his color and Name
-			player.SendMessage(serializer.Serialize(new { Color = color.ToString(), Name = name }));
+			player.NetworkAdapter.SendMessage(serializer.Serialize(new { Color = color.ToString(), Name = name }));
 
 			//return him
 			return player;

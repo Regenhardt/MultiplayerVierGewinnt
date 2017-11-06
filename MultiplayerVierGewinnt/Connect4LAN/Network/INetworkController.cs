@@ -8,7 +8,7 @@ namespace Connect4LAN.Network
 {
 	internal interface INetworkController
 	{
-		
+
 		/// <summary>
 		/// EventArgs object contains the received JSON-string
 		/// </summary>
@@ -23,7 +23,7 @@ namespace Connect4LAN.Network
 		/// Connects to the given IP.
 		/// </summary>
 		/// <param name="ipAddress">The Address to connect to.</param>
-        /// <param name="port">The Port on wich to connect to.</param>
+		/// <param name="port">The Port on wich to connect to.</param>
 		/// <returns>Whether or not the connection was successful.</returns>
 		bool Connect(string ipAddress, int port = 16569);
 

@@ -10,44 +10,13 @@ using System.Windows.Media;
 
 namespace Connect4LAN.Network
 {
-    /// <summary>
-    /// The client wich connects to the host    
+	/// <summary>
+	/// The client wich connects to the host    
 	/// 
 	/// Is the User for the User
-    /// </summary>
-    class Client : INetworkController
-    {
-        public event EventHandler ConnectionLost;
-        public event EventHandler<string> Received;
-
-
-		private TcpClient client;
-		private StreamReader @in;
-		private StreamWriter @out;
-
-		private TcpClient tcpClient
-		{
-			get { return client; }
-			set
-			{
-				if(value != client)
-				{
-					client = value;
-					
-					//reset streams
-					if(value != null)
-					{
-						//reset the streams
-						@in = new StreamReader(client.GetStream());
-						@out = new StreamWriter(client.GetStream());
-						@out.AutoFlush = true;
-					}
-				}
-
-			}
-		}
-
-
+	/// </summary>
+	class Client : NetworkAdapter
+	{
 		/// <summary>
 		/// The Name of the player
 		/// </summary>
@@ -64,6 +33,16 @@ namespace Connect4LAN.Network
 		public Client(string name = "Player1")
 		{
 			Name = name;
+
+			//Wie heißsen?
+			/*
+			 "HUGOO"
+			 New Client()
+			 Joinen? -> Jo!
+			 "IP pl0x"
+			 Connect();
+			 
+			 */
 		}
 
 		/// <summary>
@@ -73,8 +52,8 @@ namespace Connect4LAN.Network
 		/// <param name="ipAddress"></param>
 		/// <param name="port"></param>
 		/// <returns></returns>
-		public bool Connect(string ipAddress, int port = 16569)
-        {
+		override public bool Connect(string ipAddress, int port = 16569)
+		{
 			try
 			{
 				//close current connection and reset the connection
@@ -89,9 +68,9 @@ namespace Connect4LAN.Network
 				//await his answer
 				string answer = @in.ReadLine();
 				//reset name and Answer
-			    this.Name = ((dynamic) serializer.DeserializeObject(answer))["Name"];
-				this.Color = ColorConverter.ConvertFromString(((dynamic)serializer.DeserializeObject(answer))["Color"]);				
-				
+				this.Name = ((dynamic)serializer.DeserializeObject(answer))["Name"];
+				this.Color = ColorConverter.ConvertFromString(((dynamic)serializer.DeserializeObject(answer))["Color"]);
+
 
 				return true;
 			}
@@ -103,19 +82,6 @@ namespace Connect4LAN.Network
 			{
 				throw;
 			}
-        }
-
-        public void Disconnect()
-        {
-			if(tcpClient != null)
-				tcpClient.Close();
-        }
-		
-
-		/// <exception cref="NotImplementedException"/>
-        public IEnumerable<string> GetAvailableConnections()
-        {
-            throw new NotImplementedException();
-        }
-    }
+		}
+	}
 }
