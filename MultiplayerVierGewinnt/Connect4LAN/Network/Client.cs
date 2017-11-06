@@ -33,16 +33,6 @@ namespace Connect4LAN.Network
 		public Client(string name = "Player1")
 		{
 			Name = name;
-
-			//Wie heißsen?
-			/*
-			 "HUGOO"
-			 New Client()
-			 Joinen? -> Jo!
-			 "IP pl0x"
-			 Connect();
-			 
-			 */
 		}
 
 		/// <summary>
