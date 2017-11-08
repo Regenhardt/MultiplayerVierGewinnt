@@ -12,14 +12,19 @@ namespace Connect4LAN.Network
 	enum NetworkMessageType
 	{
 		/// <summary>
+		/// A Message from the server to display to the client
+		/// </summary>
+		ServerMessage,
+
+		/// <summary>
 		/// A Chat message send by a Player
 		/// </summary>
-		Chatmessage,
+		ChatMessage,
 
 		/// <summary>
 		/// The Playername
 		/// </summary>
-		PlayerName,		
+		PlayerName,	
 
 		/// <summary>
 		/// A Color

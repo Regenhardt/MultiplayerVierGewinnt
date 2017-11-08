@@ -63,7 +63,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Network\Chatmessage.cs" />
+    <Compile Include="Network\ChatMessage.cs" />
     <Compile Include="ConnectFourGame.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Network\Move.cs" />
     <Compile Include="Network\NetworkAdapter.cs" />
+    <Compile Include="Network\NetworkMessage.cs" />
     <Compile Include="Network\NetworkMessageType.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="Network\INetworkController.cs" />

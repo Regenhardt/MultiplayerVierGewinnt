@@ -33,6 +33,32 @@ namespace Connect4LAN.Network
 		public Client(string name = "Player1")
 		{
 			Name = name;
+			this.Received += analyseRecievedMessage;
+		}
+
+		private void analyseRecievedMessage(object sender, NetworkMessage e)
+		{
+			if (e.MessageType == NetworkMessageType.PlayerName)
+				this.Name = e.Message.ToString();
+
+			switch (e.MessageType)
+			{
+				case NetworkMessageType.ServerMessage:									break;
+				case NetworkMessageType.ChatMessage:									break;
+				case NetworkMessageType.PlayerName:		Name = e.Message.ToString();	break;
+				case NetworkMessageType.Color:			Color = (Color)e.Message;		break;
+				case NetworkMessageType.Move:											break;
+				default:																break;
+			}
+		}
+
+		/// <summary>
+		/// Sends a chat message to the server
+		/// </summary>
+		/// <param name="msg"></param>
+		public void SendMessage(string msg)
+		{
+			base.SendMessage(msg, NetworkMessageType.ChatMessage);
 		}
 
 		/// <summary>
@@ -44,34 +70,13 @@ namespace Connect4LAN.Network
 		/// <returns></returns>
 		override public bool Connect(string ipAddress, int port = 16569)
 		{
-			try
-			{
-				//close current connection and reset the connection
-				if (tcpClient != null)
-					tcpClient.Close();
-				tcpClient = new TcpClient(ipAddress, port);
-
-				//tell the server our Name
-				JavaScriptSerializer serializer = new JavaScriptSerializer();
-				@out.WriteLine(serializer.Serialize(new { Name = this.Name }));
-
-				//await his answer
-				string answer = @in.ReadLine();
-				//reset name and Answer
-				this.Name = ((dynamic)serializer.DeserializeObject(answer))["Name"];
-				this.Color = ColorConverter.ConvertFromString(((dynamic)serializer.DeserializeObject(answer))["Color"]);
-
-
-				return true;
-			}
-			catch (IOException)
-			{
+			//connect the player
+			if (base.Connect(ipAddress, port))
+				this.SendMessage(Name, NetworkMessageType.PlayerName);
+			//and send if it worked
+			else
 				return false;
-			}
-			catch (Exception)
-			{
-				throw;
-			}
+			return true;
 		}
 	}
 }

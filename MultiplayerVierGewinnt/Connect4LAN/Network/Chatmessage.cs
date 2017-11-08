@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Connect4LAN.Network
 {
-	struct Chatmessage
+	struct ChatMessage
 	{
 		public string Message { get; set; }
 		public string From { get; set; }
 		public DateTime Sent { get; set; }
 	
 
-		public Chatmessage(string msg, string from)
+		public ChatMessage(string msg, string from)
 		{
 			this.Message = msg;
 			this.From = from;
