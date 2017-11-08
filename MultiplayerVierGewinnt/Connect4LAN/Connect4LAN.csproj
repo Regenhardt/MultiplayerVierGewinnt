@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="Network\Chatmessage.cs" />
     <Compile Include="ConnectFourGame.cs" />
+    <Compile Include="ViewModel.cs" />
     <Compile Include="View\InputBox.xaml.cs">
       <DependentUpon>InputBox.xaml</DependentUpon>
     </Compile>
