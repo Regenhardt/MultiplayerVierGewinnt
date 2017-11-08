@@ -61,9 +61,26 @@ namespace Connect4LAN.Network.Serverside
 			client = await socket.AcceptTcpClientAsync();
 			players[1] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync(), Colors.Red, client);
 
+			//push messages from palyer1 to player2
+			players[1].NetworkAdapter.Received += (s, e) => pushMessageToPlayer(players[0], e);
+			players[0].NetworkAdapter.Received += (s, e) => pushMessageToPlayer(players[1], e);
+
 			//initlize the game
 			ConnectFourGame game = new ConnectFourGame(players[0], players[1]);
 			
+		}
+
+		/// <summary>
+		/// Decides on the messagetype wether to psuh to the player or not
+		/// Pushes a message to the other player
+		/// </summary>
+		/// <param name="player"></param>
+		/// <param name="message"></param>
+		private void pushMessageToPlayer(Player player, NetworkMessage message)
+		{
+			//send to other wether its a chat message or a movement
+			if(message.MessageType == NetworkMessageType.ChatMessage || message.MessageType == NetworkMessageType.Move)
+				player.NetworkAdapter.SendMessage(message.Message, message.MessageType);
 		}
 
         private Player parseRequest(string json, Color color, TcpClient client)
