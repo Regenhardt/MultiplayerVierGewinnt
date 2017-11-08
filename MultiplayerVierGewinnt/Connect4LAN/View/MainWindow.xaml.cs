@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Connect4LAN
+namespace Connect4LAN.View
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
