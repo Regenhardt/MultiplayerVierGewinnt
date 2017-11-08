@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows.Media;
 
-namespace Connect4LAN.Network
+namespace Connect4LAN.Network.Clientside
 {
 	/// <summary>
 	/// The client wich connects to the host    
