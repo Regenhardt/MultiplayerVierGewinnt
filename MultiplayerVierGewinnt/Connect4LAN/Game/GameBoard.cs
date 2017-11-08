@@ -23,7 +23,7 @@ namespace Connect4LAN.Game
 		/// </summary>
 		/// <param name="collumn"></param>
 		/// <returns></returns>
-		public int PutPiece(int collumn)
+		public int PutPiece(int collumn, Piece piece)
 		{
 			throw new NotImplementedException();
 		}
