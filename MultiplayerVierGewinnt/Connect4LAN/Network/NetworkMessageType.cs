@@ -12,9 +12,9 @@ namespace Connect4LAN.Network
 	enum NetworkMessageType
 	{
 		/// <summary>
-		/// A AChat message send by a Player
+		/// A Chat message send by a Player
 		/// </summary>
-		ChatMessage,
+		Chatmessage,
 
 		/// <summary>
 		/// The Playername
