@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Network\Move.cs" />
     <Compile Include="Network\NetworkAdapter.cs" />
+    <Compile Include="Network\NetworkMessageType.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="Network\INetworkController.cs" />
     <Compile Include="Network\Client.cs" />
