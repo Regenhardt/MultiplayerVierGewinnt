@@ -7,6 +7,7 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+[assembly: InternalsVisibleTo("Connect4LANTests")]
 [assembly: AssemblyTitle("Connect4LAN")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
