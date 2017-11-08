@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows.Media;
 
-namespace Connect4LAN.Network
+namespace Connect4LAN.Network.Serverside
 {
     /// <summary>
     /// The Server wich hosts the Game
@@ -39,10 +39,10 @@ namespace Connect4LAN.Network
 
 
 		/// <summary>
-		/// 
+		/// Throws an exception, cuz game is already hosted
 		/// </summary>///
 		/// <exception cref="Exception">Always</exception>
-		public void Start()
+		public void Host()
 		{
 			throw new Exception("Already Done nigga!");
 		}

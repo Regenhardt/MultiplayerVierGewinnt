@@ -83,10 +83,10 @@
     <Compile Include="Network\NetworkAdapter.cs" />
     <Compile Include="Network\NetworkMessage.cs" />
     <Compile Include="Network\NetworkMessageType.cs" />
-    <Compile Include="Network\Server.cs" />
+    <Compile Include="Network\Serverside\Server.cs" />
     <Compile Include="Network\INetworkController.cs" />
-    <Compile Include="Network\Client.cs" />
-    <Compile Include="Network\Player.cs" />
+    <Compile Include="Network\Clientside\Client.cs" />
+    <Compile Include="Network\Serverside\Player.cs" />
     <Compile Include="Network\Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -116,5 +116,6 @@
   <ItemGroup>
     <Resource Include="View\arrowright.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

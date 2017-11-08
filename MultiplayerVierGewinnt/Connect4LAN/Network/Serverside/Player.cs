@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace Connect4LAN.Network
+namespace Connect4LAN.Network.Serverside
 {
     /// <summary>
     /// The connected Player Serverside
@@ -31,7 +31,6 @@ namespace Connect4LAN.Network
 			this.Name = name;
 			this.NetworkAdapter = adapter;			
 		}
-		
 
 		#region  [ Properties ]
 
