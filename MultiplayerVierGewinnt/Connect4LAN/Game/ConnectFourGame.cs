@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace Connect4LAN
+namespace Connect4LAN.Game
 {
     /// <summary>
     /// Represents a Connect4 Game instance

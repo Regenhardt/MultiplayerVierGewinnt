@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Connect4LAN.Game;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
