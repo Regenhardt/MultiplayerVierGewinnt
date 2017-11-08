@@ -59,7 +59,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainWindow.xaml">
+    <Page Include="View\GameWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -69,14 +69,15 @@
     </Compile>
     <Compile Include="Game\Gameboard.cs" />
     <Compile Include="Game\Piece.cs" />
+    <Compile Include="Connect4LanFactory.cs" />
     <Compile Include="Network\ChatMessage.cs" />
     <Compile Include="Game\ConnectFourGame.cs" />
     <Compile Include="ViewModel.cs" />
     <Compile Include="View\InputBox.xaml.cs">
       <DependentUpon>InputBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="View\GameWindow.xaml.cs">
+      <DependentUpon>GameWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
