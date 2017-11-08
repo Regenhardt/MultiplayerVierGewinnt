@@ -4,11 +4,14 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace Connect4LAN.Network
 {
 	class NetworkAdapter : INetworkController
 	{
+		#region [ Constuctors ]
+
 		/// <summary>
 		/// Initilizes a Networkadapterr but doesn't instantiate any variables
 		/// </summary>
@@ -16,15 +19,7 @@ namespace Connect4LAN.Network
 		{
 
 		}
-		
-		/// <summary>
-		/// Connects to the given IP
-		/// </summary>
-		/// <param name="ip"></param>
-		public NetworkAdapter(string ip, int port = 16569)
-		{
-			Connect(ip, port);
-		}
+
 
 		/// <summary>
 		/// 
@@ -40,21 +35,32 @@ namespace Connect4LAN.Network
 		}
 
 		/// <summary>
-		/// Sends a Message to the player
+		/// Connects to the given IP
+		/// </summary>
+		/// <param name="ip"></param>
+		public NetworkAdapter(string ip, int port = 16569)
+		{
+			Connect(ip, port);
+		}
+
+		#endregion [ Constuctorsd ]
+
+		/// <summary>
+		/// Setilizes a message and sends it 
 		/// </summary>
 		/// <param name="msg"></param>
-		public void SendMessage(string msg)
+		virtual public void SendMessage(object msg, NetworkMessageType type)
 		{
-			@out.WriteLine(msg);
+			@out.WriteLine(new NetworkMessage{ Message = msg, MessageType = type }.Serilize());
 		}
 
 		/// <summary>
 		/// Returns the last message from the player
 		/// </summary>
 		/// <returns></returns>
-		public string ReadLastMessage()
+		public NetworkMessage ReadLastMessage()
 		{
-			return lastMesssage;
+			return lastNetworkMesssage;
 		}
 
 		#region  [ Properties ]
@@ -93,8 +99,10 @@ namespace Connect4LAN.Network
 							while (tcpClient.Connected)
 							{
 								//read the message and send out the recieved message
-								lastMesssage = @in.ReadLine();
-								Received?.Invoke(this, lastMesssage);
+								lastNetworkMesssage = NetworkMessage.DeSerilize(@in.ReadLine());
+									
+								//report that message was 								
+								Received?.Invoke(this, lastNetworkMesssage);
 							}
 						}
 						catch (NullReferenceException)
@@ -120,18 +128,14 @@ namespace Connect4LAN.Network
 		protected TcpClient tcpClient;
 		protected StreamReader @in;
 		protected StreamWriter @out;
-		protected string lastMesssage;
-
-		#endregion
-
-		#region [ Events ]
-
-		public event EventHandler<string> Received;
-		public event EventHandler ConnectionLost;
+		protected NetworkMessage lastNetworkMesssage;
 
 		#endregion
 
 		#region [ INetworkController Members ]
+
+		public event EventHandler<NetworkMessage> Received;
+		public event EventHandler ConnectionLost;
 
 		virtual public bool Connect(string ipAddress, int port = 16569)
 		{

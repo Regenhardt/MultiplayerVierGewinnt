@@ -56,7 +56,7 @@ namespace Connect4LAN.Network
             var client = await socket.AcceptTcpClientAsync();
 			players[0] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync(), Colors.Green, client);
 			//TODO JSON FOrmat
-			players[0].NetworkAdapter.SendMessage("Waiting for one more player...");
+			players[0].NetworkAdapter.SendMessage("Waiting for one more player...", NetworkMessageType.ServerMessage);
 			client = await socket.AcceptTcpClientAsync();
 			players[1] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync(), Colors.Red, client);
 
@@ -69,7 +69,7 @@ namespace Connect4LAN.Network
         {
 			//initilize the serilizer
 			JavaScriptSerializer serializer = new JavaScriptSerializer();
-
+			
 			//pray to god that his works :D
 			string name = serializer.Deserialize<dynamic>(json)["Name"];
 
@@ -80,7 +80,8 @@ namespace Connect4LAN.Network
 			//instantiate the new player
 			var player = new Player(color, name, new NetworkAdapter(client)); //TODO: IP
 			//Tell him his color and Name
-			player.NetworkAdapter.SendMessage(serializer.Serialize(new { Color = color.ToString(), Name = name }));
+			player.NetworkAdapter.SendMessage(color, NetworkMessageType.Color);
+			player.NetworkAdapter.SendMessage(name, NetworkMessageType.PlayerName);
 
 			//return him
 			return player;

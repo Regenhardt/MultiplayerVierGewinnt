@@ -12,7 +12,7 @@ namespace Connect4LAN.Network
 		/// <summary>
 		/// EventArgs object contains the received JSON-string
 		/// </summary>
-		event EventHandler<string> Received;
+		event EventHandler<NetworkMessage> Received;
 
 		/// <summary>
 		/// Indicates a critical loss of connection that couldn't be recovered.
