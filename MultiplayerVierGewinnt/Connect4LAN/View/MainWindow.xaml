@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Connect4LAN.View"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="500" MinWidth="588">
+        Title="Connect4Lan" MinHeight="500" MinWidth="588">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Window.Resources>
@@ -27,7 +27,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Game -->
-            <Grid Grid.Column="0" Visibility="Hidden">
+            <Grid Name="GameGrid" Grid.Column="0" Visibility="Hidden">
                 <!-- Width: 7 fields -->
                 <Grid.RowDefinitions>
                     <RowDefinition Height="64" />
@@ -47,7 +47,55 @@
                     <ColumnDefinition Width="64" />
                     <ColumnDefinition Width="64" />
                 </Grid.ColumnDefinitions>
-                
+
+                <Image Grid.Column="0" Grid.Row="0" Margin="5" />
+                <Image Grid.Column="0" Grid.Row="1" Margin="5" />
+                <Image Grid.Column="0" Grid.Row="2" Margin="5" />
+                <Image Grid.Column="0" Grid.Row="3" Margin="5" />
+                <Image Grid.Column="0" Grid.Row="4" Margin="5" />
+                <Image Grid.Column="0" Grid.Row="5" Margin="5" />
+
+                <Image Grid.Column="1" Grid.Row="0" Margin="5" />
+                <Image Grid.Column="1" Grid.Row="1" Margin="5" />
+                <Image Grid.Column="1" Grid.Row="2" Margin="5" />
+                <Image Grid.Column="1" Grid.Row="3" Margin="5" />
+                <Image Grid.Column="1" Grid.Row="4" Margin="5" />
+                <Image Grid.Column="1" Grid.Row="5" Margin="5" />
+
+                <Image Grid.Column="2" Grid.Row="0" Margin="5" />
+                <Image Grid.Column="2" Grid.Row="1" Margin="5" />
+                <Image Grid.Column="2" Grid.Row="2" Margin="5" />
+                <Image Grid.Column="2" Grid.Row="3" Margin="5" />
+                <Image Grid.Column="2" Grid.Row="4" Margin="5" />
+                <Image Grid.Column="2" Grid.Row="5" Margin="5" />
+
+                <Image Grid.Column="3" Grid.Row="0" Margin="5" />
+                <Image Grid.Column="3" Grid.Row="1" Margin="5" />
+                <Image Grid.Column="3" Grid.Row="2" Margin="5" />
+                <Image Grid.Column="3" Grid.Row="3" Margin="5" />
+                <Image Grid.Column="3" Grid.Row="4" Margin="5" />
+                <Image Grid.Column="3" Grid.Row="5" Margin="5" />
+
+                <Image Grid.Column="4" Grid.Row="0" Margin="5" />
+                <Image Grid.Column="4" Grid.Row="1" Margin="5" />
+                <Image Grid.Column="4" Grid.Row="2" Margin="5" />
+                <Image Grid.Column="4" Grid.Row="3" Margin="5" />
+                <Image Grid.Column="4" Grid.Row="4" Margin="5" />
+                <Image Grid.Column="4" Grid.Row="5" Margin="5" />
+
+                <Image Grid.Column="5" Grid.Row="0" Margin="5" />
+                <Image Grid.Column="5" Grid.Row="1" Margin="5" />
+                <Image Grid.Column="5" Grid.Row="2" Margin="5" />
+                <Image Grid.Column="5" Grid.Row="3" Margin="5" />
+                <Image Grid.Column="5" Grid.Row="4" Margin="5" />
+                <Image Grid.Column="5" Grid.Row="5" Margin="5" />
+
+                <Image Grid.Column="6" Grid.Row="0" Margin="5" />
+                <Image Grid.Column="6" Grid.Row="1" Margin="5" />
+                <Image Grid.Column="6" Grid.Row="2" Margin="5" />
+                <Image Grid.Column="6" Grid.Row="3" Margin="5" />
+                <Image Grid.Column="6" Grid.Row="4" Margin="5" />
+                <Image Grid.Column="6" Grid.Row="5" Margin="5" />
             </Grid>
             
             <!-- Game setup -->
@@ -69,7 +117,7 @@
                     <!-- Chat messages -->
                     <RowDefinition Height="*" />
                     <!-- Input -->
-                    <RowDefinition Height="50" />
+                    <RowDefinition Height="40" />
                 </Grid.RowDefinitions>
 
                 <ListBox Grid.Row="0" Name="ChatWindow" />
