@@ -59,8 +59,20 @@ namespace Connect4LAN
 
         #region [ Properties ]
 
-        public const int GameWidth = 7;
-        public const int GameHeight = 6;
+
+        public string Title
+        {
+            get
+            {
+                return title;
+            }
+            set
+            {
+                title = value;
+                Notify();
+            }
+        }
+        private string title;
 
         public bool GameVisible
         {
@@ -122,7 +134,10 @@ namespace Connect4LAN
 
         #region [ Fields ]
 
+        public const int GameWidth = 7;
+        public const int GameHeight = 6;
         Network.Serverside.Server server;
+        Network.Clientside.Client client;
 
         #endregion
 
@@ -143,7 +158,8 @@ namespace Connect4LAN
                     Pieces[i][j] = Colors.AntiqueWhite;
                 }
             }
-
+            client = new Network.Clientside.Client();
+            Title = $"Connect4Lan - {client.Name}";
             GameVisible = false;
         }
 
@@ -153,7 +169,7 @@ namespace Connect4LAN
 
         private void HostGame()
         {
-            throw new NotImplementedException();
+            server = new Network.Serverside.Server();
         }
 
         private void JoinGame()
