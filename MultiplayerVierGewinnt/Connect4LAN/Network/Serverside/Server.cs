@@ -85,11 +85,14 @@ namespace Connect4LAN.Network.Serverside
 
         private Player parseRequest(string json, Color color, TcpClient client)
         {
-			//initilize the serilizer
-			JavaScriptSerializer serializer = new JavaScriptSerializer();
-			
-			//pray to god that his works :D
-			string name = serializer.Deserialize<dynamic>(json)["Name"];
+			//decode the message
+			var msg = NetworkMessage.DeSerilize(json);
+			//the first message is always the name
+			string name;
+			if (msg.MessageType == NetworkMessageType.PlayerName)
+				name = msg.Message.ToString();
+			else
+				name = "Idiot";
 
 			//check if name is taken
 			if (players.Any(p => p != null && string.Equals(p.Name, name, StringComparison.OrdinalIgnoreCase)))

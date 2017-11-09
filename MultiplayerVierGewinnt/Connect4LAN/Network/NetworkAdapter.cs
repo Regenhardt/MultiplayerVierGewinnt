@@ -134,7 +134,7 @@ namespace Connect4LAN.Network
 
 		#region [ INetworkController Members ]
 
-		public event EventHandler<NetworkMessage> Received;
+		virtual		public event EventHandler<NetworkMessage> Received;
 		public event EventHandler ConnectionLost;
 
 		virtual public bool Connect(string ipAddress, int port = 16569)

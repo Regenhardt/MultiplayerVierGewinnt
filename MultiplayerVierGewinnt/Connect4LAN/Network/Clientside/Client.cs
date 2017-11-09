@@ -33,8 +33,40 @@ namespace Connect4LAN.Network.Clientside
 		public Client(string name = "Player1")
 		{
 			Name = name;
-			this.Received += analyseRecievedMessage;
+			base.Received += analyseRecievedMessage;
 		}
+
+		#region [ Events ]
+
+		public override event EventHandler<NetworkMessage> Received;
+
+		/// <summary>
+		/// A Chat message was recieved through the network
+		/// </summary>
+		public event EventHandler<string> ChatMessageRecieved;
+		/// <summary>
+		/// The server assigned us a new playername
+		/// </summary>
+		public event EventHandler<string> PlayerNamedChanged;
+		/// <summary>
+		/// A Server message was recieved through the network
+		/// </summary>
+		public event EventHandler<string> ServerMessageRecieved;
+		/// <summary>
+		/// The Oponnent connected and the game can start
+		/// </summary>
+		public event EventHandler<string> PlayerJoined;
+		/// <summary>
+		/// The server assigned us a color
+		/// </summary>
+		public event EventHandler<Color> ColorChanged;
+		/// <summary>
+		/// The oponnent placed a piece on the GameBoard
+		/// </summary>
+		public event EventHandler<Move> MovementRecieved;
+
+
+		#endregion [ Events ]
 
 		private void analyseRecievedMessage(object sender, NetworkMessage e)
 		{
@@ -43,12 +75,13 @@ namespace Connect4LAN.Network.Clientside
 
 			switch (e.MessageType)
 			{
-				case NetworkMessageType.ServerMessage:									break;
-				case NetworkMessageType.ChatMessage:									break;
-				case NetworkMessageType.PlayerName:		Name = e.Message.ToString();	break;
-				case NetworkMessageType.Color:			Color = (Color)e.Message;		break;
-				case NetworkMessageType.Move:											break;
-				default:																break;
+				case NetworkMessageType.ServerMessage:	this.ServerMessageRecieved?.Invoke(this, e.Message.ToString());	break;
+				case NetworkMessageType.ChatMessage:	this.ChatMessageRecieved?.Invoke(this, e.Message.ToString()); break;
+				case NetworkMessageType.PlayerName:		if (Name != e.Message.ToString()) { Name = e.Message.ToString(); PlayerNamedChanged?.Invoke(this, e.Message.ToString()); };		break;
+				case NetworkMessageType.Color:			Color = (Color)ColorConverter.ConvertFromString(e.Message.ToString()); this.ColorChanged?.Invoke(this, Color);		break;
+				case NetworkMessageType.Move:			this.MovementRecieved?.Invoke(this, (Move)e.Message);/*Untested */			break;
+				case NetworkMessageType.PlayerConnected:this.PlayerJoined?.Invoke(this, e.Message.ToString()); break;
+				default:								this.Received?.Invoke(this, e);									break;
 			}
 		}
 

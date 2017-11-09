@@ -34,6 +34,12 @@ namespace Connect4LAN.Network
 		/// <summary>
 		/// A Move
 		/// </summary>
-		Move
+		Move,
+
+		//TODO
+
+		PlayerConnected,
+
+		
 	}
 }
