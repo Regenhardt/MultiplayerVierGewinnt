@@ -23,7 +23,9 @@ namespace Connect4LAN
         {
             get
             {
-                if (hostGameCommand == null) hostGameCommand = new RelayCommand(param => HostGame());
+                if (hostGameCommand == null)
+					hostGameCommand = new RelayCommand((param) => HostAndJoinGame() );
+				
                 return hostGameCommand;
             }
         }
@@ -36,7 +38,7 @@ namespace Connect4LAN
         {
             get
             {
-                if (joinGameCommand == null) joinGameCommand = new RelayCommand(param => JoinGame());
+                if (joinGameCommand == null) joinGameCommand = new RelayCommand(param => JoinGame((string) param));
                 return joinGameCommand;
             }
         }
@@ -49,7 +51,7 @@ namespace Connect4LAN
         {
             get
             {
-                if (sendChatMessageCommand == null) sendChatMessageCommand = new RelayCommand(param => SendChatMessage(param));
+                if (sendChatMessageCommand == null) sendChatMessageCommand = new RelayCommand(param => SendChatMessage((string) param));
                 return sendChatMessageCommand;
             }
         }
@@ -62,6 +64,9 @@ namespace Connect4LAN
         public const int GameWidth = 7;
         public const int GameHeight = 6;
 
+		/// <summary>
+		/// Shows the gameboard and hides join/host buttons
+		/// </summary>
         public bool GameVisible
         {
             get
@@ -81,27 +86,48 @@ namespace Connect4LAN
 
         public bool SetupVisible => !GameVisible;
 
-        public Color[][] Pieces
-        {
-            get
-            {
-                return pieces;
-            }
-            set
-            {
-                if (value.Length != GameWidth)
-                    throw new ArgumentException($"Length of array has to be {GameWidth}!");
-                if (value != pieces)
-                {
-                    pieces = value;
-                    Notify();
-                }
-            }
-        }
-        private Color[][] pieces;
+		public Color[][] Pieces
+		{
+			get
+			{
+				return pieces;
+			}
+			set
+			{
+				if (value.Length != GameWidth)
+					throw new ArgumentException($"Length of array has to be {GameWidth}!");
+				if (value != pieces)
+				{
+					pieces = value;
+					Notify();
+				}
+			}
+		}
+		private Color[][] pieces;
 
+		#region [ Name ]
 
-        public ObservableCollection<string> ChatMessages
+		string name;
+
+		public string Name
+		{
+			get
+			{
+				return name;
+			}
+			set
+			{
+				if (name != value)
+				{
+					name = value;
+					RaisePropertyChanged("Name");
+				}
+			}
+		}
+
+		#endregion 
+
+		public ObservableCollection<string> ChatMessages
         {
             get
             {
@@ -147,23 +173,33 @@ namespace Connect4LAN
             GameVisible = false;
         }
 
-        #endregion
+		#endregion
 
-        #region [ Methods ]
+		#region [ Methods ]		
 
-        private void HostGame()
+		/// <summary>
+		/// Hosts a game and then joins it 
+		/// </summary>
+		private void HostAndJoinGame()
         {
-            throw new NotImplementedException();
+			server = new Network.Serverside.Server();
+			JoinGame("localhost");
         }
 
-        private void JoinGame()
-        {
-            throw new NotImplementedException();
+		/// <summary>
+		/// Connects to the given IP
+		/// </summary>
+		/// <param name="ip"></param>
+        private void JoinGame(string ip)
+        {			
+			//TODO once implemented
+			//client.Connect(ip);
         }
 
-        private void SendChatMessage(object msg)
+        private void SendChatMessage(string msg)
         {
-            throw new NotImplementedException();
+			//client.SendMessage(msg);
+			this.ChatMessages.Add(msg);
         }
 
         #endregion
