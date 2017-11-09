@@ -49,11 +49,6 @@ namespace Connect4LAN.Game
 		public int FriendlyAmountMiddleRight { get; set; }
 
 		/// <summary>
-		/// The pieces to the Top of this piece wich have the same color
-		/// </summary>
-		public int FriendlyAmountTop { get; set; }
-
-		/// <summary>
 		/// The pieces to the Top left of this piece wich have the same color
 		/// </summary>
 		public int FriendlyAmountTopLeft { get; set; }
