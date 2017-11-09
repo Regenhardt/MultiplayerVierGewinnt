@@ -4,10 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Connect4LAN.View"
+        xmlns:a="clr-namespace:Connect4LAN"
+        xmlns:c="clr-namespace:Connect4LAN.Converters"
         mc:Ignorable="d"
-        Title="Connect4Lan" MinHeight="500" MinWidth="588">
+        Title="Connect4Lan" MinHeight="470" Height="470" MinWidth="558" Width="600"
+        d:DataContext="a:ViewModel">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <c:ColorToBrushConverter x:Key="ColToBrush" />
     </Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
@@ -18,7 +22,7 @@
 		</Grid.RowDefinitions>
 		
 		<!-- Game & Chat -->
-		<Grid Row="0">
+        <Grid Row="0" >
             <Grid.ColumnDefinitions>
                 <!-- Game, 7x64 + 6x10 -->
                 <ColumnDefinition MinWidth="478" />
@@ -27,7 +31,8 @@
             </Grid.ColumnDefinitions>
 
             <!-- Game -->
-            <Grid Name="GameGrid" Grid.Column="0" Visibility="Hidden">
+            <Grid Name="GameGrid" Grid.Column="0" Visibility="{Binding GameVisible, Converter={StaticResource BoolToVis}}"
+                  Background="DarkBlue">
                 <!-- Width: 7 fields -->
                 <Grid.RowDefinitions>
                     <RowDefinition Height="64" />
@@ -48,71 +53,71 @@
                     <ColumnDefinition Width="64" />
                 </Grid.ColumnDefinitions>
 
-                <Canvas Grid.Column="0" Grid.Row="0" Margin="5" Background="AliceBlue" />
-                <Image Grid.Column="0" Grid.Row="1" Margin="5" />
-                <Image Grid.Column="0" Grid.Row="2" Margin="5" />
-                <Image Grid.Column="0" Grid.Row="3" Margin="5" />
-                <Image Grid.Column="0" Grid.Row="4" Margin="5" />
-                <Image Grid.Column="0" Grid.Row="5" Margin="5" />
+                <Canvas Grid.Column="0" Grid.Row="0" Margin="5" Background="{Binding Pieces[0][5], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="0" Grid.Row="1" Margin="5" Background="{Binding Pieces[0][4], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="0" Grid.Row="2" Margin="5" Background="{Binding Pieces[0][3], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="0" Grid.Row="3" Margin="5" Background="{Binding Pieces[0][2], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="0" Grid.Row="4" Margin="5" Background="{Binding Pieces[0][1], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="0" Grid.Row="5" Margin="5" Background="{Binding Pieces[0][0], Converter={StaticResource ColToBrush}}" />
 
-                <Image Grid.Column="1" Grid.Row="0" Margin="5" />
-                <Image Grid.Column="1" Grid.Row="1" Margin="5" />
-                <Image Grid.Column="1" Grid.Row="2" Margin="5" />
-                <Image Grid.Column="1" Grid.Row="3" Margin="5" />
-                <Image Grid.Column="1" Grid.Row="4" Margin="5" />
-                <Image Grid.Column="1" Grid.Row="5" Margin="5" />
+                <Canvas Grid.Column="1" Grid.Row="0" Margin="5" Background="{Binding Pieces[1][5], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="1" Grid.Row="1" Margin="5" Background="{Binding Pieces[1][4], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="1" Grid.Row="2" Margin="5" Background="{Binding Pieces[1][3], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="1" Grid.Row="3" Margin="5" Background="{Binding Pieces[1][2], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="1" Grid.Row="4" Margin="5" Background="{Binding Pieces[1][1], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="1" Grid.Row="5" Margin="5" Background="{Binding Pieces[1][0], Converter={StaticResource ColToBrush}}" />
 
-                <Image Grid.Column="2" Grid.Row="0" Margin="5" />
-                <Image Grid.Column="2" Grid.Row="1" Margin="5" />
-                <Image Grid.Column="2" Grid.Row="2" Margin="5" />
-                <Image Grid.Column="2" Grid.Row="3" Margin="5" />
-                <Image Grid.Column="2" Grid.Row="4" Margin="5" />
-                <Image Grid.Column="2" Grid.Row="5" Margin="5" />
+                <Canvas Grid.Column="2" Grid.Row="0" Margin="5" Background="{Binding Pieces[2][5], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="2" Grid.Row="1" Margin="5" Background="{Binding Pieces[2][4], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="2" Grid.Row="2" Margin="5" Background="{Binding Pieces[2][3], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="2" Grid.Row="3" Margin="5" Background="{Binding Pieces[2][2], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="2" Grid.Row="4" Margin="5" Background="{Binding Pieces[2][1], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="2" Grid.Row="5" Margin="5" Background="{Binding Pieces[2][0], Converter={StaticResource ColToBrush}}" />
 
-                <Image Grid.Column="3" Grid.Row="0" Margin="5" />
-                <Image Grid.Column="3" Grid.Row="1" Margin="5" />
-                <Image Grid.Column="3" Grid.Row="2" Margin="5" />
-                <Image Grid.Column="3" Grid.Row="3" Margin="5" />
-                <Image Grid.Column="3" Grid.Row="4" Margin="5" />
-                <Image Grid.Column="3" Grid.Row="5" Margin="5" />
+                <Canvas Grid.Column="3" Grid.Row="0" Margin="5" Background="{Binding Pieces[3][5], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="3" Grid.Row="1" Margin="5" Background="{Binding Pieces[3][4], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="3" Grid.Row="2" Margin="5" Background="{Binding Pieces[3][3], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="3" Grid.Row="3" Margin="5" Background="{Binding Pieces[3][2], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="3" Grid.Row="4" Margin="5" Background="{Binding Pieces[3][1], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="3" Grid.Row="5" Margin="5" Background="{Binding Pieces[3][0], Converter={StaticResource ColToBrush}}" />
 
-                <Image Grid.Column="4" Grid.Row="0" Margin="5" />
-                <Image Grid.Column="4" Grid.Row="1" Margin="5" />
-                <Image Grid.Column="4" Grid.Row="2" Margin="5" />
-                <Image Grid.Column="4" Grid.Row="3" Margin="5" />
-                <Image Grid.Column="4" Grid.Row="4" Margin="5" />
-                <Image Grid.Column="4" Grid.Row="5" Margin="5" />
+                <Canvas Grid.Column="4" Grid.Row="0" Margin="5" Background="{Binding Pieces[4][5], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="4" Grid.Row="1" Margin="5" Background="{Binding Pieces[4][4], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="4" Grid.Row="2" Margin="5" Background="{Binding Pieces[4][3], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="4" Grid.Row="3" Margin="5" Background="{Binding Pieces[4][2], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="4" Grid.Row="4" Margin="5" Background="{Binding Pieces[4][1], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="4" Grid.Row="5" Margin="5" Background="{Binding Pieces[4][0], Converter={StaticResource ColToBrush}}" />
 
-                <Image Grid.Column="5" Grid.Row="0" Margin="5" />
-                <Image Grid.Column="5" Grid.Row="1" Margin="5" />
-                <Image Grid.Column="5" Grid.Row="2" Margin="5" />
-                <Image Grid.Column="5" Grid.Row="3" Margin="5" />
-                <Image Grid.Column="5" Grid.Row="4" Margin="5" />
-                <Image Grid.Column="5" Grid.Row="5" Margin="5" />
+                <Canvas Grid.Column="5" Grid.Row="0" Margin="5" Background="{Binding Pieces[5][5], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="5" Grid.Row="1" Margin="5" Background="{Binding Pieces[5][4], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="5" Grid.Row="2" Margin="5" Background="{Binding Pieces[5][3], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="5" Grid.Row="3" Margin="5" Background="{Binding Pieces[5][2], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="5" Grid.Row="4" Margin="5" Background="{Binding Pieces[5][1], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="5" Grid.Row="5" Margin="5" Background="{Binding Pieces[5][0], Converter={StaticResource ColToBrush}}" />
 
-                <Image Grid.Column="6" Grid.Row="0" Margin="5" />
-                <Image Grid.Column="6" Grid.Row="1" Margin="5" />
-                <Image Grid.Column="6" Grid.Row="2" Margin="5" />
-                <Image Grid.Column="6" Grid.Row="3" Margin="5" />
-                <Image Grid.Column="6" Grid.Row="4" Margin="5" />
-                <Image Grid.Column="6" Grid.Row="5" Margin="5" />
+                <Canvas Grid.Column="6" Grid.Row="0" Margin="5" Background="{Binding Pieces[6][5], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="6" Grid.Row="1" Margin="5" Background="{Binding Pieces[6][4], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="6" Grid.Row="2" Margin="5" Background="{Binding Pieces[6][3], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="6" Grid.Row="3" Margin="5" Background="{Binding Pieces[6][2], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="6" Grid.Row="4" Margin="5" Background="{Binding Pieces[6][1], Converter={StaticResource ColToBrush}}" />
+                <Canvas Grid.Column="6" Grid.Row="5" Margin="5" Background="{Binding Pieces[6][0], Converter={StaticResource ColToBrush}}" />
             </Grid>
             
             <!-- Game setup -->
-            <Grid Grid.Column="0" Visibility="Visible">
+            <Grid Grid.Column="0" Visibility="{Binding SetupVisible, Converter={StaticResource BoolToVis}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <!-- Host game -->
-                <Button Grid.Row="0" Content="Host game" Height="30" Width="100" />
+                <Button Grid.Row="0" Content="Host game" Height="30" Width="100" Command="{Binding HostGameCommand}" />
                 <!-- Join game -->
-                <Button Grid.Row="1" Content="Join game" Height="30" Width="100" />
+                <Button Grid.Row="1" Content="Join game" Height="30" Width="100" Command="{Binding JoinGameCommand}" />
             </Grid>
 
             <!-- Chat -->
-            <Grid Grid.Column="1" >
+            <Grid Grid.Column="1" Background="Azure" >
                 <Grid.RowDefinitions>
                     <!-- Chat messages -->
                     <RowDefinition Height="*" />
@@ -120,8 +125,8 @@
                     <RowDefinition Height="40" />
                 </Grid.RowDefinitions>
 
-                <ListBox Grid.Row="0" Name="ChatWindow" />
-                <local:InputBox Grid.Row="1" />
+                <ListBox Grid.Row="0" Name="ChatWindow" Background="Azure" ItemsSource="{Binding ChatMessages}" />
+                <local:InputBox Grid.Row="1" Background="Aqua" Command="{Binding SendChatMessageCommand}" />
 
             </Grid>
 		</Grid>
