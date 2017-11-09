@@ -30,9 +30,13 @@ namespace Connect4LAN
         /// </summary>
         /// <param name="execute">Action object.</param>
         /// <param name="canExecute">Function predicate for the can execute.</param>
+		/// <exception cref="ArgumentNullException"/>
         public RelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
-            _execute = execute ?? throw new ArgumentNullException("execute");
+			if(execute == null)
+				throw new ArgumentNullException("execute");
+
+			_execute = execute;
             _canExecute = canExecute;
         }
         #endregion // Constructors
