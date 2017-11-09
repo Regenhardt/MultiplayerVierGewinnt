@@ -23,7 +23,7 @@ namespace Connect4LAN
         {
             get
             {
-                if (hostGameCommand == null) hostGameCommand = new RelayCommand(param => HostGame());
+                if (hostGameCommand == null) hostGameCommand = new RelayCommand(param => HostAndJoinGame());
                 return hostGameCommand;
             }
         }
@@ -36,7 +36,7 @@ namespace Connect4LAN
         {
             get
             {
-                if (joinGameCommand == null) joinGameCommand = new RelayCommand(param => JoinGame());
+                if (joinGameCommand == null) joinGameCommand = new RelayCommand(param => JoinGame((string) param));
                 return joinGameCommand;
             }
         }
@@ -49,7 +49,7 @@ namespace Connect4LAN
         {
             get
             {
-                if (sendChatMessageCommand == null) sendChatMessageCommand = new RelayCommand(param => SendChatMessage(param));
+                if (sendChatMessageCommand == null) sendChatMessageCommand = new RelayCommand(param => SendChatMessage((string) param));
                 return sendChatMessageCommand;
             }
         }
@@ -112,8 +112,30 @@ namespace Connect4LAN
         }
         private Color[][] pieces;
 
+		#region [ Name ]
 
-        public ObservableCollection<string> ChatMessages
+		string name;
+
+		public string Name
+		{
+			get
+			{
+				return name;
+			}
+			set
+			{
+				if (name != value)
+				{
+					name = value;
+					RaisePropertyChanged("Name");
+				}
+			}
+		}
+
+		#endregion 
+
+
+		public ObservableCollection<string> ChatMessages
         {
             get
             {
@@ -163,28 +185,36 @@ namespace Connect4LAN
             GameVisible = false;
         }
 
-        #endregion
+		#endregion
 
-        #region [ Methods ]
+		#region [ Methods ]
+		/// <summary>
+		/// Hosts a game and then joins it 
+		/// </summary>
+		private void HostAndJoinGame()
+		{
+			server = new Network.Serverside.Server();
+			JoinGame("localhost");
+		}
 
-        private void HostGame()
-        {
-            server = new Network.Serverside.Server();
-        }
+		/// <summary>
+		/// Connects to the given IP
+		/// </summary>
+		/// <param name="ip"></param>
+		private void JoinGame(string ip)
+		{
+			client.Connect(ip);
+		}
 
-        private void JoinGame()
-        {
-            throw new NotImplementedException();
-        }
+		private void SendChatMessage(string msg)
+		{
+			client.SendMessage(msg);
+			this.ChatMessages.Add(msg);
+		}
 
-        private void SendChatMessage(object msg)
-        {
-            throw new NotImplementedException();
-        }
+		#endregion
 
-        #endregion
-
-        private void Notify([CallerMemberName]string propertyName = "")
+		private void Notify([CallerMemberName]string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
