@@ -42,107 +42,14 @@ namespace Connect4LAN.Game
 				//if the field as been initilized then continue to next
 				if (!IsInitilized(Board[collumn, row]))
 				{
-					placePiece(collumn, row, piece);
+					//place the field on the board
+					Board[collumn, row] = piece;
 					break;
 				}
 			}
 
+			//and return the row
 			return row;			
-		}
-
-		private void placePiece(int collumn, int row, Piece piece)
-		{
-			Board[collumn, row] = piece;
-
-			//check other pieces
-			//check bottom row
-			Piece tmp;
-
-			bool canExistsLeft = collumn != 0, canExistsRight = collumn != (Board.GetLength(0) - 1);
-			
-			#region [ Check Bottom ]
-
-			//the bottom row
-			if (row != 0)
-			{
-				//bottom middle
-				if (IsInitilized(Board[collumn, row - 1]))
-				{
-					tmp = Board[collumn, row - 1];
-					piece.FriendlyAmountBottom = tmp.FriendlyAmountBottom + 1;
-				}
-				//bottom left
-				if (canExistsLeft && IsInitilized(Board[collumn - 1, row - 1]))
-				{
-					tmp = Board[collumn - 1, row - 1];
-					piece.FriendlyAmountBottomLeft = tmp.FriendlyAmountBottomLeft + 1;
-					tmp.FriendlyAmountTopRight += 1;
-				}
-				else
-					canExistsLeft = false;
-
-				//bottom right
-				if (canExistsRight && IsInitilized(Board[collumn + 1, row - 1]))
-				{
-					tmp = Board[collumn + 1, row - 1];
-					piece.FriendlyAmountBottomLeft = tmp.FriendlyAmountBottomLeft + 1;
-					tmp.FriendlyAmountTopRight += 1;
-				}
-				else
-					canExistsRight = false;
-			}
-
-			#endregion [ Bottom ]
-
-			#region [ Check Middle ]
-
-			// middle left
-			if (canExistsLeft && IsInitilized(Board[collumn - 1, row]))
-			{
-				tmp = Board[collumn - 1, row];
-				piece.FriendlyAmountMiddleLeft = tmp.FriendlyAmountMiddleLeft + 1;
-				tmp.FriendlyAmountMiddleRight += 1;
-			}
-			else
-				canExistsLeft = false;
-			// middle right
-			if (canExistsRight && IsInitilized(Board[collumn + 1, row]))
-			{
-				tmp = Board[collumn + 1, row];
-				piece.FriendlyAmountMiddleRight = tmp.FriendlyAmountMiddleRight + 1;
-				tmp.FriendlyAmountMiddleLeft += 1;
-			}
-			else
-				canExistsRight = false;
-
-			#endregion [ check middle ]
-
-			#region [ Check Top ]
-
-			//the top
-			if (row != Board.GetLength(1) - 1)
-			{
-				//top left
-				if (canExistsLeft && IsInitilized(Board[collumn - 1, row + 1]))
-				{
-					tmp = Board[collumn - 1, row + 1];
-					piece.FriendlyAmountTopLeft = tmp.FriendlyAmountTopLeft + 1;
-					tmp.FriendlyAmountTopRight += 1;
-				}
-				//top right
-				if (canExistsRight && IsInitilized(Board[collumn + 1, row + 1]))
-				{
-					tmp = Board[collumn + 1, row + 1];
-					piece.FriendlyAmountBottomLeft = tmp.FriendlyAmountBottomLeft + 1;
-					tmp.FriendlyAmountTopRight += 1;
-				}
-
-			}
-
-			#endregion [ Top ]
-
-
-
 		}
 
 		/// <summary>
