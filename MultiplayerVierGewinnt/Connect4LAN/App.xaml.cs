@@ -7,9 +7,13 @@ namespace Connect4LAN
     /// </summary>
     public partial class App : Application
     {
-        private void Application_Startup(object sender, StartupEventArgs e)
+        public void StartApp()
         {
             new Connect4LanFactory().GetWindow().Show();
+        }
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            StartApp();
         }
     }
 }

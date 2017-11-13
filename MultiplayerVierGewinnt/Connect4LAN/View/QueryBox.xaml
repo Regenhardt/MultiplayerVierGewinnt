@@ -1,0 +1,18 @@
+﻿<Window x:Class="Connect4LAN.View.QueryBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Connect4LAN.View"
+        mc:Ignorable="d"
+        Title="QueryBox" Height="145.562" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="0" Text="{Binding IP}" Width="200" Height="50" />
+        <Button Grid.Row="1" Content="Use IP" Command="{Binding OkCommand}" Width="100" Height="30" />
+
+    </Grid>
+</Window>
