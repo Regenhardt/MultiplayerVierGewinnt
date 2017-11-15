@@ -55,7 +55,7 @@ namespace Connect4LAN.Network.Clientside
 		/// <summary>
 		/// The Oponnent connected and the game can start
 		/// </summary>
-		public event EventHandler<string> PlayerJoined;
+		public event EventHandler<Oponnent> PlayerJoined;
 		/// <summary>
 		/// The server assigned us a color
 		/// </summary>
@@ -80,7 +80,7 @@ namespace Connect4LAN.Network.Clientside
 				case NetworkMessageType.PlayerName:		if (Name != e.Message.ToString()) { Name = e.Message.ToString(); PlayerNamedChanged?.Invoke(this, e.Message.ToString()); };		break;
 				case NetworkMessageType.Color:			Color = (Color)ColorConverter.ConvertFromString(e.Message.ToString()); this.ColorChanged?.Invoke(this, Color);		break;
 				case NetworkMessageType.Move:			this.MovementRecieved?.Invoke(this, (Move)e.Message);/*Untested */			break;
-				case NetworkMessageType.PlayerConnected:this.PlayerJoined?.Invoke(this, e.Message.ToString()); break;
+				case NetworkMessageType.PlayerConnected:this.PlayerJoined?.Invoke(this, (Oponnent) e.Message); break;
 				default:								this.Received?.Invoke(this, e);									break;
 			}
 		}

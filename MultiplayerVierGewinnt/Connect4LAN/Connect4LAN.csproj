@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Network\Oponnent.cs" />
     <Compile Include="View\QueryBox.xaml.cs">
       <DependentUpon>QueryBox.xaml</DependentUpon>
     </Compile>

@@ -55,11 +55,15 @@ namespace Connect4LAN.Network.Serverside
         {			
             //get the first client
             var client = await socket.AcceptTcpClientAsync();
-			players[0] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync(), Colors.Green, client);
+			players[0] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync(), Colors.Yellow, client);
 			//TODO JSON FOrmat
 			players[0].NetworkAdapter.SendMessage("Waiting for one more player...", NetworkMessageType.ServerMessage);
 			client = await socket.AcceptTcpClientAsync();
 			players[1] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync(), Colors.Red, client);
+
+			//tell them about eachother
+			players[0].NetworkAdapter.SendMessage(new Oponnent { Color = players[1].Color, Name = players[1].Name }, NetworkMessageType.PlayerConnected);
+			players[1].NetworkAdapter.SendMessage(new Oponnent { Color = players[0].Color, Name = players[0].Name }, NetworkMessageType.PlayerConnected);
 
 			//push messages from palyer1 to player2
 			players[1].NetworkAdapter.Received += (s, e) => pushMessageToPlayer(players[0], e);
