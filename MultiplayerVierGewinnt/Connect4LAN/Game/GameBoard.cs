@@ -31,25 +31,25 @@ namespace Connect4LAN.Game
 		/// <summary>
 		/// Places piece in Column
 		/// </summary>
-		/// <param name="collumn"></param>
-		/// <returns></returns>
-		public int PutPiece(int collumn, Piece piece)
+		/// <param name="column">The column to place the piece in.</param>
+		/// <returns>The row in which the piece landed.</returns>
+		public int PutPiece(int column, Piece piece)
 		{
-			//put the piece in the coloum
+            if (column >= Board.GetLength(0)) throw new ArgumentOutOfRangeException("Column outisde of board boundaries.");
+			//put the piece in the column
 			int row;
 			for (row = 0; row < Board.GetLength(1); row++)
 			{
 				//if the field as been initilized then continue to next
-				if (!IsInitilized(Board[collumn, row]))
+				if (!IsInitilized(Board[column, row]))
 				{
 					//place the field on the board
-					Board[collumn, row] = piece;
-					break;
+					Board[column, row] = piece;
+			        //and return the row
+					return row;
 				}
 			}
-
-			//and return the row
-			return row;			
+            throw new InvalidOperationException("This column is full.");	
 		}
 
 		/// <summary>
