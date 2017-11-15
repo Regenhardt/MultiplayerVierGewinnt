@@ -7,13 +7,21 @@ namespace Connect4LAN
     /// </summary>
     public partial class App : Application
     {
+        private Window window;
         public void StartApp()
         {
-            new Connect4LanFactory().GetWindow().Show();
+            window = new Connect4LanFactory().GetWindow();
+            window.Show();
         }
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             StartApp();
+            this.DispatcherUnhandledException += UnhandledExceptionHandler;
+        }
+
+        private void UnhandledExceptionHandler(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(window, e.Exception.Message, "Unhandled Exception");
         }
     }
 }

@@ -25,5 +25,5 @@ namespace Connect4LAN.View
 			InitializeComponent();
             DataContext = viewModel;
 		}
-	}
+    }
 }

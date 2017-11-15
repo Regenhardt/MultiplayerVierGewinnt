@@ -57,6 +57,18 @@ namespace Connect4LAN
         }
         private RelayCommand sendChatMessageCommand;
 
+        /// <summary>
+        /// Inserts a piece into the game board
+        /// </summary>
+        public ICommand PutPieceCommand
+        {
+            get
+            {
+                return putPieceCommand?? new RelayCommand(param => PutPiece(int.Parse(param.ToString())));
+            }
+        }
+        private RelayCommand putPieceCommand;
+
         #endregion
 
         #region [ Properties ]
@@ -88,6 +100,7 @@ namespace Connect4LAN
                 {
                     gameVisible = value;
                     Notify();
+                    RaisePropertyChanged(nameof(SetupVisible));
                 }
             }
         }
@@ -117,7 +130,6 @@ namespace Connect4LAN
 		#region [ Name ]
 
 		string name;
-
 		public string Name
 		{
 			get
@@ -129,10 +141,27 @@ namespace Connect4LAN
 				if (name != value)
 				{
 					name = value;
+                    Title = "Connect4Lan - " + name;
 					RaisePropertyChanged("Name");
+                    Notify();
 				}
 			}
 		}
+
+
+        public string EnemyName
+        {
+            get
+            {
+                return enemyName;
+            }
+            set
+            {
+                enemyName = value;
+                Notify();
+            }
+        }
+        private string enemyName;
 
 		#endregion 
 
@@ -160,6 +189,7 @@ namespace Connect4LAN
 
         public const int GameWidth = 7;
         public const int GameHeight = 6;
+        private bool yourTurn;
         Color ownColor = Colors.Yellow;
         Color enemyColor = Colors.Red;
         Network.Serverside.Server server;
@@ -175,14 +205,16 @@ namespace Connect4LAN
         /// </summary>
         public ViewModel()
         {
-            InitPieces();
+            InitBoard();
             InitClient();
             Title = $"Connect4Lan - {client.Name}";
             GameVisible = false;
         }
 
-        private void InitPieces()
+        private void InitBoard()
         {
+            // Init Board
+            board = new Game.Gameboard();
             // Init pieces
             Pieces = new Color[7][];
             for (int i = 0; i < GameWidth; i++)
@@ -200,12 +232,12 @@ namespace Connect4LAN
             client = new Network.Clientside.Client();
             client.ChatMessageRecieved += ChatMessageReceivedHandler;
             client.ColorChanged += ColorChanged;
-                client.ConnectionLost
-                client.MovementRecieved
-                client.PlayerJoined
-                client.PlayerNamedChanged
-                client.Received
-                client.ServerMessageRecieved
+            client.ConnectionLost += ConnectionLost;
+            client.MovementRecieved += MovementReceived;
+            client.PlayerJoined += PlayerJoined;
+            client.PlayerNamedChanged += PlayerNameChanged;
+            //    client.Received
+            //    client.ServerMessageRecieved
         }
 
 		#endregion
@@ -216,6 +248,10 @@ namespace Connect4LAN
 		/// </summary>
 		private void HostAndJoinGame()
 		{
+            yourTurn = true;
+            ownColor = Colors.Yellow;
+            enemyColor = Colors.Red;
+            if (server != null) server.Stop();
 			server = new Network.Serverside.Server();
 			JoinGame("localhost");
 		}
@@ -226,6 +262,9 @@ namespace Connect4LAN
 		/// <param name="ip"></param>
 		private void JoinGame()
 		{
+            yourTurn = false;
+            ownColor = Colors.Red;
+            enemyColor = Colors.Yellow;
             var query = new View.QueryBox();
             query.ShowDialog();
 			JoinGame(query.IP);
@@ -249,13 +288,15 @@ namespace Connect4LAN
 
         private void PutPiece(int colIdx)
         {
+            if (!yourTurn) return;
             int row = board.PutPiece(colIdx, new Game.Piece());
+            Pieces[colIdx][row] = ownColor;
         }
 
         private void ResetGame()
         {
             GameVisible = false;
-            InitPieces();
+            InitBoard();
             InitClient();
             RaisePropertyChanged(null);
         }
@@ -276,13 +317,32 @@ namespace Connect4LAN
 
         private void ConnectionLost(object sender, EventArgs args)
         {
-            throw new NotImplementedException();
+            ChatMessages.Add("Connection lost");
+            ResetGame();
         }
 
         private void MovementReceived(object sender, Network.Move move)
         {
+            if (yourTurn)
+            {
+                MessageBox.Show("Game out of sync!");
+                ResetGame();
+            }
             board.PutPiece(move.Column, new Game.Piece() { Color = move.Color });
-            throw new NotImplementedException("Whos turn? Did someone win?");
+            yourTurn = true;
+            RaisePropertyChanged(null);
+        }
+
+        // TODO: Check if done
+        private void PlayerJoined(object sender, string playerName)
+        {
+            EnemyName = playerName;
+            ChatMessages.Add(playerName + " connected");
+        }
+
+        private void PlayerNameChanged(object sender, string newName)
+        {
+            Name = newName;
         }
 
         #endregion
