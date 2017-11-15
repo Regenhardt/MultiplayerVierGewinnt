@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,21 @@ namespace Connect4LAN.Network.Clientside
 	/// </summary>
 	class Client : NetworkAdapter
 	{
+		/// <summary>
+		/// The Current users IPadress
+		/// </summary>
+		/// <exception cref="IOException">When the host is not connected to a network</exception>
+		public new IPAddress IP
+		{
+			get
+			{
+				if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+					throw new IOException("Not connected to a network.");
+					
+				return Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);				
+			}
+		}
+
 		/// <summary>
 		/// The Name of the player
 		/// </summary>
