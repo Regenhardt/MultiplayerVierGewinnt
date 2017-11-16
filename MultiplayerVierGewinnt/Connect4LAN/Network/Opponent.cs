@@ -18,8 +18,8 @@ namespace Connect4LAN.Network
 		/// </summary>
 		public Color Color
 		{
-			get => (Color) ColorConverter.ConvertFromString(message);
-			set => message = value.ToString();
+			get { return (Color)ColorConverter.ConvertFromString(message); }
+			set { message = value.ToString(); }
 		}
 	}
 }
