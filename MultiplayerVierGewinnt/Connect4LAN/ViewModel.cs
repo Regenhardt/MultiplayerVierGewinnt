@@ -291,9 +291,16 @@ namespace Connect4LAN
         /// <param name="ip"></param>
         private void JoinGame(string ip)
         {
-            client.Connect(ip);
-            SetupVisible = false;
-            GameVisible = true;
+            if (!client.Connect(ip))
+            {
+                MessageBox.Show("Connection failed.");
+                ResetGame();
+            }
+            else
+            {
+                SetupVisible = false;
+                GameVisible = true;
+            }
         }
 
         private void SendChatMessage(string msg)
@@ -304,9 +311,12 @@ namespace Connect4LAN
 
         private void PutPiece(int colIdx)
         {
-            if (!yourTurn) return;
-            int row = board.PutPiece(colIdx, new Game.Piece());
+            if (!yourTurn)
+                return;
+            yourTurn = false;
+            int row = board.PutPiece(colIdx, new Game.Piece() { Color = ownColor });
             Pieces[colIdx][row] = ownColor;
+            Notify(null);
         }
 
         private void ResetGame()
