@@ -66,7 +66,7 @@ namespace Connect4LAN.Network
 		#region  [ Properties ]
 
 		/// <summary>
-		/// THe IPAdress of the connected user
+		/// The IPAdress of the connected user
 		/// </summary>
 		public IPAddress IP { get; private set; }
 
