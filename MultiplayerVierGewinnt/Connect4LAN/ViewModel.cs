@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Connect4LAN.Network;
 
 namespace Connect4LAN
 {
@@ -106,7 +107,16 @@ namespace Connect4LAN
         }
         private bool gameVisible;
 
-        public bool SetupVisible => !GameVisible;
+        public bool SetupVisible
+        {
+            get => setupVisible;
+            set
+            {
+                setupVisible = value;
+                Notify();
+            }
+        }
+        private bool setupVisible;
 
         public Color[][] Pieces
         {
@@ -149,19 +159,19 @@ namespace Connect4LAN
 		}
 
 
-        public string EnemyName
+        public string OpponentName
         {
             get
             {
-                return enemyName;
+                return opponentName;
             }
             set
             {
-                enemyName = value;
+                opponentName = value;
                 Notify();
             }
         }
-        private string enemyName;
+        private string opponentName;
 
 		#endregion 
 
@@ -209,6 +219,7 @@ namespace Connect4LAN
             InitClient();
             Title = $"Connect4Lan - {client.Name}";
             GameVisible = false;
+            SetupVisible = true;
         }
 
         private void InitBoard()
@@ -251,6 +262,7 @@ namespace Connect4LAN
             yourTurn = true;
             ownColor = Colors.Yellow;
             enemyColor = Colors.Red;
+            SetupVisible = false;
             if (server != null) server.Stop();
 			server = new Network.Serverside.Server();
 			JoinGame("localhost");
@@ -277,6 +289,7 @@ namespace Connect4LAN
         private void JoinGame(string ip)
         {
             client.Connect(ip);
+            SetupVisible = false;
             GameVisible = true;
         }
 
@@ -296,6 +309,7 @@ namespace Connect4LAN
         private void ResetGame()
         {
             GameVisible = false;
+            SetupVisible = true;
             InitBoard();
             InitClient();
             RaisePropertyChanged(null);
@@ -332,12 +346,12 @@ namespace Connect4LAN
             yourTurn = true;
             RaisePropertyChanged(null);
         }
-
-        // TODO: Check if done
-        private void PlayerJoined(object sender, string playerName)
+        
+        private void PlayerJoined(object sender, Opponent opponent)
         {
-            EnemyName = playerName;
-            ChatMessages.Add(playerName + " connected");
+            OpponentName = opponent.Name;
+            ChatMessages.Add(OpponentName + " connected");
+            GameVisible = true;
         }
 
         private void PlayerNameChanged(object sender, string newName)

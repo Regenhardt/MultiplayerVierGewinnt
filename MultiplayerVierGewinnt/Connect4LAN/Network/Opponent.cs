@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace Connect4LAN.Network
 {
-	struct Oponnent
+	struct Opponent
 	{
 		public string Name { get; set; }		
 
