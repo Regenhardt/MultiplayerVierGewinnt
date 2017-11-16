@@ -109,7 +109,10 @@ namespace Connect4LAN
 
         public bool SetupVisible
         {
-            get => setupVisible;
+            get
+			{
+				return setupVisible;
+			}
             set
             {
                 setupVisible = value;
