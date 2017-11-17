@@ -78,7 +78,7 @@
     <Compile Include="Network\ChatMessage.cs" />
     <Compile Include="Game\ConnectFourGame.cs" />
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="ViewModel.cs" />
+    <Compile Include="GameViewModel.cs" />
     <Compile Include="View\InputBox.xaml.cs">
       <DependentUpon>InputBox.xaml</DependentUpon>
     </Compile>

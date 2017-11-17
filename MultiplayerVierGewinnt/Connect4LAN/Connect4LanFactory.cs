@@ -15,7 +15,7 @@ namespace Connect4LAN
     
         public Window GetWindow()
         {
-            var viewModel = new ViewModel();
+            var viewModel = new GameViewModel();
             var window = new View.GameWindow(viewModel);
 
             return window;

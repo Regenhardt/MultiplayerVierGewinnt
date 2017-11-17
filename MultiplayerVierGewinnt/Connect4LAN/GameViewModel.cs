@@ -16,7 +16,7 @@ using System.Windows.Threading;
 
 namespace Connect4LAN
 {
-    internal class ViewModel : INotifyPropertyChanged
+    internal class GameViewModel : INotifyPropertyChanged
     {
 
         #region [ Commands ]
@@ -54,7 +54,7 @@ namespace Connect4LAN
         {
             get
             {
-                if (sendChatMessageCommand == null) sendChatMessageCommand = new RelayCommand(param => SendChatMessage((string) param));
+                if (sendChatMessageCommand == null) sendChatMessageCommand = new RelayCommand(param => SendChatMessage());
                 return sendChatMessageCommand;
             }
         }
@@ -67,7 +67,9 @@ namespace Connect4LAN
         {
             get
             {
-                return putPieceCommand?? new RelayCommand(param => PutPiece(int.Parse(param.ToString())));
+                if(putPieceCommand == null)
+                    putPieceCommand = new RelayCommand(param => PutPiece(int.Parse(param.ToString())));
+                return putPieceCommand;
             }
         }
         private RelayCommand putPieceCommand;
@@ -75,8 +77,7 @@ namespace Connect4LAN
         #endregion
 
         #region [ Properties ]
-
-
+        
         public string Title
         {
             get
@@ -141,6 +142,34 @@ namespace Connect4LAN
             }
         }
         private Color[][] pieces;
+        
+        public string ChatInput
+        {
+            get
+            {
+                return chatInput;
+            }
+            set
+            {
+                chatInput = value;
+                Notify();
+            }
+        }
+        private string chatInput;
+        
+        public string IpAddress
+        {
+            get
+            {
+                return ipAdress;
+            }
+            set
+            {
+                ipAdress = value;
+                Notify();
+            }
+        }
+        private string ipAdress;
 
 		#region [ Name ]
 
@@ -156,9 +185,9 @@ namespace Connect4LAN
 				if (name != value)
 				{
 					name = value;
-                    Title = "Connect4Lan - " + name;
-					RaisePropertyChanged("Name");
+                    Title = nameof(Connect4LAN) + " - " + name;
                     Notify();
+                    Notify(nameof(Title));
 				}
 			}
 		}
@@ -207,6 +236,7 @@ namespace Connect4LAN
 
         public const int GameWidth = 7;
         public const int GameHeight = 6;
+
         private bool yourTurn;
         Color ownColor = Colors.Yellow;
         Color enemyColor = Colors.Red;
@@ -222,12 +252,14 @@ namespace Connect4LAN
         /// <summary>
         /// Builds a new ViewModel and initializes an empty field.
         /// </summary>
-        public ViewModel()
+        public GameViewModel()
         {
             InitChat();
             InitBoard();
             InitClient();
-            Title = $"Connect4Lan - {client.Name}";
+            IpAddress = client.IP.MapToIPv4().ToString();
+            Name = "Player 1";
+            Title = $"Connect4Lan - {Name}";
             GameVisible = false;
             SetupVisible = true;
             dispatcher = Dispatcher.CurrentDispatcher;
@@ -325,12 +357,19 @@ namespace Connect4LAN
         /// Sends a chat message to the chat window and the server.
         /// </summary>
         /// <param name="msg"></param>
-        private void SendChatMessage(string msg)
+        private void SendChatMessage()
 		{
-			client.SendMessage(msg);
-            WriteChatMessage(msg);
+            WriteChatMessage(Name + ": " + ChatInput);
+            if(GameVisible)
+			    client.SendMessage(ChatInput);
+            ChatInput = string.Empty;
 		}
 
+        /// <summary>
+        /// Writes a message to the chat window.
+        /// Should be thread safe.
+        /// </summary>
+        /// <param name="msg"></param>
         private void WriteChatMessage(string msg)
         {
             dispatcher.Invoke(() => ChatMessages.Add(msg));
@@ -379,9 +418,9 @@ namespace Connect4LAN
 
         #region [ EventHandlers ]
 
-        private void ChatMessageReceivedHandler(object sender, string args)
+        private void ChatMessageReceivedHandler(object sender, string message)
         {
-            ChatMessages.Add(OpponentName + ": " + args);
+            WriteChatMessage(OpponentName + ": " + message);
         }
 
         private void ColorChanged(object sender, Color args)
