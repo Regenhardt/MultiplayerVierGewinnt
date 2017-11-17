@@ -28,7 +28,7 @@ namespace Connect4LAN.Network.Serverside
 		public Server(int port = 16569)
 		{
 			//insantiate the Socket
-			socket = new TcpListener(Dns.GetHostAddresses("localhost")[0], port);
+			socket = new TcpListener(IPAddress.Any, port);
 			//only 2 players can play simultaniously
 			players = new Player[2];
 			//start accepting incoming requests and only allow 1 person to be in queue at a time
