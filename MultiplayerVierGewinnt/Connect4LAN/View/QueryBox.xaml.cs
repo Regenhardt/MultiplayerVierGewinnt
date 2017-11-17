@@ -52,6 +52,9 @@ namespace Connect4LAN.View
         {
             InitializeComponent();
             DataContext = this;
+            #if DEBUG
+            IP = "localhost";
+            #endif
         }
 
         private void ConfirmIP() => Close();
