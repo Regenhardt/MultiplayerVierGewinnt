@@ -84,6 +84,7 @@ namespace Connect4LAN
 			{
 				return title;
 			}
+
 			set
 			{
 				title = value;
@@ -176,16 +177,15 @@ namespace Connect4LAN
 		string name;
 		public string Name
 		{
-			get
-			{
-				return name;
-			}
+			get => name;
 			set
 			{
 				if (name != value)
 				{
 					name = value;
 					Title = nameof(Connect4LAN) + " - " + name;
+					if (client != null)
+						client.Name = name;
 					Notify();
 					Notify(nameof(Title));
 				}
@@ -308,6 +308,7 @@ namespace Connect4LAN
 		#endregion
 
 		#region [ Methods ]
+
 		/// <summary>
 		/// Hosts a game and then joins it 
 		/// </summary>
@@ -478,6 +479,8 @@ namespace Connect4LAN
 
 		#endregion
 
+		#region [ NotifyPropertyChanged ]
+
 		private void Notify([CallerMemberName]string propertyName = "")
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -487,5 +490,8 @@ namespace Connect4LAN
 			Notify(propertyName);
 		}
 		public event PropertyChangedEventHandler PropertyChanged;
+
+		#endregion
+
 	}
 }
