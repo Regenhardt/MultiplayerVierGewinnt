@@ -72,8 +72,7 @@ namespace Connect4LAN.Network
 					@out.WriteLine(new NetworkMessage<Opponent> { Message = msg, MessageType = type }.Serilize());
 					break;
 				default:
-					throw new ArgumentException();
-					break;
+					throw new ArgumentException();				
 			}
 			
 		}
