@@ -294,7 +294,18 @@
                 </Grid.RowDefinitions>
 
                 <ListBox Grid.Row="0" Name="ChatWindow" Background="Azure" ItemsSource="{Binding ChatMessages}" />
-                <local:InputBox Grid.Row="1" Background="Aqua" Command="{Binding SendChatMessageCommand}" />
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="40" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Name="InputTextBox" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                    <Button Grid.Column="1" Height="40" Width="40" IsDefault="True" Command="{Binding SendChatMessageCommand}" CommandParameter="{Binding ElementName=InputTextBox, Path=Text}">
+                        <Button.Content>
+                            <Image Source="arrowright.png" />
+                        </Button.Content>
+                    </Button>
+                </Grid>
 
             </Grid>
 		</Grid>
