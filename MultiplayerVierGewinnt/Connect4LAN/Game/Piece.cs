@@ -17,7 +17,7 @@ namespace Connect4LAN.Game
 		/// <summary>
 		/// Flag if this is the winning piece
 		/// </summary>
-		public bool WinningPiece { get; set; }
+		public bool IsWinningPiece { get; set; }
 
 		//To save Server Computational power we store it's neighbour
 		#region [ SuperPiece ]

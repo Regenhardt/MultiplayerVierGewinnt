@@ -89,7 +89,7 @@ namespace Connect4LAN.Game
 			if (!weHaveAWinner)
 			{
 				var piece = placePiece(move, player.Color);
-				if (isWinningMove(piece))
+				if (piece.IsWinningPiece)
 				{
 					//send out who won
 					string msg = $"Player {player.Name} has won.";
@@ -112,8 +112,13 @@ namespace Connect4LAN.Game
 		/// <param name="color"></param>
 		private Piece placePiece(Move move, Color color)
 		{
+			//iniate piec eon board
 			Piece piece = new Piece{ Color = color };
-			this.Gameboard.PutPiece(move.Column, piece);
+			//place it in its collum/row
+			var row = Gameboard.PutPiece(move.Column, piece);
+			//update the neighboring pieces
+			calculateNeighbours(move.Column, row, piece);
+			//return the piece
 			return piece;			
 		}
 
@@ -126,18 +131,24 @@ namespace Connect4LAN.Game
 
 			bool canExistsLeft = collumn != 0, canExistsRight = collumn != (Board.GetLength(0) - 1);
 			bool canExistsBelow = row != 0, canExistsAbove = row != (Board.GetLength(1) - 1);
-
-			//the one next to that 
-			int left, right;
+			bool topLeftChecked = false, topRightChecked = false;
+			
 			//checks the piece on the oard if its freindly
 			Func<int, int, Piece, bool> pieceIsFriendly = new Func<int, int, Piece, bool>((co, ro, pi) => 
 			{
-				//check if peice is initilized
-				if (!Gameboard.IsInitilized(Board[co, ro]))
-					return false;
+				try
+				{
+					//check if peice is initilized
+					if (!Gameboard.IsInitilized(Board[co, ro]))
+						return false;
 
-				//return if both colors are equal
-				return Board[co, ro].Color == pi.Color;
+					//return if both colors are equal
+					return Board[co, ro].Color == pi.Color;
+				}
+				catch (IndexOutOfRangeException)
+				{
+					return false;
+				}
 			});
 
 			#region [ Check Bottom ]
@@ -168,7 +179,9 @@ namespace Connect4LAN.Game
 							p2.FriendlyAmountBottomLeft = p1.FriendlyAmountBottomLeft + 1;
 
 							//Don't have to set bottom/top right/left from current piece, because it will never ever be read from again
-							piece.WinningPiece = p1.FriendlyAmountTopRight >= 4 || p2.FriendlyAmountBottomLeft >= 4;
+							piece.IsWinningPiece = p1.FriendlyAmountTopRight >= 4 || p2.FriendlyAmountBottomLeft >= 4;
+
+							topRightChecked = true;
 						}
 						//no friendly top right exists
 						else
@@ -178,7 +191,7 @@ namespace Connect4LAN.Game
 							piece.FriendlyAmountBottomLeft = p1.FriendlyAmountBottomLeft + 1;
 
 							//set the winning piece
-							piece.WinningPiece = p1.FriendlyAmountTopRight >= 4 || piece.FriendlyAmountBottomLeft >= 4;
+							piece.IsWinningPiece = p1.FriendlyAmountTopRight >= 4 || piece.FriendlyAmountBottomLeft >= 4;
 						}
 
 					}
@@ -193,8 +206,29 @@ namespace Connect4LAN.Game
 					//TODO moaa calcu
 					if (p1.Color == piece.Color)
 					{
-						piece.FriendlyAmountBottomLeft = p1.FriendlyAmountBottomLeft + 1;
-						p1.FriendlyAmountTopRight += 1; 
+						//check if a topright piece exists
+						if (canExistsLeft && canExistsAbove && pieceIsFriendly(collumn - 1, row + 1, piece))
+						{
+							//get 2nd piece and adjust movement
+							p2 = Board[collumn - 1, row + 1];
+							p1.FriendlyAmountTopRight = p2.FriendlyAmountTopRight + 1;
+							p2.FriendlyAmountBottomLeft = p1.FriendlyAmountBottomLeft + 1;
+
+							//Don't have to set bottom/top right/left from current piece, because it will never ever be read from again
+							piece.IsWinningPiece = p1.FriendlyAmountTopRight >= 4 || p2.FriendlyAmountBottomLeft >= 4;
+
+							topLeftChecked = true;
+						}
+						//no friendly top right exists
+						else
+						{
+							//set pieces
+							p1.FriendlyAmountTopRight += 1;
+							piece.FriendlyAmountBottomLeft = p1.FriendlyAmountBottomLeft + 1;
+
+							//set the winning piece
+							piece.IsWinningPiece = p1.FriendlyAmountTopRight >= 4 || piece.FriendlyAmountBottomLeft >= 4;
+						}
 					}
 				}
 				else
@@ -209,16 +243,19 @@ namespace Connect4LAN.Game
 			if (canExistsLeft && Gameboard.IsInitilized(Board[collumn - 1, row]))
 			{
 				p1 = Board[collumn - 1, row];
-					//TODO moaa calcu
+				//TODO moaa calcu
 				if (p1.Color == piece.Color)
 				{
-
 					piece.FriendlyAmountMiddleLeft = p1.FriendlyAmountMiddleLeft + 1;
-					p1.FriendlyAmountMiddleRight += 1; 
+					p1.FriendlyAmountMiddleRight += 1;
+
+					//set if it was the winning piece
+					piece.IsWinningPiece = piece.FriendlyAmountMiddleLeft >= 4 || p1.FriendlyAmountMiddleRight >= 4;
 				}
 			}
 			else
 				canExistsLeft = false;
+
 			// middle right
 			if (canExistsRight && Gameboard.IsInitilized(Board[collumn + 1, row]))
 			{
@@ -227,7 +264,10 @@ namespace Connect4LAN.Game
 				if (p1.Color == piece.Color)
 				{
 					piece.FriendlyAmountMiddleRight = p1.FriendlyAmountMiddleRight + 1;
-					p1.FriendlyAmountMiddleLeft += 1; 
+					p1.FriendlyAmountMiddleLeft += 1;
+
+					//set if it was the winning piece
+					piece.IsWinningPiece = piece.FriendlyAmountMiddleRight >= 4 || p1.FriendlyAmountMiddleLeft >= 4;
 				}
 			}
 			else
@@ -238,31 +278,37 @@ namespace Connect4LAN.Game
 			#region [ Check Top ]
 
 			//the top
-			if (row != Board.GetLength(1) - 1)
+			if (canExistsAbove)
 			{
 				//top left
-				if (canExistsLeft && Gameboard.IsInitilized(Board[collumn - 1, row + 1]))
+				if (canExistsLeft && !topLeftChecked && Gameboard.IsInitilized(Board[collumn - 1, row + 1]))
 				{
 					p1 = Board[collumn - 1, row + 1];
 
 					//TODO moaa calcu
 					if (p1.Color == piece.Color)
 					{
-
 						piece.FriendlyAmountTopLeft = p1.FriendlyAmountTopLeft + 1;
-						p1.FriendlyAmountTopRight += 1; 
+						p1.FriendlyAmountBottomRight += 1;
+
+						//set if it was the winning piece
+						piece.IsWinningPiece = piece.FriendlyAmountTopLeft >= 4 || p1.FriendlyAmountBottomRight >= 4;
 					}
 				}
+
 				//top right
-				if (canExistsRight && Gameboard.IsInitilized(Board[collumn + 1, row + 1]))
+				if (canExistsRight && !topRightChecked && Gameboard.IsInitilized(Board[collumn + 1, row + 1]))
 				{
 					p1 = Board[collumn + 1, row + 1];
 
 					//TODO moaa calcu
 					if (p1.Color == piece.Color)
 					{
-						piece.FriendlyAmountBottomLeft = p1.FriendlyAmountBottomLeft + 1;
-						p1.FriendlyAmountTopRight += 1; 
+						piece.FriendlyAmountTopRight = p1.FriendlyAmountTopRight + 1;
+						p1.FriendlyAmountBottomLeft += 1;
+
+						//set if it was the winning piece
+						piece.IsWinningPiece = piece.FriendlyAmountTopRight >= 4 || p1.FriendlyAmountBottomLeft >= 4;
 					}
 				}
 
@@ -270,30 +316,7 @@ namespace Connect4LAN.Game
 
 			#endregion [ Top ]
 
-
-
 		}
 
-
-		/// <summary>
-		/// Checks if the color of this piece has connected 4.
-		/// </summary>
-		/// <param name="piece"></param>
-		private bool isWinningMove(Piece piece)
-		{
-			int[] allProps = new int[]
-			{
-				piece.FriendlyAmountBottom,
-				piece.FriendlyAmountBottomLeft,
-				piece.FriendlyAmountBottomRight,
-				piece.FriendlyAmountMiddle,
-				piece.FriendlyAmountMiddleLeft,
-				piece.FriendlyAmountMiddleRight,
-				piece.FriendlyAmountTopLeft,
-				piece.FriendlyAmountTopRight
-			};
-
-			return allProps.Any(i => i >= 4);
-		}
 	}    
 }

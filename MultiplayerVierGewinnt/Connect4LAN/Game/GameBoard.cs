@@ -33,9 +33,13 @@ namespace Connect4LAN.Game
 		/// </summary>
 		/// <param name="column">The column to place the piece in.</param>
 		/// <returns>The row in which the piece landed.</returns>
+		/// <exception cref="ArgumentOutOfRangeException">If the collum is to big/small</exception>
+		/// <exception cref="InvalidOperationException">If the row is full</exception>
 		public int PutPiece(int column, Piece piece)
 		{
-            if (column >= Board.GetLength(0)) throw new ArgumentOutOfRangeException("Column outisde of board boundaries.");
+            if (column >= Board.GetLength(0) || column < 0)
+				throw new ArgumentOutOfRangeException("Column outisde of board boundaries.");
+
 			//put the piece in the column
 			int row;
 			for (row = 0; row < Board.GetLength(1); row++)
@@ -49,6 +53,7 @@ namespace Connect4LAN.Game
 					return row;
 				}
 			}
+
             throw new InvalidOperationException("This column is full.");	
 		}
 
