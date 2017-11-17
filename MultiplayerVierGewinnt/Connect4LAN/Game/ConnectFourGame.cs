@@ -89,7 +89,7 @@ namespace Connect4LAN.Game
 			if (!weHaveAWinner)
 			{
 				var piece = placePiece(move, player.Color);
-				if (isWinningMove(piece))
+				if (piece.IsWinningPiece)
 				{
 					//send out who won
 					string msg = $"Player {player.Name} has won.";
@@ -112,8 +112,13 @@ namespace Connect4LAN.Game
 		/// <param name="color"></param>
 		private Piece placePiece(Move move, Color color)
 		{
+			//iniate piec eon board
 			Piece piece = new Piece{ Color = color };
-			this.Gameboard.PutPiece(move.Column, piece);
+			//place it in its collum/row
+			var row = Gameboard.PutPiece(move.Column, piece);
+			//update the neighboring pieces
+			calculateNeighbours(move.Column, row, piece);
+			//return the piece
 			return piece;			
 		}
 
@@ -313,26 +318,5 @@ namespace Connect4LAN.Game
 
 		}
 
-
-		/// <summary>
-		/// Checks if the color of this piece has connected 4.
-		/// </summary>
-		/// <param name="piece"></param>
-		private bool isWinningMove(Piece piece)
-		{
-			int[] allProps = new int[]
-			{
-				piece.FriendlyAmountBottom,
-				piece.FriendlyAmountBottomLeft,
-				piece.FriendlyAmountBottomRight,
-				piece.FriendlyAmountMiddle,
-				piece.FriendlyAmountMiddleLeft,
-				piece.FriendlyAmountMiddleRight,
-				piece.FriendlyAmountTopLeft,
-				piece.FriendlyAmountTopRight
-			};
-
-			return allProps.Any(i => i >= 4);
-		}
 	}    
 }
