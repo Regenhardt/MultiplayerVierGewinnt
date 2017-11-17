@@ -9,7 +9,7 @@ namespace Connect4LAN.Network
 	/// <summary>
 	/// The type of mesage sent thrtough the network
 	/// </summary>
-	enum NetworkMessageType
+	public enum NetworkMessageType
 	{
 		/// <summary>
 		/// A Message from the server to display to the client
@@ -52,7 +52,7 @@ namespace Connect4LAN.Network
 		/// <param name="type"></param>
 		/// <returns></returns>
 		/// <exception cref="FormatException">On any converstion that is new</exception>
-		static Type ToType(this NetworkMessageType type)
+		public static Type ToType(this NetworkMessageType type)
 		{
 			switch (type)
 			{
