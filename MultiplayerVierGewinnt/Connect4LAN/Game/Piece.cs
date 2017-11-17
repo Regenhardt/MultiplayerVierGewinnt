@@ -65,3 +65,4 @@ namespace Connect4LAN.Game
 		#endregion [ SuperPiece ]
 	}
 }
+	

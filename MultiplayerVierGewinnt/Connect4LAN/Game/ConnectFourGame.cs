@@ -9,13 +9,13 @@ using System.Windows.Media;
 
 namespace Connect4LAN.Game
 {
-    /// <summary>
-    /// Represents a Connect4 Game instance.
-    /// </summary>
-    class ConnectFourGame
-    {
-        public Player player1 { get; private set; }
-        public Player player2 { get; private set; }
+	/// <summary>
+	/// Represents a Connect4 Game instance.
+	/// </summary>
+	class ConnectFourGame
+	{
+		public Player player1 { get; private set; }
+		public Player player2 { get; private set; }
 
 		public Gameboard Gameboard { get; private set; }
 
@@ -28,10 +28,10 @@ namespace Connect4LAN.Game
 		/// <param name="player1"></param>
 		/// <param name="player2"></param>
 		public ConnectFourGame(Player player1, Player player2)
-        {
+		{
 			//set variables
-            this.player1 = player1;
-            this.player2 = player2;
+			this.player1 = player1;
+			this.player2 = player2;
 			this.Gameboard = new Gameboard();
 
 			EventHandler<string> handler;

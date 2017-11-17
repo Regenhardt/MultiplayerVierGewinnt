@@ -20,7 +20,7 @@ namespace Connect4LAN.Network
 
 
 		/// <summary>
-		/// The message that is sent 
+		/// The message that is sent	
 		/// </summary>
 		public T Message { get; set; }
 

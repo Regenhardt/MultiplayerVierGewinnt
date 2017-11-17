@@ -12,31 +12,31 @@ using System.Windows.Media;
 
 namespace Connect4LAN.Network.Serverside
 {
-    /// <summary>
-    /// The Server wich hosts the Game
-    /// </summary>
-    class Server
-    {
-        private TcpListener socket;
-        private Player[] players;
+	/// <summary>
+	/// The Server wich hosts the Game
+	/// </summary>
+	class Server
+	{
+		private TcpListener socket;
+		private Player[] players;
 
-        /// <summary>
-        /// Opens a TCP Listner Port on the specified port 
+		/// <summary>
+		/// Opens a TCP Listner Port on the specified port 
 		/// --> Starts the god damned server
-        /// </summary>
-        /// <param name="port">The Port on wich the listning shall be</param>
-        public Server(int port = 16569)
-        {
+		/// </summary>
+		/// <param name="port">The Port on wich the listning shall be</param>
+		public Server(int port = 16569)
+		{
 			//insantiate the Socket
 			socket = new TcpListener(Dns.GetHostAddresses("localhost")[0], port);
-            //only 2 players can play simultaniously
-            players = new Player[2];
-            //start accepting incoming requests and only allow 1 person to be in queue at a time
-            socket.Start(1);
+			//only 2 players can play simultaniously
+			players = new Player[2];
+			//start accepting incoming requests and only allow 1 person to be in queue at a time
+			socket.Start(1);
 
 			//process the incoming requests
 			processIncomingRequestsASync();
-        }
+		}
 
 
 		/// <summary>
@@ -48,13 +48,13 @@ namespace Connect4LAN.Network.Serverside
 			throw new Exception("Already Done nigga!");
 		}
 
-        /// <summary>
-        /// Processes Incoming Requests
-        /// </summary>
-        private async void processIncomingRequestsASync()
-        {			
-            //get the first client
-            var client = await socket.AcceptTcpClientAsync();
+		/// <summary>
+		/// Processes Incoming Requests
+		/// </summary>
+		private async void processIncomingRequestsASync()
+		{			
+			//get the first client
+			var client = await socket.AcceptTcpClientAsync();
 			players[0] = parseRequest(await (new StreamReader(client.GetStream())).ReadLineAsync(), Colors.Yellow, client);
 			//TODO JSON FOrmat
 			players[0].NetworkAdapter.SendMessage("Waiting for one more player...", NetworkMessageType.ServerMessage);
@@ -86,14 +86,14 @@ namespace Connect4LAN.Network.Serverside
 			//send to other wether its a chat message or a movement
 			if(message.MessageType == NetworkMessageType.ChatMessage)
 				player.NetworkAdapter.SendMessage(message.Message, NetworkMessageType.ChatMessage);
-            else if(message.MessageType == NetworkMessageType.Move)
-            {
-                player.NetworkAdapter.SendMessage(NetworkMessage<Move>.DeSerialize(serilizedMessage).Message, NetworkMessageType.Move);
-            }
+			else if(message.MessageType == NetworkMessageType.Move)
+			{
+				player.NetworkAdapter.SendMessage(NetworkMessage<Move>.DeSerialize(serilizedMessage).Message, NetworkMessageType.Move);
+			}
 		}
 
-        private Player parseRequest(string json, Color color, TcpClient client)
-        {
+		private Player parseRequest(string json, Color color, TcpClient client)
+		{
 			//decode the message
 			var msg = NetworkMessage<object>.DeSerialize(json);
 			//the first message is always the name
@@ -117,12 +117,12 @@ namespace Connect4LAN.Network.Serverside
 			return player;
 		}
 		
-        /// <summary>
-        /// Stops the Server
-        /// </summary>
-        public void Stop()
-        {
-            socket.Stop();
-        }
-    }
+		/// <summary>
+		/// Stops the Server
+		/// </summary>
+		public void Stop()
+		{
+			socket.Stop();
+		}
+	}
 }
