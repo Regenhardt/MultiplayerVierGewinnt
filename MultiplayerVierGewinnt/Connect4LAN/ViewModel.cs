@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Connect4LAN.Network;
 using System.Collections.Concurrent;
+using System.Windows.Threading;
 
 namespace Connect4LAN
 {
@@ -198,7 +199,7 @@ namespace Connect4LAN
             }
         }
         private ObservableCollection<string> chatMessages;
-        private ConcurrentBag<string> chatMsg;
+        private ConcurrentQueue<string> chatMsg;
 
         #endregion
 
@@ -212,6 +213,7 @@ namespace Connect4LAN
         Network.Serverside.Server server;
         Network.Clientside.Client client;
         Game.Gameboard board;
+        Dispatcher dispatcher;
 
         #endregion
 
@@ -228,25 +230,15 @@ namespace Connect4LAN
             Title = $"Connect4Lan - {client.Name}";
             GameVisible = false;
             SetupVisible = true;
+            dispatcher = Dispatcher.CurrentDispatcher;
         }
 
         private void InitChat()
         {
-            new Thread(RunChat).Start();
-        }
-        private void RunChat()
-        {
             ChatMessages = new ObservableCollection<string>();
-            chatMsg = new ConcurrentBag<string>();
-            while (true)
-            {
-                if (chatMsg.TryTake(out string message))
-                {
-                    ChatMessages.Add(message);
-                }
-                Thread.Sleep(100);
-            }
+            chatMsg = new ConcurrentQueue<string>();
         }
+
         private void InitBoard()
         {
             // Init Board
@@ -340,7 +332,7 @@ namespace Connect4LAN
 
         private void WriteChatMessage(string msg)
         {
-            chatMsg.Add(msg);
+            dispatcher.Invoke(() => ChatMessages.Add(msg));
         }
 
         /// <summary>
