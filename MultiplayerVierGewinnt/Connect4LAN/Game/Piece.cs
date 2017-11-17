@@ -7,17 +7,12 @@ using System.Windows.Media;
 
 namespace Connect4LAN.Game
 {
-	struct Piece
+	class Piece
 	{
 		/// <summary>
 		/// THe Color of the piece
 		/// </summary>
 		public Color Color { get; set; }
-
-		/// <summary>
-		/// Flag if this is the winning piece
-		/// </summary>
-		public bool IsWinningPiece { get; set; }
 
 		//To save Server Computational power we store it's neighbour
 		#region [ SuperPiece ]
@@ -63,6 +58,10 @@ namespace Connect4LAN.Game
 		/// </summary>
 		public int FriendlyAmountTopRight { get; set; }
 
+		/// <summary>
+		/// Flag if this is the winning piece
+		/// </summary>
+		public bool IsWinningPiece { get; set; }
 		#endregion [ SuperPiece ]
 	}
 }
