@@ -121,28 +121,67 @@ namespace Connect4LAN.Game
 		{
 			//check other pieces
 			//check bottom row
-			Piece tmp;
+			Piece p1, p2;
 			var Board = Gameboard.Board;
 
 			bool canExistsLeft = collumn != 0, canExistsRight = collumn != (Board.GetLength(0) - 1);
+			bool canExistsBelow = row != 0, canExistsAbove = row != (Board.GetLength(1) - 1);
+
+			//the one next to that 
+			int left, right;
+			//checks the piece on the oard if its freindly
+			Func<int, int, Piece, bool> pieceIsFriendly = new Func<int, int, Piece, bool>((co, ro, pi) => 
+			{
+				//check if peice is initilized
+				if (!Gameboard.IsInitilized(Board[co, ro]))
+					return false;
+
+				//return if both colors are equal
+				return Board[co, ro].Color == pi.Color;
+			});
 
 			#region [ Check Bottom ]
 
 			//the bottom row
-			if (row != 0)
+			if (canExistsBelow)
 			{
 				//bottom middle
 				if (Gameboard.IsInitilized(Board[collumn, row - 1]))
 				{
-					tmp = Board[collumn, row - 1];
-					piece.FriendlyAmountBottom = tmp.FriendlyAmountBottom + 1;
+					p1 = Board[collumn, row - 1];
+					if(p1.Color == piece.Color)
+						piece.FriendlyAmountBottom = p1.FriendlyAmountBottom + 1;
 				}
 				//bottom left
 				if (canExistsLeft && Gameboard.IsInitilized(Board[collumn - 1, row - 1]))
 				{
-					tmp = Board[collumn - 1, row - 1];
-					piece.FriendlyAmountBottomLeft = tmp.FriendlyAmountBottomLeft + 1;
-					tmp.FriendlyAmountTopRight += 1;
+					p1 = Board[collumn - 1, row - 1];
+					//TODO moaa calcu
+					if (p1.Color == piece.Color)
+					{
+						//check if a topright piece exists
+						if(canExistsRight && canExistsAbove && pieceIsFriendly(collumn + 1, row + 1, piece))
+						{
+							//get 2nd piece and adjust movement
+							p2 = Board[collumn + 1, row + 1];
+							p1.FriendlyAmountTopRight = p2.FriendlyAmountTopRight + 1;
+							p2.FriendlyAmountBottomLeft = p1.FriendlyAmountBottomLeft + 1;
+
+							//Don't have to set bottom/top right/left from current piece, because it will never ever be read from again
+							piece.WinningPiece = p1.FriendlyAmountTopRight >= 4 || p2.FriendlyAmountBottomLeft >= 4;
+						}
+						//no friendly top right exists
+						else
+						{
+							//set pieces
+							p1.FriendlyAmountTopRight += 1;
+							piece.FriendlyAmountBottomLeft = p1.FriendlyAmountBottomLeft + 1;
+
+							//set the winning piece
+							piece.WinningPiece = p1.FriendlyAmountTopRight >= 4 || piece.FriendlyAmountBottomLeft >= 4;
+						}
+
+					}
 				}
 				else
 					canExistsLeft = false;
@@ -150,9 +189,13 @@ namespace Connect4LAN.Game
 				//bottom right
 				if (canExistsRight && Gameboard.IsInitilized(Board[collumn + 1, row - 1]))
 				{
-					tmp = Board[collumn + 1, row - 1];
-					piece.FriendlyAmountBottomLeft = tmp.FriendlyAmountBottomLeft + 1;
-					tmp.FriendlyAmountTopRight += 1;
+					p1 = Board[collumn + 1, row - 1];
+					//TODO moaa calcu
+					if (p1.Color == piece.Color)
+					{
+						piece.FriendlyAmountBottomLeft = p1.FriendlyAmountBottomLeft + 1;
+						p1.FriendlyAmountTopRight += 1; 
+					}
 				}
 				else
 					canExistsRight = false;
@@ -165,18 +208,27 @@ namespace Connect4LAN.Game
 			// middle left
 			if (canExistsLeft && Gameboard.IsInitilized(Board[collumn - 1, row]))
 			{
-				tmp = Board[collumn - 1, row];
-				piece.FriendlyAmountMiddleLeft = tmp.FriendlyAmountMiddleLeft + 1;
-				tmp.FriendlyAmountMiddleRight += 1;
+				p1 = Board[collumn - 1, row];
+					//TODO moaa calcu
+				if (p1.Color == piece.Color)
+				{
+
+					piece.FriendlyAmountMiddleLeft = p1.FriendlyAmountMiddleLeft + 1;
+					p1.FriendlyAmountMiddleRight += 1; 
+				}
 			}
 			else
 				canExistsLeft = false;
 			// middle right
 			if (canExistsRight && Gameboard.IsInitilized(Board[collumn + 1, row]))
 			{
-				tmp = Board[collumn + 1, row];
-				piece.FriendlyAmountMiddleRight = tmp.FriendlyAmountMiddleRight + 1;
-				tmp.FriendlyAmountMiddleLeft += 1;
+				p1 = Board[collumn + 1, row];
+					//TODO moaa calcu
+				if (p1.Color == piece.Color)
+				{
+					piece.FriendlyAmountMiddleRight = p1.FriendlyAmountMiddleRight + 1;
+					p1.FriendlyAmountMiddleLeft += 1; 
+				}
 			}
 			else
 				canExistsRight = false;
@@ -191,16 +243,27 @@ namespace Connect4LAN.Game
 				//top left
 				if (canExistsLeft && Gameboard.IsInitilized(Board[collumn - 1, row + 1]))
 				{
-					tmp = Board[collumn - 1, row + 1];
-					piece.FriendlyAmountTopLeft = tmp.FriendlyAmountTopLeft + 1;
-					tmp.FriendlyAmountTopRight += 1;
+					p1 = Board[collumn - 1, row + 1];
+
+					//TODO moaa calcu
+					if (p1.Color == piece.Color)
+					{
+
+						piece.FriendlyAmountTopLeft = p1.FriendlyAmountTopLeft + 1;
+						p1.FriendlyAmountTopRight += 1; 
+					}
 				}
 				//top right
 				if (canExistsRight && Gameboard.IsInitilized(Board[collumn + 1, row + 1]))
 				{
-					tmp = Board[collumn + 1, row + 1];
-					piece.FriendlyAmountBottomLeft = tmp.FriendlyAmountBottomLeft + 1;
-					tmp.FriendlyAmountTopRight += 1;
+					p1 = Board[collumn + 1, row + 1];
+
+					//TODO moaa calcu
+					if (p1.Color == piece.Color)
+					{
+						piece.FriendlyAmountBottomLeft = p1.FriendlyAmountBottomLeft + 1;
+						p1.FriendlyAmountTopRight += 1; 
+					}
 				}
 
 			}
