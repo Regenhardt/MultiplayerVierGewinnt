@@ -122,7 +122,22 @@ namespace Connect4LAN.Game
 			return piece;			
 		}
 
+		//calculates the neighbors of a piece
 		private void calculateNeighbours(int collumn, int row, Piece piece)
+		{
+			piece.IsWinningPiece =
+				(calculateLeft(collumn - 1, row, piece) + calculateRight(collumn + 1, row, piece) > 3)					||
+				(calculateTopLeft(collumn - 1, row + 1, piece) + calculateBottomRight(collumn + 1, row - 1, piece) > 3) ||
+				(calculateTopRight(collumn + 1, row + 1, piece) + calculateBottomLeft(collumn - 1, row - 1, piece) > 3);
+		}
+
+		/// <summary>
+		/// Old way of calculaiton kept for reasons unknown
+		/// </summary>
+		/// <param name="collumn"></param>
+		/// <param name="row"></param>
+		/// <param name="piece"></param>
+		private void calculateNeighbour(int collumn, int row, Piece piece)
 		{
 			//check other pieces
 			//check bottom row
@@ -318,5 +333,210 @@ namespace Connect4LAN.Game
 
 		}
 
-	}    
+
+		/// <summary>
+		/// Calculates the left row
+		/// </summary>
+		/// <param name="collum"></param>
+		/// <param name="row"></param>
+		/// <param name="piece"></param>
+		/// <returns></returns>
+		private int calculateLeft(int collum, int row, Piece piece)
+		{
+			try
+			{
+				Piece tmp = Gameboard.Board[collum, row];
+				if (Gameboard.IsInitilized(tmp))
+				{
+					if (tmp.Color == piece.Color)
+						return 1 + calculateLeft(collum - 1, row, piece);
+					else
+						return 0;
+				}
+				else
+					return 0;
+
+			}
+			catch (IndexOutOfRangeException)
+			{
+				return 0;				
+			}
+		}
+
+		/// <summary>
+		/// Calculates the left row
+		/// </summary>
+		/// <param name="collum"></param>
+		/// <param name="row"></param>
+		/// <param name="piece"></param>
+		/// <returns></returns>
+		private int calculateTopLeft(int collum, int row, Piece piece)
+		{
+			try
+			{
+				Piece tmp = Gameboard.Board[collum, row];
+				if (Gameboard.IsInitilized(tmp))
+				{
+					if (tmp.Color == piece.Color)
+						return 1 + calculateTopLeft(collum - 1, row + 1, piece);
+					else
+						return 0;
+				}
+				else
+					return 0;
+
+			}
+			catch (IndexOutOfRangeException)
+			{
+				return 0;
+			}
+		}
+
+		/// <summary>
+		/// Calculates the left row
+		/// </summary>
+		/// <param name="collum"></param>
+		/// <param name="row"></param>
+		/// <param name="piece"></param>
+		/// <returns></returns>
+		private int calculateBottomLeft(int collum, int row, Piece piece)
+		{
+			try
+			{
+				Piece tmp = Gameboard.Board[collum, row];
+				if (Gameboard.IsInitilized(tmp))
+				{
+					if (tmp.Color == piece.Color)
+						return 1 + calculateBottomLeft(collum - 1, row - 1, piece);
+					else
+						return 0;
+				}
+				else
+					return 0;
+
+			}
+			catch (IndexOutOfRangeException)
+			{
+				return 0;
+			}
+		}
+
+		/// <summary>
+		/// Calculates the left row
+		/// </summary>
+		/// <param name="collum"></param>
+		/// <param name="row"></param>
+		/// <param name="piece"></param>
+		/// <returns></returns>
+		private int calculateBottom(int collum, int row, Piece piece)
+		{
+			try
+			{
+				Piece tmp = Gameboard.Board[collum, row];
+				if (Gameboard.IsInitilized(tmp))
+				{
+					if (tmp.Color == piece.Color)
+						return 1 + calculateBottom(collum, row - 1, piece);
+					else
+						return 0;
+				}
+				else
+					return 0;
+
+			}
+			catch (IndexOutOfRangeException)
+			{
+				return 0;
+			}
+		}
+
+		/// <summary>
+		/// Calculates the left row
+		/// </summary>
+		/// <param name="collum"></param>
+		/// <param name="row"></param>
+		/// <param name="piece"></param>
+		/// <returns></returns>
+		private int calculateBottomRight(int collum, int row, Piece piece)
+		{
+			try
+			{
+				Piece tmp = Gameboard.Board[collum, row];
+				if (Gameboard.IsInitilized(tmp))
+				{
+					if (tmp.Color == piece.Color)
+						return 1 + calculateBottomRight(collum + 1, row - 1, piece);
+					else
+						return 0;
+				}
+				else
+					return 0;
+
+			}
+			catch (IndexOutOfRangeException)
+			{
+				return 0;
+			}
+		}
+
+		/// <summary>
+		/// Calculates the left row
+		/// </summary>
+		/// <param name="collum"></param>
+		/// <param name="row"></param>
+		/// <param name="piece"></param>
+		/// <returns></returns>
+		private int calculateRight(int collum, int row, Piece piece)
+		{
+			try
+			{
+				Piece tmp = Gameboard.Board[collum, row];
+				if (Gameboard.IsInitilized(tmp))
+				{
+					if (tmp.Color == piece.Color)
+						return 1 + calculateRight(collum + 1, row, piece);
+					else
+						return 0;
+				}
+				else
+					return 0;
+
+			}
+			catch (IndexOutOfRangeException)
+			{
+				return 0;
+			}
+		}
+
+		/// <summary>
+		/// Calculates the left row
+		/// </summary>
+		/// <param name="collum"></param>
+		/// <param name="row"></param>
+		/// <param name="piece"></param>
+		/// <returns></returns>
+		private int calculateTopRight(int collum, int row, Piece piece)
+		{
+			try
+			{
+				Piece tmp = Gameboard.Board[collum, row];
+				if (Gameboard.IsInitilized(tmp))
+				{
+					if (tmp.Color == piece.Color)
+						return 1 + calculateTopRight(collum + 1, row + 1, piece);
+					else
+						return 0;
+				}
+				else
+					return 0;
+
+			}
+			catch (IndexOutOfRangeException)
+			{
+				return 0;
+			}
+		}
+
+
+	}
 }

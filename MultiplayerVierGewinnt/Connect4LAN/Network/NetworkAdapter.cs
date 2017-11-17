@@ -120,9 +120,10 @@ namespace Connect4LAN.Network
 						try
 						{
 							while (tcpClient.Connected)
-							{									
-								//report that message was 								
-								Received?.Invoke(this, @in.ReadLine());
+							{
+								//report that message was 			
+								var msg = @in.ReadLine();
+								Received?.Invoke(this, msg);
 							}
 						}
 						catch (NullReferenceException)
