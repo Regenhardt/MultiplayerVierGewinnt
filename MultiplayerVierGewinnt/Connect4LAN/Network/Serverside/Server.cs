@@ -84,8 +84,12 @@ namespace Connect4LAN.Network.Serverside
 		{
 			var message = NetworkMessage<object>.DeSerialize(serilizedMessage);
 			//send to other wether its a chat message or a movement
-			if(message.MessageType == NetworkMessageType.ChatMessage || message.MessageType == NetworkMessageType.Move)
-				player.NetworkAdapter.SendMessage(message.Message, message.MessageType);
+			if(message.MessageType == NetworkMessageType.ChatMessage)
+				player.NetworkAdapter.SendMessage(message.Message, NetworkMessageType.ChatMessage);
+            else if(message.MessageType == NetworkMessageType.Move)
+            {
+                player.NetworkAdapter.SendMessage(NetworkMessage<Move>.DeSerialize(serilizedMessage).Message, NetworkMessageType.Move);
+            }
 		}
 
         private Player parseRequest(string json, Color color, TcpClient client)
