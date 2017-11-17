@@ -35,11 +35,42 @@ namespace Connect4LAN.Network
 		/// A Move
 		/// </summary>
 		Move,
-
-		//TODO
-
+		
+		/// <summary>
+		/// An opponent has connected
+		/// </summary>
 		PlayerConnected,
 
 		
+	}
+
+	public static class NetworkMessageTypeExtensions
+	{
+		/// <summary>
+		/// Converts the Enum to the corresponing Type
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		/// <exception cref="FormatException">On any converstion that is new</exception>
+		static Type ToType(this NetworkMessageType type)
+		{
+			switch (type)
+			{
+				case NetworkMessageType.ServerMessage:
+					return typeof(string);
+				case NetworkMessageType.ChatMessage:
+					return typeof(string);
+				case NetworkMessageType.PlayerName:
+					return typeof(string);
+				case NetworkMessageType.Color:
+					return typeof(System.Windows.Media.Color);
+				case NetworkMessageType.Move:
+					return typeof(Move);
+				case NetworkMessageType.PlayerConnected:
+					return typeof(Opponent);
+				default:
+					throw new FormatException("Conversion for this type hasn't been implemented yet.");
+			}
+		}
 	}
 }
