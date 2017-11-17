@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Connect4LAN.Network;
+using System.Collections.Concurrent;
 
 namespace Connect4LAN
 {
@@ -183,6 +184,8 @@ namespace Connect4LAN
         {
             get
             {
+                if (chatMessages == null)
+                    chatMessages = new ObservableCollection<string>();
                 return chatMessages;
             }
             set
@@ -195,6 +198,7 @@ namespace Connect4LAN
             }
         }
         private ObservableCollection<string> chatMessages;
+        private ConcurrentBag<string> chatMsg;
 
         #endregion
 
@@ -218,6 +222,7 @@ namespace Connect4LAN
         /// </summary>
         public ViewModel()
         {
+            InitChat();
             InitBoard();
             InitClient();
             Title = $"Connect4Lan - {client.Name}";
@@ -225,6 +230,23 @@ namespace Connect4LAN
             SetupVisible = true;
         }
 
+        private void InitChat()
+        {
+            new Thread(RunChat).Start();
+        }
+        private void RunChat()
+        {
+            ChatMessages = new ObservableCollection<string>();
+            chatMsg = new ConcurrentBag<string>();
+            while (true)
+            {
+                if (chatMsg.TryTake(out string message))
+                {
+                    ChatMessages.Add(message);
+                }
+                Thread.Sleep(100);
+            }
+        }
         private void InitBoard()
         {
             // Init Board
@@ -318,7 +340,7 @@ namespace Connect4LAN
 
         private void WriteChatMessage(string msg)
         {
-            ChatMessages.Add(msg);
+            chatMsg.Add(msg);
         }
 
         /// <summary>
@@ -328,7 +350,10 @@ namespace Connect4LAN
         private void PutPiece(int colIdx)
         {
             if (!yourTurn)
+            {
+                WriteChatMessage("It's not your turn!");
                 return;
+            }
             yourTurn = false;
             int row = board.PutPiece(colIdx, new Game.Piece() { Color = ownColor });
             client.SendMessage(new Move { Color = ownColor, Column = colIdx }, NetworkMessageType.Move);
