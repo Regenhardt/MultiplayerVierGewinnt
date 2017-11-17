@@ -7,18 +7,19 @@ using System.Windows;
 
 namespace Connect4LAN
 {
-    public class Connect4LanFactory
-    {
-        public Connect4LanFactory()
-        {
-        }
-    
-        public Window GetWindow()
-        {
-            var viewModel = new GameViewModel();
-            var window = new View.GameWindow(viewModel);
+	public class Connect4LanFactory
+	{
+		public Connect4LanFactory()
+		{
+			
+		}
+	
+		public Window GetWindow()
+		{
+			var viewModel = new GameViewModel();
+			var window = new View.GameWindow(viewModel);
 
-            return window;
-        }
-    }
+			return window;
+		}
+	}
 }

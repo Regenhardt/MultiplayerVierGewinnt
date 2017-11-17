@@ -11,7 +11,7 @@ namespace Connect4LAN
         public void StartApp()
         {
             window = new Connect4LanFactory().GetWindow();
-            window.Show();
+            window.Show();	
         }
         private void Application_Startup(object sender, StartupEventArgs e)
         {

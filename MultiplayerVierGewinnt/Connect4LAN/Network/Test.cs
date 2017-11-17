@@ -16,7 +16,7 @@ namespace Connect4LAN.Network
 	{
 		public Test()
 		{
-
+				
 		}
 
 		public bool Execute()

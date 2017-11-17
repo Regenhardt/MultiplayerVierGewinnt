@@ -15,7 +15,7 @@ namespace Connect4LAN.Network
 
 		/// <summary>
 		/// The message that is sent 
-		/// </summary>
+		/// </summary>	
 		public Color Color
 		{
 			get { return (Color)ColorConverter.ConvertFromString(message); }

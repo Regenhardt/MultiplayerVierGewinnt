@@ -12,7 +12,7 @@ namespace Connect4LAN.Network
 	public enum NetworkMessageType
 	{
 		/// <summary>
-		/// A Message from the server to display to the client
+		/// A Message from the server to display to the client	
 		/// </summary>
 		ServerMessage,
 

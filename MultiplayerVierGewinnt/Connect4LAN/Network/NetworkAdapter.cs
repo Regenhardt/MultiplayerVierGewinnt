@@ -18,7 +18,7 @@ namespace Connect4LAN.Network
 		/// </summary>
 		public NetworkAdapter()
 		{
-
+				 
 		}
 
 

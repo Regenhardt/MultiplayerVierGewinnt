@@ -23,3 +23,4 @@ namespace Connect4LAN.Network
 		public Color Color { get; set; }
 	}
 }
+	

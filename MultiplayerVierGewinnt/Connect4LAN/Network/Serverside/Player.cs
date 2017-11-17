@@ -10,12 +10,12 @@ using System.Windows.Media;
 
 namespace Connect4LAN.Network.Serverside
 {
-    /// <summary>
-    /// The connected Player Serverside
+	/// <summary>
+	/// The connected Player Serverside
 	/// 
 	/// Is the user for the Server
-    /// </summary>
-    class Player
+	/// </summary>
+	class Player
 	{
 		/// <summary>
 		/// 
