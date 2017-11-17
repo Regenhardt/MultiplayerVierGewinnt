@@ -268,7 +268,7 @@ namespace Connect4LAN
             SetupVisible = false;
             if (server != null) server.Stop();
 			server = new Network.Serverside.Server();
-			JoinGame("localhost");
+			Connect("localhost");
 		}
 
 		/// <summary>
@@ -282,39 +282,43 @@ namespace Connect4LAN
             enemyColor = Colors.Yellow;
             var query = new View.QueryBox();
             query.ShowDialog();
-			JoinGame(query.IP);
+            if (Connect(query.IP))
+            {
+                GameVisible = true;
+            }
+            else
+            {
+                MessageBox.Show("Connection failed!");
+                ResetGame();
+            }
 		}
 
         /// <summary>
         /// Connects to the given IP address.
         /// </summary>
         /// <param name="ip"></param>
-        private void JoinGame(string ip)
+        private bool Connect(string ip)
         {
-            if (!client.Connect(ip))
-            {
-                MessageBox.Show("Connection failed.");
-                ResetGame();
-            }
-            else
-            {
-                SetupVisible = false;
-                GameVisible = true;
-            }
+            return client.Connect(ip);
         }
 
         private void SendChatMessage(string msg)
 		{
 			client.SendMessage(msg);
-			this.ChatMessages.Add(msg);
+            ChatMessages.Add(msg);
 		}
 
+        /// <summary>
+        /// Puts a piece into the given column and sends it to the server
+        /// </summary>
+        /// <param name="colIdx">The column to insert the piece into.</param>
         private void PutPiece(int colIdx)
         {
             if (!yourTurn)
                 return;
             yourTurn = false;
             int row = board.PutPiece(colIdx, new Game.Piece() { Color = ownColor });
+            client.SendMessage(new Move { Color = ownColor, Column = colIdx }, NetworkMessageType.Move);
             Pieces[colIdx][row] = ownColor;
             Notify(null);
         }
