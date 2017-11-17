@@ -126,9 +126,9 @@ namespace Connect4LAN.Game
 		private void calculateNeighbours(int collumn, int row, Piece piece)
 		{
 			piece.IsWinningPiece =
-				(calculateLeft(collumn - 1, row, piece) + calculateRight(collumn + 1, row, piece) > 3)					||
-				(calculateTopLeft(collumn - 1, row + 1, piece) + calculateBottomRight(collumn + 1, row - 1, piece) > 3) ||
-				(calculateTopRight(collumn + 1, row + 1, piece) + calculateBottomLeft(collumn - 1, row - 1, piece) > 3);
+				(calculateLeft(collumn - 1, row, piece) + calculateRight(collumn + 1, row, piece) >= 3)					||
+				(calculateTopLeft(collumn - 1, row + 1, piece) + calculateBottomRight(collumn + 1, row - 1, piece) >= 3) ||
+				(calculateTopRight(collumn + 1, row + 1, piece) + calculateBottomLeft(collumn - 1, row - 1, piece) >= 3);			
 		}
 
 		/// <summary>

@@ -71,6 +71,10 @@ namespace Connect4LAN.Network
 				case NetworkMessageType.PlayerConnected:
 					@out.WriteLine(new NetworkMessage<Opponent> { Message = msg, MessageType = type }.Serialize());
 					break;
+				case NetworkMessageType.GameOver:
+					@out.WriteLine(new NetworkMessage<bool> { Message = msg, MessageType = type }.Serialize());
+					break;	
+				
 				default:
 					throw new ArgumentException();				
 			}
