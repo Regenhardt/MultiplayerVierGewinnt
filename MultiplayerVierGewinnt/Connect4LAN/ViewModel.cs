@@ -400,7 +400,7 @@ namespace Connect4LAN
         private void PlayerJoined(object sender, Opponent opponent)
         {
             OpponentName = opponent.Name;
-            ChatMessages.Add("Your opponent is " + OpponentName);
+            WriteChatMessage("Your opponent is " + OpponentName);
             GameVisible = true;
         }
 
