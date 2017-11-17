@@ -41,6 +41,10 @@ namespace Connect4LAN.Network
 		/// </summary>
 		PlayerConnected,
 
+		/// <summary>
+		/// When a player won the game
+		/// </summary>
+		GameOver
 		
 	}
 
@@ -68,6 +72,8 @@ namespace Connect4LAN.Network
 					return typeof(Move);
 				case NetworkMessageType.PlayerConnected:
 					return typeof(Opponent);
+				case NetworkMessageType.GameOver:
+					return typeof(bool);
 				default:
 					throw new FormatException("Conversion for this type hasn't been implemented yet.");
 			}
