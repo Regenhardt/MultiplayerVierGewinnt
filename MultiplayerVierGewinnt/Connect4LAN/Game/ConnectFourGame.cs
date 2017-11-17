@@ -39,9 +39,9 @@ namespace Connect4LAN.Game
 			//wire up player 1
 			handler = (s, msg) => 
 			{
-				var e = NetworkMessage<object>.DeSerilize(msg);
+				var e = NetworkMessage<object>.DeSerialize(msg);
 				if (e.MessageType == NetworkMessageType.Move)
-					executeMove(NetworkMessage<Move>.DeSerilize(msg).Message, player1);
+					executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, player1);
 			};
 			player1.NetworkAdapter.Received += handler;
 			player1.NetworkAdapter.ConnectionLost += (s, e) =>
@@ -54,9 +54,9 @@ namespace Connect4LAN.Game
 			//wire up player 2
 			handler = (s, msg) =>
 			{
-				var e = NetworkMessage<object>.DeSerilize(msg);
+				var e = NetworkMessage<object>.DeSerialize(msg);
 				if (e.MessageType == NetworkMessageType.Move)
-					executeMove(NetworkMessage<Move>.DeSerilize(msg).Message, player2);
+					executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, player2);
 			};
 			player2.NetworkAdapter.Received += handler;
 			player1.NetworkAdapter.ConnectionLost += (s, e) => 

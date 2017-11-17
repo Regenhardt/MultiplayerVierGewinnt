@@ -22,6 +22,7 @@ namespace Connect4LAN
         private void UnhandledExceptionHandler(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             MessageBox.Show(window, e.Exception.Message, "Unhandled Exception");
+            System.Environment.Exit(1);
         }
     }
 }

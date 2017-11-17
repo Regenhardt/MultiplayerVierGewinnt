@@ -392,7 +392,8 @@ namespace Connect4LAN
                 MessageBox.Show("Game out of sync!");
                 ResetGame();
             }
-            board.PutPiece(move.Column, new Game.Piece() { Color = move.Color });
+            int row = board.PutPiece(move.Column, new Game.Piece() { Color = move.Color });
+            Pieces[move.Column][row] = move.Color;
             yourTurn = true;
             RaisePropertyChanged(null);
         }
