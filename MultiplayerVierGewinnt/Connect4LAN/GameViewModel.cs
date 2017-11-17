@@ -259,6 +259,10 @@ namespace Connect4LAN
             InitClient();
             IpAddress = client.IP.MapToIPv4().ToString();
             Name = "Player 1";
+			#if DEBUG
+			if(System.Diagnostics.Debugger.IsAttached)
+				Name = "THIS. IS. DEBUG!";
+            #endif
             Title = $"Connect4Lan - {Name}";
             GameVisible = false;
             SetupVisible = true;
