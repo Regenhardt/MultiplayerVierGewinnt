@@ -8,20 +8,20 @@
         xmlns:c="clr-namespace:Connect4LAN.Converters"
         mc:Ignorable="d"
         Title="{Binding Title}" MinHeight="470" Height="470" MinWidth="558" Width="600"
-        d:DataContext="a:ViewModel">
+        d:DataContext="{d:DesignInstance a:GameViewModel}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <c:ColorToBrushConverter x:Key="ColToBrush" />
     </Window.Resources>
-	<Grid>
-		<Grid.RowDefinitions>
-			<!-- Game & Chat -->
-			<RowDefinition Height="*" />
-			<!-- Advertisement -->
-			<RowDefinition Height="20" />
-		</Grid.RowDefinitions>
-		
-		<!-- Game & Chat -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Game & Chat -->
+            <RowDefinition Height="*" />
+            <!-- Advertisement -->
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+
+        <!-- Game & Chat -->
         <Grid Row="0" >
             <Grid.ColumnDefinitions>
                 <!-- Game, 7x64 + 6x10 -->
@@ -270,18 +270,21 @@
                     </Canvas.InputBindings>
                 </Canvas>
             </Grid>
-            
+
             <!-- Game setup -->
             <Grid Grid.Column="0" Visibility="{Binding SetupVisible, Converter={StaticResource BoolToVis}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
+                <!-- Player name -->
+                <TextBox Grid.Row="0" Width="100" Height="30" Text="{Binding Name}" />
                 <!-- Host game -->
-                <Button Grid.Row="0" Content="Host game" Height="30" Width="100" Command="{Binding HostGameCommand}" />
+                <Button Grid.Row="1" Content="Host game" Height="30" Width="100" Command="{Binding HostGameCommand}" />
                 <!-- Join game -->
-                <Button Grid.Row="1" Content="Join game" Height="30" Width="100" Command="{Binding JoinGameCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+                <Button Grid.Row="2" Content="Join game" Height="30" Width="100" Command="{Binding JoinGameCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
             </Grid>
 
             <!-- Chat -->
@@ -299,8 +302,8 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="40" />
                     </Grid.ColumnDefinitions>
-                    <TextBox Name="InputTextBox" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                    <Button Grid.Column="1" Height="40" Width="40" IsDefault="True" Command="{Binding SendChatMessageCommand}" CommandParameter="{Binding ElementName=InputTextBox, Path=Text}">
+                    <TextBox Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Text="{Binding ChatInput}" />
+                    <Button Grid.Column="1" Height="40" Width="40" IsDefault="True" Command="{Binding SendChatMessageCommand}" >
                         <Button.Content>
                             <Image Source="arrowright.png" />
                         </Button.Content>
@@ -308,10 +311,10 @@
                 </Grid>
 
             </Grid>
-		</Grid>
-		
-		<!-- Advertisement -->
-		<Grid Row="1">
+        </Grid>
+
+        <!-- Advertisement -->
+        <Grid Row="1">
             <TextBlock Text="Hier könnte Ihre Werbung stehen!" />
         </Grid>
     </Grid>
