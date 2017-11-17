@@ -41,7 +41,7 @@ namespace Connect4LAN
         {
             get
             {
-                if (joinGameCommand == null) joinGameCommand = new RelayCommand(param => JoinGame());
+                if (joinGameCommand == null) joinGameCommand = new RelayCommand(param => JoinGame((Window)param));
                 return joinGameCommand;
             }
         }
@@ -266,6 +266,7 @@ namespace Connect4LAN
             client.PlayerNamedChanged += PlayerNameChanged;
             client.Received += MessageToChat;
             client.ServerMessageRecieved += MessageToChat;
+            client.GameOver += GameOver;
         }
 
 		#endregion
@@ -291,7 +292,7 @@ namespace Connect4LAN
         }
 
 
-		private void JoinGame()
+		private void JoinGame(Window window)
 		{
             yourTurn = false;
             ownColor = Colors.Red;
@@ -347,7 +348,16 @@ namespace Connect4LAN
                 return;
             }
             yourTurn = false;
-            int row = board.PutPiece(colIdx, new Game.Piece() { Color = ownColor });
+            int row = int.MaxValue;
+            try
+            {
+                row = board.PutPiece(colIdx, new Game.Piece() { Color = ownColor });
+            }
+            catch (InvalidOperationException ex)
+            {
+                WriteChatMessage(ex.Message);
+                return;
+            }
             client.SendMessage(new Move { Color = ownColor, Column = colIdx }, NetworkMessageType.Move);
             Pieces[colIdx][row] = ownColor;
             Notify(null);
@@ -413,6 +423,13 @@ namespace Connect4LAN
         private void MessageToChat(object sender, string msg)
         {
             WriteChatMessage(msg.ToString());
+        }
+
+        private void GameOver(object sender, bool iWon)
+        {
+            string message = iWon ? "You won!" : "You lose :(";
+            WriteChatMessage(message);
+            MessageBox.Show(message);
         }
 
         #endregion

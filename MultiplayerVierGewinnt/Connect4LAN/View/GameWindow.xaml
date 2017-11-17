@@ -281,7 +281,7 @@
                 <!-- Host game -->
                 <Button Grid.Row="0" Content="Host game" Height="30" Width="100" Command="{Binding HostGameCommand}" />
                 <!-- Join game -->
-                <Button Grid.Row="1" Content="Join game" Height="30" Width="100" Command="{Binding JoinGameCommand}" />
+                <Button Grid.Row="1" Content="Join game" Height="30" Width="100" Command="{Binding JoinGameCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
             </Grid>
 
             <!-- Chat -->
