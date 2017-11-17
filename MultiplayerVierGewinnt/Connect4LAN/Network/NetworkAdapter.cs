@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using System.Windows.Media;
 
 namespace Connect4LAN.Network
 {
@@ -48,17 +49,40 @@ namespace Connect4LAN.Network
 		/// <summary>
 		/// Setilizes a message and sends it 
 		/// </summary>
-		/// <param name="msg"></param>
-		virtual public void SendMessage(object msg, NetworkMessageType type)
+		/// <param name="msg">The message to be transmitted</param>
+		/// <exception cref="ArgumentException"/>
+		virtual public void SendMessage(dynamic msg, NetworkMessageType type)
 		{
-			@out.WriteLine(new NetworkMessage{ Message = msg, MessageType = type }.Serilize());
+			//TODO: Valuechecking
+
+			switch (type)
+			{
+				case NetworkMessageType.ServerMessage:
+				case NetworkMessageType.ChatMessage:
+				case NetworkMessageType.PlayerName:
+					@out.WriteLine(new NetworkMessage<string> { Message = msg, MessageType = type }.Serilize());
+					break;
+				case NetworkMessageType.Color:
+					@out.WriteLine(new NetworkMessage<Color> { Message = msg, MessageType = type }.Serilize());
+					break;
+				case NetworkMessageType.Move:
+					@out.WriteLine(new NetworkMessage<Move> { Message = msg, MessageType = type }.Serilize());
+					break;
+				case NetworkMessageType.PlayerConnected:
+					@out.WriteLine(new NetworkMessage<Opponent> { Message = msg, MessageType = type }.Serilize());
+					break;
+				default:
+					throw new ArgumentException();
+					break;
+			}
+			
 		}
 
 		/// <summary>
 		/// Returns the last message from the player
 		/// </summary>
 		/// <returns></returns>
-		public NetworkMessage ReadLastMessage()
+		public NetworkMessage<object> ReadLastMessage()
 		{
 			return lastNetworkMesssage;
 		}
@@ -97,12 +121,9 @@ namespace Connect4LAN.Network
 						try
 						{
 							while (tcpClient.Connected)
-							{
-								//read the message and send out the recieved message
-								lastNetworkMesssage = NetworkMessage.DeSerilize(@in.ReadLine());
-									
+							{									
 								//report that message was 								
-								Received?.Invoke(this, lastNetworkMesssage);
+								Received?.Invoke(this, @in.ReadLine());
 							}
 						}
 						catch (NullReferenceException)
@@ -128,13 +149,13 @@ namespace Connect4LAN.Network
 		protected TcpClient tcpClient;
 		protected StreamReader @in;
 		protected StreamWriter @out;
-		protected NetworkMessage lastNetworkMesssage;
+		protected NetworkMessage<object> lastNetworkMesssage;
 
 		#endregion
 
 		#region [ INetworkController Members ]
 
-		virtual		public event EventHandler<NetworkMessage> Received;
+		virtual	public event EventHandler<string> Received;
 		public event EventHandler ConnectionLost;
 
 		virtual public bool Connect(string ipAddress, int port = 16569)

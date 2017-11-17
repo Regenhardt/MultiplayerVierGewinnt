@@ -34,24 +34,36 @@ namespace Connect4LAN.Game
             this.player2 = player2;
 			this.Gameboard = new Gameboard();
 
-			EventHandler<NetworkMessage> handler;
+			EventHandler<string> handler;
 
 			//wire up player 1
-			handler = (s, e) => { if (e.MessageType == NetworkMessageType.Move) executeMove((Move)e.Message, player1); };
+			handler = (s, msg) => 
+			{
+				var e = NetworkMessage<object>.DeSerilize(msg);
+				if (e.MessageType == NetworkMessageType.Move)
+					executeMove(NetworkMessage<Move>.DeSerilize(msg).Message, player1);
+			};
 			player1.NetworkAdapter.Received += handler;
-			player1.NetworkAdapter.ConnectionLost += (s, e) => {
+			player1.NetworkAdapter.ConnectionLost += (s, e) =>
+			{
 				player2.NetworkAdapter.SendMessage($"{player2.Name} lost connection.{((weHaveAWinner)?"You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
 				player1.NetworkAdapter.Received -= handler;
-				player1.NetworkAdapter.Disconnect();
+				player2.NetworkAdapter.Disconnect();
 			};
 
 			//wire up player 2
-			handler = (s, e) => { if (e.MessageType == NetworkMessageType.Move) executeMove((Move)e.Message, player2); };
+			handler = (s, msg) =>
+			{
+				var e = NetworkMessage<object>.DeSerilize(msg);
+				if (e.MessageType == NetworkMessageType.Move)
+					executeMove(NetworkMessage<Move>.DeSerilize(msg).Message, player2);
+			};
 			player2.NetworkAdapter.Received += handler;
-			player1.NetworkAdapter.ConnectionLost += (s, e) => {
-				player2.NetworkAdapter.SendMessage($"{player1.Name} lost connection.{((weHaveAWinner)?"You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
+			player1.NetworkAdapter.ConnectionLost += (s, e) => 
+			{
+				player1.NetworkAdapter.SendMessage($"{player1.Name} lost connection.{((weHaveAWinner)?"You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
 				player2.NetworkAdapter.Received -= handler;
-				player2.NetworkAdapter.Disconnect();
+				player1.NetworkAdapter.Disconnect();
 			};
 		}
 
