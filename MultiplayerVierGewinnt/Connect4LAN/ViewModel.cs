@@ -347,11 +347,11 @@ namespace Connect4LAN
                 WriteChatMessage("It's not your turn!");
                 return;
             }
-            yourTurn = false;
             int row = int.MaxValue;
             try
             {
                 row = board.PutPiece(colIdx, new Game.Piece() { Color = ownColor });
+                yourTurn = false;
             }
             catch (InvalidOperationException ex)
             {
