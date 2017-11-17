@@ -250,8 +250,8 @@ namespace Connect4LAN
             client.MovementRecieved += MovementReceived;
             client.PlayerJoined += PlayerJoined;
             client.PlayerNamedChanged += PlayerNameChanged;
-            //    client.Received
-            //    client.ServerMessageRecieved
+            client.Received += MessageToChat;
+            client.ServerMessageRecieved += MessageToChat;
         }
 
 		#endregion
@@ -266,20 +266,23 @@ namespace Connect4LAN
             ownColor = Colors.Yellow;
             enemyColor = Colors.Red;
             SetupVisible = false;
-            if (server != null) server.Stop();
-			server = new Network.Serverside.Server();
-			Connect("localhost");
+            Task.Run((Action)HostGame);
 		}
 
-		/// <summary>
-		/// Queries an IP and connects to it.
-		/// </summary>
-		/// <param name="ip"></param>
+        private void HostGame()
+        {
+            if (server != null) server.Stop();
+			server = new Network.Serverside.Server();
+            Connect("localhost");
+        }
+
+
 		private void JoinGame()
 		{
             yourTurn = false;
             ownColor = Colors.Red;
             enemyColor = Colors.Yellow;
+            SetupVisible = false;
             var query = new View.QueryBox();
             query.ShowDialog();
             if (Connect(query.IP))
@@ -297,16 +300,26 @@ namespace Connect4LAN
         /// Connects to the given IP address.
         /// </summary>
         /// <param name="ip"></param>
+        /// <returns>Whether or not the connect worked.</returns>
         private bool Connect(string ip)
         {
             return client.Connect(ip);
         }
 
+        /// <summary>
+        /// Sends a chat message to the chat window and the server.
+        /// </summary>
+        /// <param name="msg"></param>
         private void SendChatMessage(string msg)
 		{
 			client.SendMessage(msg);
-            ChatMessages.Add(msg);
+            WriteChatMessage(msg);
 		}
+
+        private void WriteChatMessage(string msg)
+        {
+            ChatMessages.Add(msg);
+        }
 
         /// <summary>
         /// Puts a piece into the given column and sends it to the server
@@ -323,6 +336,9 @@ namespace Connect4LAN
             Notify(null);
         }
 
+        /// <summary>
+        /// Resets the game to its initial state, offering Host and Join options.
+        /// </summary>
         private void ResetGame()
         {
             GameVisible = false;
@@ -331,14 +347,14 @@ namespace Connect4LAN
             InitClient();
             RaisePropertyChanged(null);
         }
-
+        
         #endregion
 
         #region [ EventHandlers ]
 
         private void ChatMessageReceivedHandler(object sender, string args)
         {
-            ChatMessages.Add(args);
+            ChatMessages.Add(OpponentName + ": " + args);
         }
 
         private void ColorChanged(object sender, Color args)
@@ -367,13 +383,18 @@ namespace Connect4LAN
         private void PlayerJoined(object sender, Opponent opponent)
         {
             OpponentName = opponent.Name;
-            ChatMessages.Add(OpponentName + " connected");
+            ChatMessages.Add("Your opponent is " + OpponentName);
             GameVisible = true;
         }
 
         private void PlayerNameChanged(object sender, string newName)
         {
             Name = newName;
+        }
+
+        private void MessageToChat(object sender, string msg)
+        {
+            WriteChatMessage(msg.ToString());
         }
 
         #endregion
