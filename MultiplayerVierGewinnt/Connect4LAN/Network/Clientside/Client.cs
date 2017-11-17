@@ -80,6 +80,10 @@ namespace Connect4LAN.Network.Clientside
 		/// The oponnent placed a piece on the GameBoard
 		/// </summary>
 		public event EventHandler<Move> MovementRecieved;
+		/// <summary>
+		/// Indicates when the game is over, is true if user won
+		/// </summary>
+		public event EventHandler<bool> GameOver;
 
 
 		#endregion [ Events ]
@@ -95,7 +99,8 @@ namespace Connect4LAN.Network.Clientside
 				case NetworkMessageType.Color:			Color = NetworkMessage<Color>.DeSerialize(serilizedMessage).Message; this.ColorChanged?.Invoke(this, Color);		break;
 				case NetworkMessageType.Move:			this.MovementRecieved?.Invoke(this, NetworkMessage<Move>.DeSerialize(serilizedMessage).Message);			break;
 				case NetworkMessageType.PlayerConnected:this.PlayerJoined?.Invoke(this, NetworkMessage<Opponent>.DeSerialize(serilizedMessage).Message); break;
-				default:								this.Received?.Invoke(this, serilizedMessage);									break;
+				case NetworkMessageType.GameOver:		this.GameOver?.Invoke(this, NetworkMessage<bool>.DeSerialize(serilizedMessage).Message); break;
+				default: this.Received?.Invoke(this, serilizedMessage);									break;
 			}
 		}
 

@@ -41,7 +41,11 @@ namespace Connect4LAN.Network
 		/// </summary>
 		PlayerConnected,
 
-		
+		/// <summary>
+		/// When the game has ginished
+		/// </summary>
+		GameOver
+
 	}
 
 	public static class NetworkMessageTypeExtensions
@@ -68,6 +72,8 @@ namespace Connect4LAN.Network
 					return typeof(Move);
 				case NetworkMessageType.PlayerConnected:
 					return typeof(Opponent);
+				case NetworkMessageType.GameOver:
+					return typeof(bool);					
 				default:
 					throw new FormatException("Conversion for this type hasn't been implemented yet.");
 			}

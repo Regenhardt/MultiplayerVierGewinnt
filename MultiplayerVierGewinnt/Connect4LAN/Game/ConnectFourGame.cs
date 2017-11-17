@@ -46,7 +46,7 @@ namespace Connect4LAN.Game
 			player1.NetworkAdapter.Received += handler;
 			player1.NetworkAdapter.ConnectionLost += (s, e) =>
 			{
-				player2.NetworkAdapter.SendMessage($"{player2.Name} lost connection.{((weHaveAWinner)?"You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
+				player2.NetworkAdapter.SendMessage($"{player2.Name} lost connection.{((!weHaveAWinner)?"You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
 				player1.NetworkAdapter.Received -= handler;
 				player2.NetworkAdapter.Disconnect();
 			};
@@ -61,7 +61,7 @@ namespace Connect4LAN.Game
 			player2.NetworkAdapter.Received += handler;
 			player1.NetworkAdapter.ConnectionLost += (s, e) => 
 			{
-				player1.NetworkAdapter.SendMessage($"{player1.Name} lost connection.{((weHaveAWinner)?"You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
+				player1.NetworkAdapter.SendMessage($"{player1.Name} lost connection.{((!weHaveAWinner)?"You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
 				player2.NetworkAdapter.Received -= handler;
 				player1.NetworkAdapter.Disconnect();
 			};
@@ -78,14 +78,30 @@ namespace Connect4LAN.Game
 			this.player2.NetworkAdapter.SendMessage(msg, type);
 		}
 
+		/// <summary>
+		/// Executes the movement on the gameboard
+		/// </summary>
+		/// <param name="move"></param>
+		/// <param name="player"></param>
 		private void executeMove(Move move, Player player)
 		{
-			//place his piece
-			var piece = placePiece(move, player.Color);
-			if (isWinningMove(piece))
+			//place piece aslont as no1 won
+			if (!weHaveAWinner)
 			{
-				string msg = $"Player {player.Name} has won.";
-				weHaveAWinner = true;
+				var piece = placePiece(move, player.Color);
+				if (isWinningMove(piece))
+				{
+					//send out who won
+					string msg = $"Player {player.Name} has won.";
+					writeMessageToPlayers(msg);
+
+					//fire the event
+					player.NetworkAdapter.SendMessage(true, NetworkMessageType.GameOver);
+					((player1 == player)? player2: player1).NetworkAdapter.SendMessage(false, NetworkMessageType.GameOver);
+
+					//set that we indeed have a winner
+					weHaveAWinner = true;
+				}
 			}
 		}
 
