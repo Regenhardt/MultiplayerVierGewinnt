@@ -77,8 +77,7 @@ namespace Connect4LAN
         #endregion
 
         #region [ Properties ]
-
-
+        
         public string Title
         {
             get
@@ -143,8 +142,7 @@ namespace Connect4LAN
             }
         }
         private Color[][] pieces;
-
-
+        
         public string ChatInput
         {
             get
@@ -158,6 +156,20 @@ namespace Connect4LAN
             }
         }
         private string chatInput;
+        
+        public string IpAddress
+        {
+            get
+            {
+                return ipAdress;
+            }
+            set
+            {
+                ipAdress = value;
+                Notify();
+            }
+        }
+        private string ipAdress;
 
 		#region [ Name ]
 
@@ -245,6 +257,7 @@ namespace Connect4LAN
             InitChat();
             InitBoard();
             InitClient();
+            IpAddress = client.IP.MapToIPv4().ToString();
             Name = "Player 1";
             Title = $"Connect4Lan - {Name}";
             GameVisible = false;

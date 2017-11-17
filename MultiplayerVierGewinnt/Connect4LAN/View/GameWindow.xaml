@@ -279,6 +279,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
+                <!-- IP Address -->
+                <TextBox Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Text="{Binding IpAddress}" />
                 <!-- Player name -->
                 <TextBox Grid.Row="0" Width="100" Height="30" Text="{Binding Name}" />
                 <!-- Host game -->
