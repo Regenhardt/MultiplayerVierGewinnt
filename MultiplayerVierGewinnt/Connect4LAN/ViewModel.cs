@@ -430,6 +430,7 @@ namespace Connect4LAN
             string message = iWon ? "You won!" : "You lose :(";
             WriteChatMessage(message);
             MessageBox.Show(message);
+            ResetGame();
         }
 
         #endregion

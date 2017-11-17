@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
 
         <TextBox Grid.Column="0" Name="InputTextBox" HorizontalAlignment="Stretch" AcceptsReturn="False" />
-        <Button Name="InputButton" Grid.Column="1" Height="40" Width="40" IsDefault="True" CommandParameter="{Binding ElementName=InputTextBox, Path=Text}">
+        <Button Name="InputButton" Grid.Column="1" Height="40" Width="40" IsDefault="True" Command="{Binding Command}" CommandParameter="{Binding ElementName=InputTextBox, Path=Text}">
             <Button.Content>
                 <Image Source="arrowright.png" />
             </Button.Content>

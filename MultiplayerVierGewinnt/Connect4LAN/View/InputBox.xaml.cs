@@ -23,6 +23,7 @@ namespace Connect4LAN.View
         public InputBox()
         {
             InitializeComponent();
+            DataContext = this;
         }
         public ICommand @Command
         {
