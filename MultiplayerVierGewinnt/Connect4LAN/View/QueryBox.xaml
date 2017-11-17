@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Connect4LAN.View"
         mc:Ignorable="d"
-        Title="QueryBox" Height="145.562" Width="300">
-    <Grid>
+        Title="QueryBox" Height="145.562" Width="300"
+        WindowStartupLocation="CenterOwner">
+    <Grid FocusManager.FocusedElement="{Binding ElementName=IPTextbox}">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="IP adress to connect to:" HorizontalAlignment="Center" />
-        <TextBox Grid.Row="1" Text="{Binding IP}" Width="200" Height="50"  />
-        <Button Grid.Row="2" Content="Connect" Command="{Binding ConfirmIPCommand}" Width="100" Height="30" />
+        <TextBox Name="IPTextbox" Grid.Row="1" Text="{Binding IP}" Width="200" Height="50"/>
+        <Button Name="Connect" Grid.Row="2" Content="Connect" Command="{Binding ConfirmIPCommand}" Width="100" Height="30" IsDefault="True"/>
 
     </Grid>
 </Window>
