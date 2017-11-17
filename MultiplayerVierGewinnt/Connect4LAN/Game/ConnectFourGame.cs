@@ -211,11 +211,11 @@ namespace Connect4LAN.Game
 						{
 							//get 2nd piece and adjust movement
 							p2 = Board[collumn - 1, row + 1];
-							p1.FriendlyAmountTopRight = p2.FriendlyAmountTopRight + 1;
-							p2.FriendlyAmountBottomLeft = p1.FriendlyAmountBottomLeft + 1;
+							p1.FriendlyAmountTopLeft = p2.FriendlyAmountTopLeft + 1;
+							p2.FriendlyAmountBottomRight = p1.FriendlyAmountBottomRight + 1;
 
 							//Don't have to set bottom/top right/left from current piece, because it will never ever be read from again
-							piece.IsWinningPiece = p1.FriendlyAmountTopRight >= 4 || p2.FriendlyAmountBottomLeft >= 4;
+							piece.IsWinningPiece = p1.FriendlyAmountTopLeft >= 4 || p2.FriendlyAmountBottomRight >= 4;
 
 							topLeftChecked = true;
 						}
@@ -223,11 +223,11 @@ namespace Connect4LAN.Game
 						else
 						{
 							//set pieces
-							p1.FriendlyAmountTopRight += 1;
-							piece.FriendlyAmountBottomLeft = p1.FriendlyAmountBottomLeft + 1;
+							p1.FriendlyAmountTopLeft += 1;
+							piece.FriendlyAmountBottomRight = p1.FriendlyAmountBottomLeft + 1;
 
 							//set the winning piece
-							piece.IsWinningPiece = p1.FriendlyAmountTopRight >= 4 || piece.FriendlyAmountBottomLeft >= 4;
+							piece.IsWinningPiece = p1.FriendlyAmountTopLeft >= 4 || piece.FriendlyAmountBottomRight >= 4;
 						}
 					}
 				}

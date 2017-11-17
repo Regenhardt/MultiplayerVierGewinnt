@@ -25,7 +25,7 @@ namespace Connect4LAN.Game
 		/// <returns></returns>
 		public bool IsInitilized(Piece piece)
 		{
-			return !piece.Equals(default(Piece));
+			return piece != null;
 		}
 
 		/// <summary>
