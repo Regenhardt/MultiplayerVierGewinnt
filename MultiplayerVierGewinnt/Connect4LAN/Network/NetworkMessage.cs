@@ -29,7 +29,7 @@ namespace Connect4LAN.Network
 		/// wrapper for ToString() -> Serilizes the object
 		/// </summary>
 		/// <returns></returns>
-		public string Serilize() => ToString();
+		public string Serialize() => ToString();
 
 		/// <summary>
 		/// Serilizes the object
@@ -43,7 +43,7 @@ namespace Connect4LAN.Network
 		/// </summary>
 		/// <param name="s"></param>
 		/// <returns></returns>
-		public static NetworkMessage<T> DeSerilize(string s) => new JavaScriptSerializer().Deserialize<NetworkMessage<T>>(s);
+		public static NetworkMessage<T> DeSerialize(string s) => new JavaScriptSerializer().Deserialize<NetworkMessage<T>>(s);
 
 		/// <summary>
 		/// Reads out the type of the NetworkMessage

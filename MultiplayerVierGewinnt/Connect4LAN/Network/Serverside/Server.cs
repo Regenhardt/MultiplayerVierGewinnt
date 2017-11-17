@@ -82,7 +82,7 @@ namespace Connect4LAN.Network.Serverside
 		/// <param name="message"></param>
 		private void pushMessageToPlayer(Player player, string serilizedMessage)
 		{
-			var message = NetworkMessage<object>.DeSerilize(serilizedMessage);
+			var message = NetworkMessage<object>.DeSerialize(serilizedMessage);
 			//send to other wether its a chat message or a movement
 			if(message.MessageType == NetworkMessageType.ChatMessage || message.MessageType == NetworkMessageType.Move)
 				player.NetworkAdapter.SendMessage(message.Message, message.MessageType);
@@ -91,7 +91,7 @@ namespace Connect4LAN.Network.Serverside
         private Player parseRequest(string json, Color color, TcpClient client)
         {
 			//decode the message
-			var msg = NetworkMessage<object>.DeSerilize(json);
+			var msg = NetworkMessage<object>.DeSerialize(json);
 			//the first message is always the name
 			string name;
 			if (msg.MessageType == NetworkMessageType.PlayerName)
