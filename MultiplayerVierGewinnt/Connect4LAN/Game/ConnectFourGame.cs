@@ -91,8 +91,15 @@ namespace Connect4LAN.Game
 				var piece = placePiece(move, player.Color);
 				if (isWinningMove(piece))
 				{
+					//send out who won
 					string msg = $"Player {player.Name} has won.";
 					writeMessageToPlayers(msg);
+
+					//fire the event
+					player.NetworkAdapter.SendMessage(true, NetworkMessageType.GameOver);
+					((player1 == player)? player2: player1).NetworkAdapter.SendMessage(false, NetworkMessageType.GameOver);
+
+					//set that we indeed have a winner
 					weHaveAWinner = true;
 				}
 			}
