@@ -54,29 +54,35 @@ namespace Connect4LAN.Network
 		virtual public void SendMessage(dynamic msg, NetworkMessageType type)
 		{
 			//TODO: Valuechecking
-
-			switch (type)
+			try
 			{
-				case NetworkMessageType.ServerMessage:
-				case NetworkMessageType.ChatMessage:
-				case NetworkMessageType.PlayerName:
-					@out.WriteLine(new NetworkMessage<string> { Message = msg, MessageType = type }.Serialize());
-					break;
-				case NetworkMessageType.Color:
-					@out.WriteLine(new NetworkMessage<Color> { Message = msg, MessageType = type }.Serialize());
-					break;
-				case NetworkMessageType.Move:
-					@out.WriteLine(new NetworkMessage<Move> { Message = new Move { Color = msg.Color, Column = msg.Column }, MessageType = type }.Serialize());
-					break;
-				case NetworkMessageType.PlayerConnected:
-					@out.WriteLine(new NetworkMessage<Opponent> { Message = msg, MessageType = type }.Serialize());
-					break;
-				case NetworkMessageType.GameOver:
-					@out.WriteLine(new NetworkMessage<bool> { Message = msg, MessageType = type }.Serialize());
-					break;	
-				
-				default:
-					throw new ArgumentException();				
+				switch (type)
+				{
+					case NetworkMessageType.ServerMessage:
+					case NetworkMessageType.ChatMessage:
+					case NetworkMessageType.PlayerName:
+						@out.WriteLine(new NetworkMessage<string> { Message = msg, MessageType = type }.Serialize());
+						break;
+					case NetworkMessageType.Color:
+						@out.WriteLine(new NetworkMessage<Color> { Message = msg, MessageType = type }.Serialize());
+						break;
+					case NetworkMessageType.Move:
+						@out.WriteLine(new NetworkMessage<Move> { Message = new Move { Color = msg.Color, Column = msg.Column }, MessageType = type }.Serialize());
+						break;
+					case NetworkMessageType.PlayerConnected:
+						@out.WriteLine(new NetworkMessage<Opponent> { Message = msg, MessageType = type }.Serialize());
+						break;
+					case NetworkMessageType.GameOver:
+						@out.WriteLine(new NetworkMessage<bool> { Message = msg, MessageType = type }.Serialize());
+						break;
+
+					default:
+						throw new ArgumentException();
+				}
+			}
+			catch (IOException)
+			{
+				ConnectionLost?.Invoke(this, EventArgs.Empty);
 			}
 			
 		}
