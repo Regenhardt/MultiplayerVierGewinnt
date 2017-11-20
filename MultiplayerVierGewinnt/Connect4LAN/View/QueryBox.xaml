@@ -14,7 +14,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="IP adress to connect to:" HorizontalAlignment="Center" />
-        <TextBox Name="IPTextbox" Grid.Row="1" Text="{Binding IP}" Width="200" Height="50"/>
+        <TextBox Name="IPTextbox" Grid.Row="1" Text="{Binding IP}" Width="200" Height="50" />
         <Button Grid.Row="2" Content="Connect" Command="{Binding ConfirmIPCommand}" Width="100" Height="30" IsDefault="True"/>
 
     </Grid>

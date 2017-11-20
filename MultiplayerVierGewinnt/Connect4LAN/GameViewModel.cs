@@ -271,12 +271,18 @@ namespace Connect4LAN
 			dispatcher = Dispatcher.CurrentDispatcher;
 		}
 
+		/// <summary>
+		/// Sets up the chat.
+		/// </summary>
 		private void InitChat()
 		{
 			ChatMessages = new ObservableCollection<string>();
 			chatMsg = new ConcurrentQueue<string>();
 		}
 
+		/// <summary>
+		/// Constructs the gameboard and pieces.
+		/// </summary>
 		private void InitBoard()
 		{
 			// Init Board
@@ -293,6 +299,9 @@ namespace Connect4LAN
 			}
 		}
 
+		/// <summary>
+		/// Builds the client object and registers handlers to its events.
+		/// </summary>
 		private void InitClient()
 		{
 			client = new Network.Clientside.Client();
@@ -323,6 +332,9 @@ namespace Connect4LAN
 			Task.Run((Action)HostGame);
 		}
 
+		/// <summary>
+		/// Starts a server and connect to it.
+		/// </summary>
 		private void HostGame()
 		{
 			if (server != null) server.Stop();
