@@ -414,6 +414,7 @@ namespace Connect4LAN
 			catch (InvalidOperationException ex)
 			{
 				WriteChatMessage(ex.Message);
+				ResetGame();
 				return;
 			}
 			client.SendMessage(new Move { Color = ownColor, Column = colIdx }, NetworkMessageType.Move);
