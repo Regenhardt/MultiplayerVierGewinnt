@@ -14,8 +14,13 @@ namespace Connect4LAN.Network.Tests
 		[TestMethod()]
 		public void ServerTest()
 		{
-			Test test = new Test();
-			Assert.IsTrue(test.Execute());
+			Game.Gameboard gb = new Game.Gameboard();
+			for (int i = 0; i < gb.Board.GetLength(0); i++)
+			{
+				gb.Board[i, gb.Board.GetLength(1) - 1] = new Game.Piece();
+			}
+
+			Assert.IsTrue(gb.IsFull);
 		}
 	}
 }
