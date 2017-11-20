@@ -12,7 +12,26 @@ namespace Connect4LAN.Game
 		/// The actual game baoard
 		/// </summary>
 		public Piece[,] Board { get; private set; }
-		
+
+		/// <summary>
+		/// Checks wether the topmost row is initilized
+		/// </summary>
+		public bool IsFull
+		{
+			get
+			{
+				return topmostRowInitilized();
+			}
+		}
+
+		private bool topmostRowInitilized(int collumn = 0)
+		{
+			if (collumn < Board.Length)
+				return this.Board[collumn, Board.GetLength(collumn) - 1] != null && topmostRowInitilized(collumn + 1);
+			else
+				return false;
+		}
+
 		public Gameboard()
 		{
 			this.ClearField();

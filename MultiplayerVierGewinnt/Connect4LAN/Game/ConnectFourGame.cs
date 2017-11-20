@@ -72,7 +72,7 @@ namespace Connect4LAN.Game
 		/// </summary>
 		/// <param name="msg"></param>
 		/// <param name="type"></param>
-		private void writeMessageToPlayers(string msg, NetworkMessageType type = NetworkMessageType.ServerMessage)
+		private void writeMessageToPlayers(dynamic msg, NetworkMessageType type = NetworkMessageType.ServerMessage)
 		{
 			this.player1.NetworkAdapter.SendMessage(msg, type);
 			this.player2.NetworkAdapter.SendMessage(msg, type);
@@ -88,6 +88,7 @@ namespace Connect4LAN.Game
 			//place piece aslont as no1 won
 			if (!weHaveAWinner)
 			{
+				//instantiate the peice
 				var piece = placePiece(move, player.Color);
 				if (piece.IsWinningPiece)
 				{
@@ -101,6 +102,14 @@ namespace Connect4LAN.Game
 
 					//set that we indeed have a winner
 					weHaveAWinner = true;
+				}
+
+				//
+				if (Gameboard.IsFull)
+				{
+					writeMessageToPlayers("Gameboard is full, draw!");
+					weHaveAWinner = true;
+					writeMessageToPlayers(false, NetworkMessageType.GameOver);
 				}
 			}
 		}
