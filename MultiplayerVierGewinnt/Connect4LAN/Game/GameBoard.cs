@@ -26,8 +26,8 @@ namespace Connect4LAN.Game
 
 		private bool topmostRowInitilized(int collumn = 0)
 		{
-			if (collumn < Board.Length)
-				return this.Board[collumn, Board.GetLength(collumn) - 1] != null && topmostRowInitilized(collumn + 1);
+			if (collumn < Board.GetLength(0))
+				return this.Board[collumn, Board.GetLength(1) - 1] != null && topmostRowInitilized(collumn + 1);
 			else
 				return false;
 		}
