@@ -105,11 +105,13 @@ namespace Connect4LAN
 				{
 					gameVisible = value;
 					Notify();
-					RaisePropertyChanged(nameof(SetupVisible));
+					RaisePropertyChanged(nameof(IpVisible));
 				}
 			}
 		}
 		private bool gameVisible;
+
+		public bool IpVisible => !GameVisible;
 
 		public bool SetupVisible
 		{
