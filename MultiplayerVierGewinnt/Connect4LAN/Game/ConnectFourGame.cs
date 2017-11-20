@@ -127,6 +127,7 @@ namespace Connect4LAN.Game
 		{
 			piece.IsWinningPiece =
 				(calculateLeft(collumn - 1, row, piece) + calculateRight(collumn + 1, row, piece) >= 3)					||
+				(calculateTop(collumn, row + 1, piece) + calculateBottom(collumn, row - 1, piece) >= 3) ||
 				(calculateTopLeft(collumn - 1, row + 1, piece) + calculateBottomRight(collumn + 1, row - 1, piece) >= 3) ||
 				(calculateTopRight(collumn + 1, row + 1, piece) + calculateBottomLeft(collumn - 1, row - 1, piece) >= 3);			
 		}
@@ -437,6 +438,35 @@ namespace Connect4LAN.Game
 				{
 					if (tmp.Color == piece.Color)
 						return 1 + calculateBottom(collum, row - 1, piece);
+					else
+						return 0;
+				}
+				else
+					return 0;
+
+			}
+			catch (IndexOutOfRangeException)
+			{
+				return 0;
+			}
+		}
+
+		/// <summary>
+		/// Calculates the left row
+		/// </summary>
+		/// <param name="collum"></param>
+		/// <param name="row"></param>
+		/// <param name="piece"></param>
+		/// <returns></returns>
+		private int calculateTop(int collum, int row, Piece piece)
+		{
+			try
+			{
+				Piece tmp = Gameboard.Board[collum, row];
+				if (Gameboard.IsInitilized(tmp))
+				{
+					if (tmp.Color == piece.Color)
+						return 1 + calculateBottom(collum, row + 1, piece);
 					else
 						return 0;
 				}
