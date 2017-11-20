@@ -437,7 +437,7 @@ namespace Connect4LAN
 
 		private void ConnectionLost(object sender, EventArgs args)
 		{
-			ChatMessages.Add("Connection lost");
+			WriteChatMessage("Connection lost");
 			ResetGame();
 		}
 
