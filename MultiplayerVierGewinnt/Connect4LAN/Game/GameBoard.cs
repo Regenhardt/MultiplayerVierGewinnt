@@ -29,7 +29,7 @@ namespace Connect4LAN.Game
 			if (collumn < Board.GetLength(0))
 				return this.Board[collumn, Board.GetLength(1) - 1] != null && topmostRowInitilized(collumn + 1);
 			else
-				return false;
+				return true;
 		}
 
 		public Gameboard()
