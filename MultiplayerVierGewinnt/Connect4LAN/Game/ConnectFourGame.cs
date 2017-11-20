@@ -36,12 +36,18 @@ namespace Connect4LAN.Game
 
 			EventHandler<string> handler;
 
+			bool player1sTurn = true;
+
 			//wire up player 1
 			handler = (s, msg) => 
 			{
 				var e = NetworkMessage<object>.DeSerialize(msg);
-				if (e.MessageType == NetworkMessageType.Move)
+				if (player1sTurn && e.MessageType == NetworkMessageType.Move)
+				{
 					executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, player1);
+					player1sTurn = !player1sTurn;
+					player2.NetworkAdapter.SendMessage("Your go", NetworkMessageType.ServerMessage);
+				}
 			};
 			player1.NetworkAdapter.Received += handler;
 			player1.NetworkAdapter.ConnectionLost += (s, e) =>
@@ -55,8 +61,12 @@ namespace Connect4LAN.Game
 			handler = (s, msg) =>
 			{
 				var e = NetworkMessage<object>.DeSerialize(msg);
-				if (e.MessageType == NetworkMessageType.Move)
+				if (!player1sTurn && e.MessageType == NetworkMessageType.Move)
+				{
 					executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, player2);
+					player1sTurn = !player1sTurn;
+					player1.NetworkAdapter.SendMessage("Your go", NetworkMessageType.ServerMessage);
+				}
 			};
 			player2.NetworkAdapter.Received += handler;
 			player1.NetworkAdapter.ConnectionLost += (s, e) => 
