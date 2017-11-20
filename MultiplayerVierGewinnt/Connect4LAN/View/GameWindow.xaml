@@ -7,7 +7,7 @@
         xmlns:a="clr-namespace:Connect4LAN"
         xmlns:c="clr-namespace:Connect4LAN.Converters"
         mc:Ignorable="d"
-        Title="{Binding Title}" MinHeight="470" Height="470" MinWidth="558" Width="600"
+        Title="{Binding Title}" MinHeight="470" Height="470" MinWidth="558" Width="800"
         d:DataContext="{d:DesignInstance a:GameViewModel}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -21,7 +21,7 @@
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
 
-        <!-- Game & Chat -->
+        <!-- Game/Setup & Chat -->
         <Grid Row="0" >
             <Grid.ColumnDefinitions>
                 <!-- Game, 7x64 + 6x10 -->
