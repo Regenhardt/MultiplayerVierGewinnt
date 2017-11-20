@@ -179,7 +179,7 @@ namespace Connect4LAN
 		string name;
 		public string Name
 		{
-			get => name;
+			get { return name; }
 			set
 			{
 				if (name != value)
