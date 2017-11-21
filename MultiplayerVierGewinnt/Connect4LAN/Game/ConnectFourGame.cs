@@ -44,15 +44,17 @@ namespace Connect4LAN.Game
 				var e = NetworkMessage<object>.DeSerialize(msg);
 				if (player1sTurn && e.MessageType == NetworkMessageType.Move)
 				{
+					System.Diagnostics.Debug.WriteLine($"{DateTime.Now.ToShortTimeString()}: Move from {player1.Name} recieved.\r\nThe Message is: {msg}\r\n");				
 					executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, player1);
 					player1sTurn = !player1sTurn;
-					player2.NetworkAdapter.SendMessage("Your go", NetworkMessageType.ServerMessage);
+					player2.NetworkAdapter.SendMessage("Your turn", NetworkMessageType.ServerMessage);
 				}
 			};
 			player1.NetworkAdapter.Received += handler;
 			player1.NetworkAdapter.ConnectionLost += (s, e) =>
 			{
-				player2.NetworkAdapter.SendMessage($"{player2.Name} lost connection.{((!weHaveAWinner)?"You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
+				player2.NetworkAdapter.SendMessage($"{player1.Name} lost connection.{((!weHaveAWinner)?" You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
+				player2.NetworkAdapter.SendMessage(true, NetworkMessageType.GameOver);
 				player1.NetworkAdapter.Received -= handler;
 				player2.NetworkAdapter.Disconnect();
 			};
@@ -63,15 +65,17 @@ namespace Connect4LAN.Game
 				var e = NetworkMessage<object>.DeSerialize(msg);
 				if (!player1sTurn && e.MessageType == NetworkMessageType.Move)
 				{
+					System.Diagnostics.Debug.WriteLine($"{DateTime.Now.ToShortTimeString()}: Move from {player2.Name} recieved.\r\nThe Message is: {msg}\r\n");
 					executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, player2);
 					player1sTurn = !player1sTurn;
-					player1.NetworkAdapter.SendMessage("Your go", NetworkMessageType.ServerMessage);
+					player1.NetworkAdapter.SendMessage("Your turn", NetworkMessageType.ServerMessage);
 				}
 			};
 			player2.NetworkAdapter.Received += handler;
-			player1.NetworkAdapter.ConnectionLost += (s, e) => 
+			player2.NetworkAdapter.ConnectionLost += (s, e) => 
 			{
-				player1.NetworkAdapter.SendMessage($"{player1.Name} lost connection.{((!weHaveAWinner)?"You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
+				player1.NetworkAdapter.SendMessage($"{player2.Name} lost connection.{((!weHaveAWinner)?" You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
+				player1.NetworkAdapter.SendMessage(true, NetworkMessageType.GameOver);
 				player2.NetworkAdapter.Received -= handler;
 				player1.NetworkAdapter.Disconnect();
 			};
