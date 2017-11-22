@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace Connect4LAN.Network
 {
-	class NetworkAdapter : INetworkController
+	class NetworkAdapter : INetworkController, IDisposable
 	{
 		#region [ Constuctors ]
 
@@ -44,7 +44,16 @@ namespace Connect4LAN.Network
 			Connect(ip, port);
 		}
 
-		#endregion [ Constuctorsd ]
+		#endregion [ Constuctors ]
+
+		#region [ Destructors ]
+
+		public void Dispose()
+		{
+			tcpClient.Close();
+		}
+
+		#endregion
 
 		/// <summary>
 		/// Setilizes a message and sends it 
