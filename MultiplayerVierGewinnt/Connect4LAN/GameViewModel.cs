@@ -304,6 +304,8 @@ namespace Connect4LAN
 		/// </summary>
 		private void InitClient()
 		{
+			if (client != null)
+				client.Dispose();
 			client = new Network.Clientside.Client();
 			client.ChatMessageRecieved += ChatMessageReceivedHandler;
 			client.ColorChanged += ColorChanged;
