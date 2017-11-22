@@ -16,7 +16,7 @@ using System.Windows.Threading;
 
 namespace Connect4LAN
 {
-	internal class GameViewModel : INotifyPropertyChanged
+	internal class GameViewModel : INotifyPropertyChanged, IDisposable
 	{
 
 		#region [ Commands ]
@@ -316,6 +316,16 @@ namespace Connect4LAN
 			client.Received += MessageToChat;
 			client.ServerMessageRecieved += MessageToChat;
 			client.GameOver += GameOver;
+		}
+
+		#endregion
+
+		#region [ Destructor ]
+
+		public void Dispose()
+		{
+			if (client != null)
+				client.Dispose();
 		}
 
 		#endregion
