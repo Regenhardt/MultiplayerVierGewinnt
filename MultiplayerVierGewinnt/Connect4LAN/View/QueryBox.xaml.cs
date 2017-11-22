@@ -16,53 +16,60 @@ using System.Windows.Shapes;
 
 namespace Connect4LAN.View
 {
-    /// <summary>
-    /// Interaction logic for QueryBox.xaml
-    /// </summary>
-    public partial class QueryBox : Window, INotifyPropertyChanged
-    {
+	/// <summary>
+	/// Interaction logic for QueryBox.xaml
+	/// </summary>
+	public partial class QueryBox : Window, INotifyPropertyChanged
+	{
 
-        public string IP
-        {
-            get
-            {
-                return ip;
-            }
-            set
-            {
-                ip = value;
-                Notify();
-            }
-        }
-        private string ip;
+		public string IP
+		{
+			get
+			{
+				return ip;
+			}
+			set
+			{
+				ip = value;
+				Notify();
+			}
+		}
+		private string ip;
 
-        /// <summary>
-        /// Confirm and use the entered IP address.
-        /// </summary>
-        public ICommand ConfirmIPCommand
-        {
-            get
-            {
-                if (confirmIPCommand == null) confirmIPCommand = new RelayCommand(param => ConfirmIP());
-                return confirmIPCommand;
-            }
-        }
-        private RelayCommand confirmIPCommand;
-        public QueryBox()
-        {
-            InitializeComponent();
-            DataContext = this;
-            #if DEBUG
-            IP = "localhost";
-            #endif
-        }
+		public bool OK;
 
-        private void ConfirmIP() => Close();
+		/// <summary>
+		/// Confirm and use the entered IP address.
+		/// </summary>
+		public ICommand ConfirmIPCommand
+		{
+			get
+			{
+				if (confirmIPCommand == null) confirmIPCommand = new RelayCommand(param => ConfirmIP());
+				return confirmIPCommand;
+			}
+		}
+		private RelayCommand confirmIPCommand;
+		public QueryBox(string presetTarget = "localhost")
+		{
+			InitializeComponent();
+			DataContext = this;
+			ip = presetTarget;
+			IPTextbox.Text = ip;
+			IPTextbox.CaretIndex = IP.Length;
+			OK = false;
+		}
 
-        private void Notify([CallerMemberName]string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;	
-    }
+		private void ConfirmIP()
+		{
+			OK = true;
+			Close();
+		}
+
+		private void Notify([CallerMemberName]string propertyName = "")
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+		public event PropertyChangedEventHandler PropertyChanged;	
+	}
 }

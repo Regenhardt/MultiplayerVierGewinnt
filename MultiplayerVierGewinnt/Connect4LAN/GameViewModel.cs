@@ -349,8 +349,22 @@ namespace Connect4LAN
 			ownColor = Colors.Red;
 			enemyColor = Colors.Yellow;
 			SetupVisible = false;
-			var query = new View.QueryBox();
+			var ip = client.IP.ToString();
+			var networkPortion = ip.Substring(0, ip.LastIndexOf('.')+1);
+			var query = new View.QueryBox(networkPortion)
+			{
+				Owner = Application.Current.MainWindow
+			};
 			query.ShowDialog();
+
+			// Query aborted
+			if (!query.OK)
+			{
+				ResetGame();
+				return;
+			}
+
+
 			if (Connect(query.IP))
 			{
 				GameVisible = true;
