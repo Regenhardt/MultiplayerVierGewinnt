@@ -16,53 +16,51 @@ using System.Windows.Shapes;
 
 namespace Connect4LAN.View
 {
-    /// <summary>
-    /// Interaction logic for QueryBox.xaml
-    /// </summary>
-    public partial class QueryBox : Window, INotifyPropertyChanged
-    {
+	/// <summary>
+	/// Interaction logic for QueryBox.xaml
+	/// </summary>
+	public partial class QueryBox : Window, INotifyPropertyChanged
+	{
 
-        public string IP
-        {
-            get
-            {
-                return ip;
-            }
-            set
-            {
-                ip = value;
-                Notify();
-            }
-        }
-        private string ip;
+		public string IP
+		{
+			get
+			{
+				return ip;
+			}
+			set
+			{
+				ip = value;
+				Notify();
+			}
+		}
+		private string ip;
 
-        /// <summary>
-        /// Confirm and use the entered IP address.
-        /// </summary>
-        public ICommand ConfirmIPCommand
-        {
-            get
-            {
-                if (confirmIPCommand == null) confirmIPCommand = new RelayCommand(param => ConfirmIP());
-                return confirmIPCommand;
-            }
-        }
-        private RelayCommand confirmIPCommand;
-        public QueryBox()
-        {
-            InitializeComponent();
-            DataContext = this;
-            #if DEBUG
-            IP = "localhost";
-            #endif
-        }
+		/// <summary>
+		/// Confirm and use the entered IP address.
+		/// </summary>
+		public ICommand ConfirmIPCommand
+		{
+			get
+			{
+				if (confirmIPCommand == null) confirmIPCommand = new RelayCommand(param => ConfirmIP());
+				return confirmIPCommand;
+			}
+		}
+		private RelayCommand confirmIPCommand;
+		public QueryBox(string presetTarget = "localhost")
+		{
+			InitializeComponent();
+			DataContext = this;
+			IP = presetTarget;
+		}
 
-        private void ConfirmIP() => Close();
+		private void ConfirmIP() => Close();
 
-        private void Notify([CallerMemberName]string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;	
-    }
+		private void Notify([CallerMemberName]string propertyName = "")
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+		public event PropertyChangedEventHandler PropertyChanged;	
+	}
 }
