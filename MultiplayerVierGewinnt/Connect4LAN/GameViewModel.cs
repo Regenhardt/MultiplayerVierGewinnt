@@ -351,8 +351,20 @@ namespace Connect4LAN
 			SetupVisible = false;
 			var ip = client.IP.ToString();
 			var networkPortion = ip.Substring(0, ip.LastIndexOf('.')+1);
-			var query = new View.QueryBox(networkPortion);
+			var query = new View.QueryBox(networkPortion)
+			{
+				Owner = Application.Current.MainWindow
+			};
 			query.ShowDialog();
+
+			// Query aborted
+			if (!query.OK)
+			{
+				ResetGame();
+				return;
+			}
+
+
 			if (Connect(query.IP))
 			{
 				GameVisible = true;

@@ -36,6 +36,8 @@ namespace Connect4LAN.View
 		}
 		private string ip;
 
+		public bool OK;
+
 		/// <summary>
 		/// Confirm and use the entered IP address.
 		/// </summary>
@@ -52,10 +54,17 @@ namespace Connect4LAN.View
 		{
 			InitializeComponent();
 			DataContext = this;
-			IP = presetTarget;
+			ip = presetTarget;
+			IPTextbox.Text = ip;
+			IPTextbox.CaretIndex = IP.Length;
+			OK = false;
 		}
 
-		private void ConfirmIP() => Close();
+		private void ConfirmIP()
+		{
+			OK = true;
+			Close();
+		}
 
 		private void Notify([CallerMemberName]string propertyName = "")
 		{
