@@ -19,6 +19,7 @@ namespace Connect4LAN.Game
 
 		public Gameboard Gameboard { get; private set; }
 
+		bool player1sTurn = true;
 		//Flag to dermin wether we ahve a winner
 		private bool weHaveAWinner = false;
 
@@ -36,7 +37,6 @@ namespace Connect4LAN.Game
 
 			EventHandler<string> handler;
 
-			bool player1sTurn = true;
 
 			//wire up player 1
 			handler = (s, msg) => 
@@ -51,13 +51,7 @@ namespace Connect4LAN.Game
 				}
 			};
 			player1.NetworkAdapter.Received += handler;
-			player1.NetworkAdapter.ConnectionLost += (s, e) =>
-			{
-				player2.NetworkAdapter.SendMessage($"{player1.Name} lost connection.{((!weHaveAWinner)?" You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
-				player2.NetworkAdapter.SendMessage(true, NetworkMessageType.GameOver);
-				player1.NetworkAdapter.Received -= handler;
-				player2.NetworkAdapter.Disconnect();
-			};
+			player1.NetworkAdapter.ConnectionLost += OnConnectionLost;
 
 			//wire up player 2
 			handler = (s, msg) =>
@@ -72,13 +66,7 @@ namespace Connect4LAN.Game
 				}
 			};
 			player2.NetworkAdapter.Received += handler;
-			player2.NetworkAdapter.ConnectionLost += (s, e) => 
-			{
-				player1.NetworkAdapter.SendMessage($"{player2.Name} lost connection.{((!weHaveAWinner)?" You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
-				player1.NetworkAdapter.SendMessage(true, NetworkMessageType.GameOver);
-				player2.NetworkAdapter.Received -= handler;
-				player1.NetworkAdapter.Disconnect();
-			};
+			player2.NetworkAdapter.ConnectionLost += OnConnectionLost;
 		}
 
 		/// <summary>
@@ -145,7 +133,12 @@ namespace Connect4LAN.Game
 			return piece;			
 		}
 
-		//calculates the neighbors of a piece
+		/// <summary>
+		/// Calculates the neighbors of a piece.
+		/// </summary>
+		/// <param name="collumn"></param>
+		/// <param name="row"></param>
+		/// <param name="piece"></param>
 		private void calculateNeighbours(int collumn, int row, Piece piece)
 		{
 			piece.IsWinningPiece =
@@ -590,6 +583,30 @@ namespace Connect4LAN.Game
 			}
 		}
 
+		#region [ Eventhandlers ]
+
+		private void OnConnectionLost(object sender, EventArgs args)
+		{
+			Player winnerByElimination = sender == player1 ? player2 : player1;
+			Player loser = (Player)sender;
+			winnerByElimination.NetworkAdapter.ConnectionLost -= OnConnectionLost;
+			loser.NetworkAdapter.ConnectionLost -= OnConnectionLost;
+			winnerByElimination.Won($"{loser.Name} disconnected, you won!");
+			// TODO feature extension: Implement re-opening the game to count consecutive wins. Remove the disconnect form .Won if you do this.
+		}
+
+		public void OnReceived(object sender, string msg)
+		{
+			var messageType = NetworkMessage<object>.DeSerialize(msg).MessageType;
+			if (true)
+			{
+				executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, player1);
+				player1sTurn = !player1sTurn;
+				player2.NetworkAdapter.SendMessage("Your turn", NetworkMessageType.ServerMessage); 
+			}
+		}
+
+		#endregion
 
 	}
 }
