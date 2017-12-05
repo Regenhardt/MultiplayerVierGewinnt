@@ -39,11 +39,12 @@ namespace Connect4LAN.Network.Tests
 		public void BroadcastRecieveTest()
 		{
 			//instantiate a port
-			var client = new UDPBroadcaster(43133);
-			client.MessageRecieved += (s, e) => System.Diagnostics.Debug.WriteLine(e);
-			while (client.recievedMessages.Count() == 0)
-				System.Threading.Thread.Sleep(222);
-			client.Dispose();
+			using (var client = new UDPBroadcaster(43133))
+			{
+				client.MessageRecieved += (s, e) => System.Diagnostics.Debug.WriteLine(e);
+				while (client.recievedMessages.Count() == 0)
+					System.Threading.Thread.Sleep(222);
+			}
 			Assert.IsTrue(true);
 		}
 	}
