@@ -11,7 +11,7 @@ namespace Connect4LAN.Network
 	/// <summary>
 	/// A Message deliverd across the network
 	/// </summary>
-	struct NetworkMessage <T>
+	public struct NetworkMessage <T>
 	{
 		/// <summary>
 		/// The Type of the Message
