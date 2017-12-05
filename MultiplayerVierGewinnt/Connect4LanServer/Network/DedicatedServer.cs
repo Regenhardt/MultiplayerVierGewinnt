@@ -1,4 +1,5 @@
 ﻿using Connect4LAN.Network;
+using Connect4LAN.Network.Clientside;
 using Connect4LAN.Network.Serverside;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Connect4LanServer.Network
 		private UdpBroadcaster socket;
 		private RequestAcceptor server;
 		private List<Lobby> lobbies;
+		private List<ClientCommunicator> clients;
 
 		/// <summary>
 		/// Instantiates a Dedicated server object
@@ -25,6 +27,9 @@ namespace Connect4LanServer.Network
 		/// <param name="broadcastingPort">The port on wich any discover packets shall be listned for</param>
 		public DedicatedServer(int gamePort = 16569, int broadcastingPort = 43133)
 		{
+			lobbies = new List<Lobby>();
+			clients = new List<ClientCommunicator>();
+
 			//build the server
 			this.server = new RequestAcceptor(gamePort);
 
@@ -45,26 +50,48 @@ namespace Connect4LanServer.Network
 			//temporary set color and name cuz i am lazy
 			NetworkAdapter adapter = new NetworkAdapter(client);
 			
+			while (adapter.ReadLastMessage() == null)
+				System.Threading.Thread.Sleep(100);
 
-
-			//decode the message
-			//var msg = NetworkMessage<object>.DeSerialize(json);
 			////the first message is always the name
-			//string name;
-			//if (msg.MessageType == NetworkMessageType.PlayerName)
-			//	name = msg.Message.ToString();
-			//else
-			//	name = "Idiot";
+			var msg = NetworkMessage<string>.DeSerialize(adapter.ReadLastMessage());
+			string name;
+			if (msg.MessageType == NetworkMessageType.PlayerName)
+				name = msg.Message.ToString();
+			else
+				name = "Idiot";
 
-			////check if name is taken
-			//if (players.Any(p => p != null && string.Equals(p.Name, name, StringComparison.OrdinalIgnoreCase)))
-			//	name += "_2";
+			//check if name is taken
+			if (clients.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+				name += "_2";
 
 			//player.NetworkAdapter.SendMessage(color, NetworkMessageType.Color);
-			//player.NetworkAdapter.SendMessage(name, NetworkMessageType.PlayerName);
+			adapter.SendMessage(name, NetworkMessageType.PlayerName);
 
-			////return him
-			//return player;
+			var commi = new ClientCommunicator(adapter, name);
+			commi.LobbyRequestRegisterd += parseLobbyRequest;
+			clients.Add(commi);
+		}
+
+		private void parseLobbyRequest(object sender, LobbyCommunicationEventArgs e)
+		{
+			var commi = sender as ClientCommunicator;
+
+			switch (e.LobbyCommunicationType)
+			{
+				//only react on Lobbymessages
+				case NetworkMessageType.Discover:
+
+				case NetworkMessageType.CreateLobby:
+					this.lobbies.Add(new Lobby());					
+					break;
+				case NetworkMessageType.JoinLobby:
+					
+					break;
+				//any other message, do nuttin'
+				default:
+					return;
+			}
 		}
 
 		/// <summary>
@@ -124,6 +151,50 @@ namespace Connect4LanServer.Network
 
 
 		}
+
+		/// <summary>
+		/// Class to communicate with client
+		/// </summary>
+		private class ClientCommunicator
+		{
+			private NetworkAdapter adapter;
+
+			public string Name { get; }
+
+			public ClientCommunicator(NetworkAdapter adapter, string playerName)
+			{
+				this.adapter = adapter;
+				this.Name = playerName;
+
+				adapter.Received += Adapter_Received;
+			}
+
+			private void Adapter_Received(object sender, string e)
+			{
+				var type = NetworkMessage<object>.GetNetworkMessageType(e);
+
+				switch (type)
+				{
+					//only react on Lobbymessages
+					case NetworkMessageType.Discover:
+					case NetworkMessageType.CreateLobby:
+						LobbyRequestRegisterd?.Invoke(this, new LobbyCommunicationEventArgs(type, null));
+						break;
+					case NetworkMessageType.JoinLobby:
+						LobbyRequestRegisterd?.Invoke(this, new LobbyCommunicationEventArgs(type, NetworkMessage<int>.DeSerialize(e).Message));
+						break;
+					//any other message, do nuttin'
+					default:
+						return;
+				}
+
+			}
+
+			public event EventHandler<LobbyCommunicationEventArgs> LobbyRequestRegisterd;
+		}
+
+
+
 
 	}
 }

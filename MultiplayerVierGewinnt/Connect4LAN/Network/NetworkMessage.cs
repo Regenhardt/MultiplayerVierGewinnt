@@ -46,6 +46,13 @@ namespace Connect4LAN.Network
 		public static NetworkMessage<T> DeSerialize(string s) => new JavaScriptSerializer().Deserialize<NetworkMessage<T>>(s);
 
 		/// <summary>
+		/// Reads our the Networkmessage
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns></returns>
+		public static NetworkMessageType GetNetworkMessageType(string s) => new JavaScriptSerializer().Deserialize<NetworkMessage<object>>(s).MessageType;
+
+		/// <summary>
 		/// Reads out the type of the NetworkMessage
 		/// </summary>
 		/// <param name="s"></param>
