@@ -10,21 +10,28 @@ namespace Connect4LanServer.Network
 {
 	public class UDPBroadcaster : IDisposable
 	{
+		#region [ Fields ]
+
 		private UdpClient socket;
 		private bool listenForMessages = true;
 		private IPEndPoint endpoint;
 
+		#endregion [ Fields ]
+
+		#region [ Properties ]
 		/// <summary>
 		/// The Port wich is listned and which is sent to
 		/// </summary>
 		public int Port { get; private set; }
-		
+
 		/// <summary>
 		/// Dictionairy of recieved messages
 		/// </summary>
-		
+
 		public Dictionary<DateTime, string> recievedMessages { get; private set; }
 
+		#endregion [ Properties ]
+		
 		/// <summary>
 		/// 
 		/// </summary>
@@ -61,7 +68,6 @@ namespace Connect4LanServer.Network
 			});
 		}
 
-
 		public void Dispose()
 		{
 			listenForMessages = false;
@@ -69,6 +75,7 @@ namespace Connect4LanServer.Network
 			socket.Dispose();
 		}
 
+		#region [ Events and Methods ]
 		/// <summary>
 		/// Gets fired everytime an event is recived
 		/// </summary>
@@ -84,7 +91,7 @@ namespace Connect4LanServer.Network
 		/// <param name="msg"></param>
 		public void SendMessage(string msg)
 		{
-			SendMessage(msg, "255.255.255.255");			
+			SendMessage(msg, "255.255.255.255");
 		}
 
 		/// <summary>
@@ -97,5 +104,7 @@ namespace Connect4LanServer.Network
 
 			socket.Send(bytes, bytes.Length, host, Port);
 		}
+
+		#endregion [ Events and Methods ]
 	}
 }
