@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Connect4LanServer.Network;
 
 namespace Connect4LAN.Network.Tests
 {
@@ -22,5 +23,31 @@ namespace Connect4LAN.Network.Tests
 
 			Assert.IsTrue(gb.IsFull);
 		}
+
+		[TestMethod()]
+		public void BroadcastTest()
+		{
+			//instantiate a port
+			var client = new UDPBroadcaster(43133);
+			client.SendMessage("Hello Broadcast!");
+			client.Dispose();
+
+			Assert.IsTrue(true);
+		}
+
+		[TestMethod()]
+		public void BroadcastRecieveTest()
+		{
+			//instantiate a port
+			var client = new UDPBroadcaster(43133);
+			client.MessageRecieved += (s, e) => System.Diagnostics.Debug.WriteLine(e);
+			while (client.recievedMessages.Count() == 0)
+				System.Threading.Thread.Sleep(222);
+
+			Assert.IsTrue(true);
+		}
 	}
+
+
+
 }
