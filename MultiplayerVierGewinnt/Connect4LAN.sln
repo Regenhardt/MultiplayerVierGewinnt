@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect4LAN", "Connect4LAN\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect4LANTests", "Connect4LANTests\Connect4LANTests.csproj", "{96B71BED-ECF3-4A74-B291-08AB4292DC05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect4LanServer", "Connect4LanServer\Connect4LanServer.csproj", "{317F8205-41C7-4D05-9D03-24A9624FA6B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{96B71BED-ECF3-4A74-B291-08AB4292DC05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96B71BED-ECF3-4A74-B291-08AB4292DC05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96B71BED-ECF3-4A74-B291-08AB4292DC05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{317F8205-41C7-4D05-9D03-24A9624FA6B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{317F8205-41C7-4D05-9D03-24A9624FA6B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{317F8205-41C7-4D05-9D03-24A9624FA6B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{317F8205-41C7-4D05-9D03-24A9624FA6B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
