@@ -43,7 +43,7 @@ namespace Connect4LAN.Network.Tests
 			client.MessageRecieved += (s, e) => System.Diagnostics.Debug.WriteLine(e);
 			while (client.recievedMessages.Count() == 0)
 				System.Threading.Thread.Sleep(222);
-
+			client.Dispose();
 			Assert.IsTrue(true);
 		}
 	}

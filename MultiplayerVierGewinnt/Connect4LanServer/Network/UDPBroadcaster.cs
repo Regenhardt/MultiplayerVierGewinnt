@@ -84,9 +84,18 @@ namespace Connect4LanServer.Network
 		/// <param name="msg"></param>
 		public void SendMessage(string msg)
 		{
+			SendMessage(msg, "255.255.255.255");			
+		}
+
+		/// <summary>
+		/// Sends a message to the designated host
+		/// </summary>
+		/// <param name="msg"></param>
+		public void SendMessage(string msg, string host)
+		{
 			var bytes = Encoding.UTF8.GetBytes(msg);
 
-			socket.Send(bytes, bytes.Length, "255.255.255.255", Port);			
+			socket.Send(bytes, bytes.Length, host, Port);
 		}
 	}
 }
