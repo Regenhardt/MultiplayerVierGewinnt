@@ -100,7 +100,7 @@ namespace Connect4LAN.Network
 		/// Returns the last message from the player
 		/// </summary>
 		/// <returns></returns>
-		public NetworkMessage<object> ReadLastMessage()
+		public string ReadLastMessage()
 		{
 			return lastNetworkMesssage;
 		}
@@ -143,7 +143,7 @@ namespace Connect4LAN.Network
 								//report that message was 			
 								var msg = @in.ReadLine();
 								Received?.Invoke(this, msg);
-								lastNetworkMesssage = NetworkMessage<object>.DeSerialize(msg);
+								lastNetworkMesssage = msg;
 							}
 						}
 						catch (NullReferenceException)
@@ -169,7 +169,7 @@ namespace Connect4LAN.Network
 		protected TcpClient tcpClient;
 		protected StreamReader @in;
 		protected StreamWriter @out;
-		protected NetworkMessage<object> lastNetworkMesssage;
+		protected string lastNetworkMesssage;
 
 		#endregion
 
