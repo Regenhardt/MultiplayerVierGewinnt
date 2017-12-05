@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace Connect4LAN.Network
 {
-	class NetworkAdapter : INetworkController, IDisposable
+	public class NetworkAdapter : INetworkController, IDisposable
 	{
 		#region [ Constuctors ]
 

@@ -10,7 +10,7 @@ namespace Connect4LAN.Network
 	/// <summary>
 	/// The move a player made
 	/// </summary>
-	struct Move
+	public struct Move
 	{
 		/// <summary>
 		/// The collumn in wich this piece is set
