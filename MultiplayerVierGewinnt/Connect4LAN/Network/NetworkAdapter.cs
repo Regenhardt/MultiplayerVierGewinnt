@@ -143,6 +143,7 @@ namespace Connect4LAN.Network
 								//report that message was 			
 								var msg = @in.ReadLine();
 								Received?.Invoke(this, msg);
+								lastNetworkMesssage = NetworkMessage<object>.DeSerialize(msg);
 							}
 						}
 						catch (NullReferenceException)
