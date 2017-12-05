@@ -63,9 +63,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DedicatedServerViewModel.cs" />
-    <Compile Include="Network\ILobbyCommunicator.cs" />
-    <Compile Include="Network\LobbyCommunicationEventArgs.cs" />
-    <Compile Include="Network\LobbyCommunications.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -97,6 +94,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Network\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
