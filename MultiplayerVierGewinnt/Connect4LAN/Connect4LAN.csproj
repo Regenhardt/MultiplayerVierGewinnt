@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Network\Clientside\ILobbyCommunicator.cs" />
+    <Compile Include="Network\Clientside\LobbyCommunicationEventArgs.cs" />
+    <Compile Include="Network\Clientside\LobbyCommunications.cs" />
     <Compile Include="Network\Opponent.cs" />
     <Compile Include="View\QueryBox.xaml.cs">
       <DependentUpon>QueryBox.xaml</DependentUpon>
@@ -100,7 +103,6 @@
     <Compile Include="Network\INetworkController.cs" />
     <Compile Include="Network\Clientside\Client.cs" />
     <Compile Include="Network\Serverside\Player.cs" />
-    <Compile Include="Network\Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
