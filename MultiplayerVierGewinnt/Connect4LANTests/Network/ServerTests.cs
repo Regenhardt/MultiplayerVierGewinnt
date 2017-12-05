@@ -30,6 +30,19 @@ namespace Connect4LAN.Network.Tests
 			//instantiate a port
 			var client = new UDPBroadcaster(43133);
 			client.SendMessage("Hello Broadcast!");
+			client.Dispose();
+
+			Assert.IsTrue(true);
+		}
+
+		[TestMethod()]
+		public void BroadcastRecieveTest()
+		{
+			//instantiate a port
+			var client = new UDPBroadcaster(43133);
+			client.MessageRecieved += (s, e) => System.Diagnostics.Debug.WriteLine(e);
+			while (client.recievedMessages.Count() == 0)
+				System.Threading.Thread.Sleep(222);
 
 			Assert.IsTrue(true);
 		}
