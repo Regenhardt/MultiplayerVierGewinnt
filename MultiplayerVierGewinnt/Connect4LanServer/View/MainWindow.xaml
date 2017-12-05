@@ -9,7 +9,7 @@
 		d:DataContext="{d:DesignInstance Type=local:DedicatedServerViewModel}">
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition />
+			<RowDefinition Height="auto" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 		
@@ -28,6 +28,6 @@
 		</Grid>
 		
 		<!-- Games -->
-		<ListBox Grid.Row="1" />
+		<ListBox Grid.Row="1" VerticalAlignment="Stretch" />
 	</Grid>
 </Window>
