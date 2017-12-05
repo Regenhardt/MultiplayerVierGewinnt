@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Connect4LanServer.Network;
 
 namespace Connect4LAN.Network.Tests
 {
@@ -22,5 +23,18 @@ namespace Connect4LAN.Network.Tests
 
 			Assert.IsTrue(gb.IsFull);
 		}
+
+		[TestMethod()]
+		public void BroadcastTest()
+		{
+			//instantiate a port
+			var client = new UDPBroadcaster(43133);
+			client.SendMessage("Hello Broadcast!");
+
+			Assert.IsTrue(true);
+		}
 	}
+
+
+
 }

@@ -55,6 +55,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Connect4LanServer\Connect4LanServer.csproj">
+      <Project>{317f8205-41c7-4d05-9d03-24a9624fa6b4}</Project>
+      <Name>Connect4LanServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Connect4LAN\Connect4LAN.csproj">
       <Project>{A9F50896-116E-418A-A1D1-4C9CA76DB307}</Project>
       <Name>Connect4LAN</Name>

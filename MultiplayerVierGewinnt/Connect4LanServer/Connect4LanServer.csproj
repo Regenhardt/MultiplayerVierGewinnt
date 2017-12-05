@@ -66,6 +66,7 @@
     <Compile Include="Network\ILobbyCommunicator.cs" />
     <Compile Include="Network\LobbyCommunicationEventArgs.cs" />
     <Compile Include="Network\LobbyCommunications.cs" />
+    <Compile Include="Network\UDPBroadcaster.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
