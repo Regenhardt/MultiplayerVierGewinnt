@@ -45,6 +45,19 @@ namespace Connect4LAN.Network.Tests
 				Assert.AreEqual("127.0.0.1", c);
 			}
 		}
+
+		[TestMethod()]
+		public void DedicatedTest()
+		{
+			//instantiate a port
+			var boss = new DedicatedServer();			
+			var c = UdpBroadcaster.FindGameServer();
+			while (true) ;
+			Assert.AreEqual("127.0.0.1", c);
+			
+		}
+
+
 	}
 
 
