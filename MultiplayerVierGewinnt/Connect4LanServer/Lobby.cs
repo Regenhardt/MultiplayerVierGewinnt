@@ -20,21 +20,24 @@ namespace Connect4LanServer
 			Finished
 		}
 		public GameState State { get; private set; }
+		public Player[] Players => players;
 
 		Connect4LAN.Game.ConnectFourGame game;
 		Connect4LAN.Network.Serverside.Player[] players;
+		
 
-		public Lobby(Connect4LAN.Network.Clientside.Client host)
+		public Lobby(Player host)
 		{
 			State = GameState.Open;
 			players = new Connect4LAN.Network.Serverside.Player[2];
-			players[0] = new Player(HostColor, host.Name, host);
+			players[0] = host;
 		}
 
-		public void Start(Client opponent)
+		public void Start(Player opponent)
 		{
-			if (State != GameState.Open) throw new InvalidOperationException("The game you tried to join isn't open!");
-			players[1] = new Player(ClientColor, opponent.Name, opponent);
+			if (State != GameState.Open)
+				throw new InvalidOperationException("The game you tried to join isn't open!");
+			players[1] = opponent;
 			game = new Connect4LAN.Game.ConnectFourGame(players[0], players[1]);
 		}
 	}
