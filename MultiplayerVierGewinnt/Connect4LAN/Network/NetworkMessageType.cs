@@ -74,7 +74,12 @@ namespace Connect4LAN.Network
 		/// Client wants to create a new lobby.
 		/// No payload.
 		/// </summary>
-		CreateLobby
+		CreateLobby,
+
+		/// <summary>
+		/// Messages the client whether or not the lobby join was successful. Payload is bool.
+		/// </summary>
+		LobbyJoined
 
 	}
 
