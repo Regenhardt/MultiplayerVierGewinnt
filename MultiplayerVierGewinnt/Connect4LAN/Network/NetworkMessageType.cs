@@ -50,13 +50,7 @@ namespace Connect4LAN.Network
 		/// The Game starts now.
 		/// No payload.
 		/// </summary>
-		GameStarted,
-
-		/// <summary>
-		/// Broadcast to find running dedicated server.
-		/// No payload.
-		/// </summary>
-		Discover,
+		GameStarted,		
 
 		/// <summary>
 		/// Requests the list of open lobbies from the server.
