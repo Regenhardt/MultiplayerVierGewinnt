@@ -35,6 +35,8 @@ namespace Connect4LAN.Network.Clientside
 
 		public string ServerIp;
 
+		private Dictionary<int, string> LobbyGames;
+
 		/// <summary>
 		/// The Name of the player
 		/// </summary>
@@ -44,6 +46,8 @@ namespace Connect4LAN.Network.Clientside
 		/// </summary>
 		public Color Color { get; private set; }
 
+		#region [ Constructor ]
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -52,7 +56,9 @@ namespace Connect4LAN.Network.Clientside
 		{
 			Name = name;
 			base.Received += analyseRecievedMessage;
-		}
+		} 
+
+		#endregion
 
 		#region [ Events ]
 
@@ -90,6 +96,10 @@ namespace Connect4LAN.Network.Clientside
 		/// Fires when no dedicated server could be found.
 		/// </summary>
 		public event EventHandler<string> ServerNotFound;
+		/// <summary>
+		/// Fires when the client successfully connected to a server.
+		/// </summary>
+		public event EventHandler ConnectedToServer;
 
 
 		#endregion [ Events ]
@@ -119,6 +129,10 @@ namespace Connect4LAN.Network.Clientside
 			base.SendMessage(msg, NetworkMessageType.ChatMessage);
 		}
 
+		/// <summary>
+		/// Starts the connection process.
+		/// Make sure the ServerNotFound and ConnectedToServer events have handlers before you call this.
+		/// </summary>
 		public void ConnectToDedicatedServer()
 		{
 			new System.Threading.Thread(FindAndConnectToServer).Start();
@@ -131,6 +145,11 @@ namespace Connect4LAN.Network.Clientside
 			try
 			{
 				serverIP = UdpBroadcaster.FindGameServer();
+				ServerIp = serverIP;
+				if (!Connect(serverIP))
+					ServerNotFound?.Invoke(this, "Server was found but didn't respond.");
+				else
+					ConnectedToServer?.Invoke(this, EventArgs.Empty);
 			}
 			catch (ServerNotFoundException ex)
 			{
