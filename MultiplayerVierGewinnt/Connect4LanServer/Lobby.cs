@@ -13,6 +13,14 @@ namespace Connect4LanServer
 	{
 		private static readonly Color HostColor = Colors.Yellow;
 		private static readonly Color ClientColor = Colors.Red;
+
+		/// <summary>
+		/// Fires when the host disconnects before hte game starts.
+		/// </summary>
+		event Action<Lobby> HostDisconnected;
+
+		event EventHandler<string> GameFinished;
+
 		public enum GameState
 		{
 			Open,
@@ -39,11 +47,17 @@ namespace Connect4LanServer
 				throw new InvalidOperationException("The game you tried to join isn't open!");
 			players[1] = opponent;
 			game = new Connect4LAN.Game.ConnectFourGame(players[0], players[1]);
+			game.GameOver += GameFinished;
 
 			players[0].NetworkAdapter.SendMessage(null, Connect4LAN.Network.NetworkMessageType.GameStarted);
 			players[1].NetworkAdapter.SendMessage(null, Connect4LAN.Network.NetworkMessageType.GameStarted);
 		}
 
+		public void OnHostDisconnected(object sender, EventArgs args)
+		{
+			State = GameState.Finished;
+			HostDisconnected?.Invoke(this);
+		}
 
 	}
 }

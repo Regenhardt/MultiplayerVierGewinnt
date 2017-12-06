@@ -36,8 +36,9 @@ namespace Connect4LanServer.Network
 		/// 
 		/// </summary>
 		/// <param name="port"></param>
-		public UdpBroadcaster(int port = 43133)
+		public UdpBroadcaster(int port = 43133, bool startListining = true)
 		{
+			listenForMessages = startListining;
 			this.RecievedMessages = new Dictionary<DateTime, string>();
 			this.endpoint = new IPEndPoint(IPAddress.Any, port);
 			this.socket = new UdpClient(endpoint);
@@ -109,6 +110,15 @@ namespace Connect4LanServer.Network
 		}
 
 		/// <summary>
+		/// Retturns the lcoal IPv4 adress
+		/// </summary>
+		/// <returns></returns>
+		static public IPAddress GetLocalIPAdress()
+		{
+			return Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault(p => p.AddressFamily == AddressFamily.InterNetwork);
+		}
+
+		/// <summary>
 		/// Searches the LAN for the running dedicated Gameserver.
 		/// Starts with checking localhost
 		/// </summary>
@@ -118,7 +128,7 @@ namespace Connect4LanServer.Network
 		{
 			try
 			{
-				using (var client = new UdpBroadcaster())
+				using (var client = new UdpBroadcaster(43133, false))
 				{
 					//as soon as the a message was recieved, please tell meh
 					bool waitingForAnswer = true;
@@ -138,7 +148,7 @@ namespace Connect4LanServer.Network
 
 					//so we are not the server, broadcast it to everybody
 					//tell the server about ourself
-					client.SendMessage(IPAddress.Any.MapToIPv4().ToString());
+					client.SendMessage(UdpBroadcaster.GetLocalIPAdress().ToString());
 
 					//wait for 2.3 seconds for a replay
 					tries = 0;
