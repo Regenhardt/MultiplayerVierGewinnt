@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using System.Net.NetworkInformation;
 
 namespace Connect4LanServer.Network
 {
@@ -13,7 +14,7 @@ namespace Connect4LanServer.Network
 		#region [ Fields ]
 
 		private UdpClient socket;
-		private bool listenForMessages = true;
+		private bool listenForMessages = false;
 		private IPEndPoint endpoint;
 
 		#endregion [ Fields ]
@@ -38,12 +39,23 @@ namespace Connect4LanServer.Network
 		/// <param name="port"></param>
 		public UdpBroadcaster(int port = 43133, bool startListining = true)
 		{
-			listenForMessages = startListining;
 			this.RecievedMessages = new Dictionary<DateTime, string>();
 			this.endpoint = new IPEndPoint(IPAddress.Any, port);
 			this.socket = new UdpClient(endpoint);
 			this.Port = port;
 
+			//start listingi for messages if required
+			if (startListining)
+				StartListingForMessages();
+			
+		}
+
+		public void StartListingForMessages()
+		{
+			if (listenForMessages)
+				return;
+
+			listenForMessages = true;
 			//listen for incoming stuff
 			Task.Factory.StartNew(() =>
 			{
@@ -57,7 +69,7 @@ namespace Connect4LanServer.Network
 						//fire data if any1 is listing
 						RecievedMessages.Add(DateTime.Now, data);
 						this.MessageRecieved?.Invoke(this, data);
-						
+
 					}
 					catch (Exception)
 					{
@@ -119,6 +131,35 @@ namespace Connect4LanServer.Network
 		}
 
 		/// <summary>
+		/// Checks werther a port is free
+		/// </summary>
+		/// <param name="port"></param>
+		/// <param name="isUdp">True: check UDP, False: check TCP, null: check both</param>
+		/// <returns></returns>
+		static public bool IsPortFree(int port, bool? isUdp = null)
+		{
+			IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
+
+			Func<bool> tcpContains = () =>
+			{
+				TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
+
+				return tcpConnInfoArray.Any(p => p.LocalEndPoint.Port == port) || ipGlobalProperties.GetActiveTcpListeners().Any(p => p.Port == port);
+			};
+
+			Func<bool> udpContains = () =>
+			{
+				var updConInfoArray = ipGlobalProperties.GetActiveUdpListeners();
+				return updConInfoArray.Any(p => p.Port == port);
+			};
+
+			if(isUdp == null)			
+				return !(udpContains() || tcpContains());
+			
+			return !(isUdp.Value ? udpContains() : tcpContains());
+		}
+
+		/// <summary>
 		/// Searches the LAN for the running dedicated Gameserver.
 		/// Starts with checking localhost
 		/// </summary>
@@ -126,26 +167,18 @@ namespace Connect4LanServer.Network
 		/// <exception cref="ServerNotFoundException">When there is no reply from the server for 2.3 seconds</exception>
 		public static string FindGameServer()
 		{
+			if (!IsPortFree(43133))
+				return "127.0.0.1";
+
 			try
 			{
-				using (var client = new UdpBroadcaster(43133, false))
+				using (var client = new UdpBroadcaster(43133, true))
 				{
 					//as soon as the a message was recieved, please tell meh
 					bool waitingForAnswer = true;
 					client.MessageRecieved += (s, e) => waitingForAnswer = false;
 					int tries = 0;
-
-					//TODO: Alternitevly check for openports 
-					//tell ourself about ourself
-					client.SendMessage("127.0.0.3", "127.0.0.3");
-					//give the computer 1 second to react
-					while (waitingForAnswer && tries++ < 50)
-						System.Threading.Thread.Sleep(20);
-
-					//check if a message was recieved
-					if (!waitingForAnswer)
-						return "127.0.0.1";
-
+					
 					//so we are not the server, broadcast it to everybody
 					//tell the server about ourself
 					client.SendMessage(UdpBroadcaster.GetLocalIPAdress().ToString());
