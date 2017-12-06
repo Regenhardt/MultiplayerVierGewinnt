@@ -80,7 +80,7 @@ namespace Connect4LanServer.Network
 			switch (e.LobbyCommunicationType)
 			{
 				//tell 'im 'bout the lobbies
-				case NetworkMessageType.Discover:
+				case NetworkMessageType.RequestLobbies:
 					Dictionary<int, string> dict = new Dictionary<int, string>(lobbies.Count);
 					for (int i = 0; i < lobbies.Count; i++)
 						if (lobbies[i].State == Lobby.GameState.Open)
@@ -186,7 +186,7 @@ namespace Connect4LanServer.Network
 				switch (type)
 				{
 					//only react on Lobbymessages
-					case NetworkMessageType.Discover:
+					case NetworkMessageType.RequestLobbies:
 					case NetworkMessageType.CreateLobby:
 						LobbyRequestRegisterd?.Invoke(this, new LobbyCommunicationEventArgs(type, null));
 						break;

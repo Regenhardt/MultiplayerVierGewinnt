@@ -67,6 +67,7 @@ namespace Connect4LAN.Network
 			{
 				switch (type)
 				{
+					//string types
 					case NetworkMessageType.ServerMessage:
 					case NetworkMessageType.ChatMessage:
 					case NetworkMessageType.PlayerName:
@@ -84,6 +85,22 @@ namespace Connect4LAN.Network
 					case NetworkMessageType.GameOver:
 						@out.WriteLine(new NetworkMessage<bool> { Message = msg, MessageType = type }.Serialize());
 						break;
+					
+					//lobby logic
+					case NetworkMessageType.AvailableLobbies:
+						@out.WriteLine(new NetworkMessage<Dictionary<int, string>> { Message = msg, MessageType = type }.Serialize());
+						break;
+					case NetworkMessageType.JoinLobby:
+						@out.WriteLine(new NetworkMessage<int> { Message = msg, MessageType = type }.Serialize());
+						break;
+
+					//Messages without special payload
+					case NetworkMessageType.GameStarted:
+					case NetworkMessageType.RequestLobbies:
+					case NetworkMessageType.CreateLobby:
+						@out.WriteLine(new NetworkMessage<object> { Message = msg, MessageType = type }.Serialize());
+						break;
+
 
 					default:
 						throw new ArgumentException();
