@@ -39,6 +39,11 @@ namespace Connect4LanServer
 				throw new InvalidOperationException("The game you tried to join isn't open!");
 			players[1] = opponent;
 			game = new Connect4LAN.Game.ConnectFourGame(players[0], players[1]);
+
+			players[0].NetworkAdapter.SendMessage(null, Connect4LAN.Network.NetworkMessageType.GameStarted);
+			players[1].NetworkAdapter.SendMessage(null, Connect4LAN.Network.NetworkMessageType.GameStarted);
 		}
+
+
 	}
 }
