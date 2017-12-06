@@ -53,8 +53,10 @@ namespace Connect4LAN.Network.Tests
 			var boss = new DedicatedServer();			
 			var c = UdpBroadcaster.FindGameServer();
 			while (true) ;
+#pragma warning disable CS0162 // Unreachable code detected
 			Assert.AreEqual("127.0.0.1", c);
-			
+#pragma warning restore CS0162 // Unreachable code detected
+
 		}
 
 
