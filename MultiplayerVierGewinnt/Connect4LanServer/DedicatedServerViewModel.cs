@@ -30,6 +30,28 @@ namespace Connect4LanServer
 
 		public int GamesRunning => Games.Count(l => l.State == Lobby.GameState.Running);
 
+		private Network.DedicatedServer Server { get; set; }
+
+		#endregion
+
+		#region [ Constructor ]
+
+		internal DedicatedServerViewModel(Network.DedicatedServer server)
+		{
+			Server = server;
+			Games = new ObservableCollection<Lobby>();
+			
+		}
+
+		#endregion
+
+		#region [ Eventhandlers ]
+
+		private void OnNewLobbyCreated(object sender, Lobby newLobby)
+		{
+			Games.Add(newLobby);
+		}
+
 		#endregion
 
 		#region [ NotifyPropertyChanged ]

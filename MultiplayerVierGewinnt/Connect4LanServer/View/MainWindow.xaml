@@ -28,8 +28,16 @@
 		</Grid>
 		
 		<!-- Games -->
-		<ListBox Grid.Row="1" VerticalAlignment="Stretch">
-			
+		<ListBox Grid.Row="1" VerticalAlignment="Stretch" ItemsSource="{Binding Games}">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{Binding Path=Players[0].Name}" Width="auto" HorizontalAlignment="Left" TextAlignment="Left" />
+						<TextBlock Text="{Binding Path=DisplayString}" HorizontalAlignment="Stretch" TextAlignment="Center" />
+						<TextBlock Text="{Binding Path=Players[1].Name}" HorizontalAlignment="Right" TextAlignment="Right" />
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
 		</ListBox>
 	</Grid>
 </Window>
