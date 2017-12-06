@@ -58,6 +58,15 @@ namespace Connect4LAN.Network.Tests
 		}
 
 
+		[TestMethod]
+		public void PortFree()
+		{
+			Assert.IsTrue(UdpBroadcaster.IsPortFree(43133));
+			UdpBroadcaster ddd = new UdpBroadcaster();
+			Assert.IsFalse(UdpBroadcaster.IsPortFree(43133));
+
+		}
+
 	}
 
 
