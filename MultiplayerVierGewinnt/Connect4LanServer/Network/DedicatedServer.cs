@@ -48,12 +48,16 @@ namespace Connect4LanServer.Network
 		/// <param name="client"></param>
 		private void dealWithTcpRequests(TcpClient client)
 		{
+			System.Diagnostics.Debug.WriteLine($"\t\t1. Start {DateTime.Now.TimeOfDay}");
+
 			//temporary set color and name cuz i am lazy
 			NetworkAdapter adapter = new NetworkAdapter(client);
-			
-			while (adapter.ReadLastMessage() == null)
-				System.Threading.Thread.Sleep(100);
 
+			System.Diagnostics.Debug.WriteLine($"\t\t2. Message wait {DateTime.Now.TimeOfDay}");
+			while (adapter.ReadLastMessage() == null)
+				System.Threading.Thread.Sleep(10);
+
+			System.Diagnostics.Debug.WriteLine($"\t\t3. Message recieved {DateTime.Now.TimeOfDay}");
 			////the first message is always the name
 			var msg = NetworkMessage<string>.DeSerialize(adapter.ReadLastMessage());
 			string name;
@@ -62,14 +66,18 @@ namespace Connect4LanServer.Network
 			else
 				name = "Idiot";
 
+			System.Diagnostics.Debug.WriteLine($"\t\t4. Checkcing players... {DateTime.Now.TimeOfDay}");
 			//check if name is taken
 			if (clients.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
 				name += "_2";
 
+			System.Diagnostics.Debug.WriteLine($"\t\t5. Sending answer... {DateTime.Now.TimeOfDay}");
 			//player.NetworkAdapter.SendMessage(color, NetworkMessageType.Color);
 			adapter.SendMessage(name, NetworkMessageType.PlayerName);
 
+			System.Diagnostics.Debug.WriteLine($"\t\t6. Building communicator... {DateTime.Now.TimeOfDay}");
 			var commi = new ClientCommunicator(adapter, name);
+			System.Diagnostics.Debug.WriteLine($"\t\t7. Adding event {DateTime.Now.TimeOfDay}");
 			commi.LobbyRequestRegisterd += parseLobbyRequest;
 			clients.Add(commi);
 		}
@@ -94,6 +102,8 @@ namespace Connect4LanServer.Network
 					var lobby = new Lobby(new Player(Colors.Yellow, commi.Name, commi.Adapter));
 					this.lobbies.Add(lobby);
 					LobbyCreated?.Invoke(this, lobby);
+					//TODO STATS	
+					lobby.PropertyChanged += (s, d) => { Lobby l = s as Lobby; if (d.PropertyName == nameof(l.State) && l.State != Lobby.GameState.Open) lobbies.Remove(l); };
 					break;
 
 				//wants to join lobby
@@ -125,6 +135,10 @@ namespace Connect4LanServer.Network
 			private bool run = true;
 
 			public TcpListener Socket { get; private set; }
+			/// <summary>
+			/// 
+			/// </summary>
+			/// 			
 			public IPAddress IP { get; private set; }
 
 			public RequestAcceptor(int port)
@@ -139,8 +153,15 @@ namespace Connect4LanServer.Network
 				{
 					try
 					{
-						while(run)
-							ClientConnected?.Invoke(this, Socket.AcceptTcpClient());
+						while (run)
+						{
+							System.Diagnostics.Debug.WriteLine($"");
+							var sck = Socket.AcceptTcpClient();
+							System.Diagnostics.Debug.WriteLine($"\tStarted at {DateTime.Now.ToShortTimeString()}");
+							ClientConnected?.Invoke(this, sck);
+							System.Diagnostics.Debug.WriteLine($"\tFinished at {DateTime.Now.ToShortTimeString()}");
+
+						}
 					}
 					catch (Exception)
 					{
