@@ -67,6 +67,18 @@ namespace Connect4LAN.Network.Tests
 
 		}
 
+		[TestMethod]
+		public void FindServerTest()
+		{
+			var i = UdpBroadcaster.FindGameServer();
+
+			// Is an IP bAdress
+			Assert.IsTrue(System.Net.IPAddress.TryParse(i, out System.Net.IPAddress a));
+
+			// Isn't localhost
+			Assert.AreNotEqual(i, UdpBroadcaster.GetLocalIPAdress().MapToIPv4().ToString());
+		}
+
 	}
 
 
