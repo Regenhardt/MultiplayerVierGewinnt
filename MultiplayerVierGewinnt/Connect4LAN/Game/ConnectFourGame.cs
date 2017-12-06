@@ -19,8 +19,10 @@ namespace Connect4LAN.Game
 		public Gameboard Gameboard { get; private set; }
 
 		int playersTurn = 0;
-		//Flag to dermin wether we ahve a winner
+		//Flag to dermin whether we have a winner
 		private bool weHaveAWinner = false;
+
+		public event EventHandler<string> GameOver;
 
 		/// <summary>
 		/// Instaniates a Game of Connect 
@@ -78,6 +80,8 @@ namespace Connect4LAN.Game
 
 					//set that we indeed have a winner
 					weHaveAWinner = true;
+
+					GameOver?.Invoke(this, player.Name);
 				}
 
 				//
