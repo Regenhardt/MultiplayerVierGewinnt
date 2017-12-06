@@ -18,9 +18,9 @@ namespace Connect4LanServer
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class DedicatedServerView : Window
 	{
-		public MainWindow()
+		public DedicatedServerView()
 		{
 			InitializeComponent();
 		}
