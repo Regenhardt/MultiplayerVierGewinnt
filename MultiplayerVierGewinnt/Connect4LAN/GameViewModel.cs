@@ -127,6 +127,21 @@ namespace Connect4LAN
 		}
 		private bool setupVisible;
 
+
+		public bool ServerSearchVisible
+		{
+			get
+			{
+				return serverSearchVisible;
+			}
+			set
+			{
+				serverSearchVisible = value;
+				Notify();
+			}
+		}
+		private bool serverSearchVisible;
+
 		public Color[][] Pieces
 		{
 			get
@@ -267,7 +282,8 @@ namespace Connect4LAN
 			#endif
 			Title = $"Connect4Lan - {Name}";
 			GameVisible = false;
-			SetupVisible = true;
+			SetupVisible = false;
+			ServerSearchVisible = true;
 			dispatcher = Dispatcher.CurrentDispatcher;
 		}
 
