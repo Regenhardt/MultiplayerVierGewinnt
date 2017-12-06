@@ -1,13 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect4LAN", "Connect4LAN\Connect4LAN.csproj", "{A9F50896-116E-418A-A1D1-4C9CA76DB307}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect4LANTests", "Connect4LANTests\Connect4LANTests.csproj", "{96B71BED-ECF3-4A74-B291-08AB4292DC05}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect4LanServer", "Connect4LanServer\Connect4LanServer.csproj", "{317F8205-41C7-4D05-9D03-24A9624FA6B4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A9F50896-116E-418A-A1D1-4C9CA76DB307} = {A9F50896-116E-418A-A1D1-4C9CA76DB307}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

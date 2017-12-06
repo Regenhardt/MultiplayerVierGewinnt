@@ -63,6 +63,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DedicatedServerViewModel.cs" />
+    <Compile Include="Lobby.cs" />
     <Compile Include="Network\DedicatedServer.cs" />
     <Compile Include="Network\ServerNotFoundException.cs" />
     <Compile Include="Network\UdpBroadcaster.cs" />
@@ -97,6 +98,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Connect4LAN\Connect4LAN.csproj">
+      <Project>{a9f50896-116e-418a-a1d1-4c9ca76db307}</Project>
+      <Name>Connect4LAN</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace Connect4LAN.Network
 {
-	class NetworkAdapter : INetworkController, IDisposable
+	public class NetworkAdapter : INetworkController, IDisposable
 	{
 		#region [ Constuctors ]
 
@@ -67,6 +67,7 @@ namespace Connect4LAN.Network
 			{
 				switch (type)
 				{
+					//string types
 					case NetworkMessageType.ServerMessage:
 					case NetworkMessageType.ChatMessage:
 					case NetworkMessageType.PlayerName:
@@ -84,6 +85,22 @@ namespace Connect4LAN.Network
 					case NetworkMessageType.GameOver:
 						@out.WriteLine(new NetworkMessage<bool> { Message = msg, MessageType = type }.Serialize());
 						break;
+					
+					//lobby logic
+					case NetworkMessageType.AvailableLobbies:
+						@out.WriteLine(new NetworkMessage<Dictionary<int, string>> { Message = msg, MessageType = type }.Serialize());
+						break;
+					case NetworkMessageType.JoinLobby:
+						@out.WriteLine(new NetworkMessage<int> { Message = msg, MessageType = type }.Serialize());
+						break;
+
+					//Messages without special payload
+					case NetworkMessageType.GameStarted:
+					case NetworkMessageType.RequestLobbies:
+					case NetworkMessageType.CreateLobby:
+						@out.WriteLine(new NetworkMessage<object> { Message = msg, MessageType = type }.Serialize());
+						break;
+
 
 					default:
 						throw new ArgumentException();
@@ -100,7 +117,7 @@ namespace Connect4LAN.Network
 		/// Returns the last message from the player
 		/// </summary>
 		/// <returns></returns>
-		public NetworkMessage<object> ReadLastMessage()
+		public string ReadLastMessage()
 		{
 			return lastNetworkMesssage;
 		}
@@ -143,6 +160,7 @@ namespace Connect4LAN.Network
 								//report that message was 			
 								var msg = @in.ReadLine();
 								Received?.Invoke(this, msg);
+								lastNetworkMesssage = msg;
 							}
 						}
 						catch (NullReferenceException)
@@ -168,7 +186,7 @@ namespace Connect4LAN.Network
 		protected TcpClient tcpClient;
 		protected StreamReader @in;
 		protected StreamWriter @out;
-		protected NetworkMessage<object> lastNetworkMesssage;
+		protected string lastNetworkMesssage;
 
 		#endregion
 
@@ -203,12 +221,11 @@ namespace Connect4LAN.Network
 		}
 
 		/// <summary>
-		/// Closes the Socket
+		/// Closes the Socket (same as Dispose()).
 		/// </summary>
 		public void Disconnect()
 		{
 			Socket.Close();
-
 			//Event of disconnecting will be set in the Thread wich is reading the íncoming messages
 		}
 

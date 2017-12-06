@@ -28,6 +28,8 @@
 		</Grid>
 		
 		<!-- Games -->
-		<ListBox Grid.Row="1" VerticalAlignment="Stretch" />
+		<ListBox Grid.Row="1" VerticalAlignment="Stretch">
+			
+		</ListBox>
 	</Grid>
 </Window>

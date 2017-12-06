@@ -16,7 +16,7 @@ namespace Connect4LAN.Network.Clientside
 	/// 
 	/// Is the User for the User
 	/// </summary>
-	class Client : NetworkAdapter
+	public class Client : NetworkAdapter
 	{
 		/// <summary>
 		/// The Current users IPadress

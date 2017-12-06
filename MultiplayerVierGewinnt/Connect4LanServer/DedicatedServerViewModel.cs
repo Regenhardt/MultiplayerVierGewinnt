@@ -14,7 +14,7 @@ namespace Connect4LanServer
 		#region [ Properties ]
 
 
-		public ObservableCollection<object> Games
+		public ObservableCollection<Lobby> Games
 		{
 			get
 			{
@@ -26,7 +26,9 @@ namespace Connect4LanServer
 				Notify();
 			}
 		}
-		private ObservableCollection<object> games;
+		private ObservableCollection<Lobby> games;
+
+		public int GamesRunning => Games.Count(l => l.State == Lobby.GameState.Running);
 
 		#endregion
 

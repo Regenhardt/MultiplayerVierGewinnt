@@ -14,13 +14,15 @@ namespace Connect4LAN.Game
 	/// </summary>
 	class ConnectFourGame
 	{
-		public Player player1 { get; private set; }
-		public Player player2 { get; private set; }
+		public Player[] players { get; set; }
 
 		public Gameboard Gameboard { get; private set; }
 
-		//Flag to dermin wether we ahve a winner
+		int playersTurn = 0;
+		//Flag to dermin whether we have a winner
 		private bool weHaveAWinner = false;
+
+		public event EventHandler<string> GameOver;
 
 		/// <summary>
 		/// Instaniates a Game of Connect 
@@ -30,55 +32,17 @@ namespace Connect4LAN.Game
 		public ConnectFourGame(Player player1, Player player2)
 		{
 			//set variables
-			this.player1 = player1;
-			this.player2 = player2;
+			this.players[0] = player1;
+			this.players[1] = player2;
 			this.Gameboard = new Gameboard();
 
-			EventHandler<string> handler;
-
-			bool player1sTurn = true;
-
 			//wire up player 1
-			handler = (s, msg) => 
-			{
-				var e = NetworkMessage<object>.DeSerialize(msg);
-				if (player1sTurn && e.MessageType == NetworkMessageType.Move)
-				{
-					System.Diagnostics.Debug.WriteLine($"{DateTime.Now.ToShortTimeString()}: Move from {player1.Name} recieved.\r\nThe Message is: {msg}\r\n");				
-					executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, player1);
-					player1sTurn = !player1sTurn;
-					player2.NetworkAdapter.SendMessage("Your turn", NetworkMessageType.ServerMessage);
-				}
-			};
-			player1.NetworkAdapter.Received += handler;
-			player1.NetworkAdapter.ConnectionLost += (s, e) =>
-			{
-				player2.NetworkAdapter.SendMessage($"{player1.Name} lost connection.{((!weHaveAWinner)?" You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
-				player2.NetworkAdapter.SendMessage(true, NetworkMessageType.GameOver);
-				player1.NetworkAdapter.Received -= handler;
-				player2.NetworkAdapter.Disconnect();
-			};
+			players[0].NetworkAdapter.Received += OnReceived;
+			players[0].NetworkAdapter.ConnectionLost += OnConnectionLost;
 
 			//wire up player 2
-			handler = (s, msg) =>
-			{
-				var e = NetworkMessage<object>.DeSerialize(msg);
-				if (!player1sTurn && e.MessageType == NetworkMessageType.Move)
-				{
-					System.Diagnostics.Debug.WriteLine($"{DateTime.Now.ToShortTimeString()}: Move from {player2.Name} recieved.\r\nThe Message is: {msg}\r\n");
-					executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, player2);
-					player1sTurn = !player1sTurn;
-					player1.NetworkAdapter.SendMessage("Your turn", NetworkMessageType.ServerMessage);
-				}
-			};
-			player2.NetworkAdapter.Received += handler;
-			player2.NetworkAdapter.ConnectionLost += (s, e) => 
-			{
-				player1.NetworkAdapter.SendMessage($"{player2.Name} lost connection.{((!weHaveAWinner)?" You won by elimination." : "" )}", NetworkMessageType.ServerMessage);
-				player1.NetworkAdapter.SendMessage(true, NetworkMessageType.GameOver);
-				player2.NetworkAdapter.Received -= handler;
-				player1.NetworkAdapter.Disconnect();
-			};
+			players[1].NetworkAdapter.Received += OnReceived;
+			players[1].NetworkAdapter.ConnectionLost += OnConnectionLost;
 		}
 
 		/// <summary>
@@ -88,8 +52,8 @@ namespace Connect4LAN.Game
 		/// <param name="type"></param>
 		private void writeMessageToPlayers(dynamic msg, NetworkMessageType type = NetworkMessageType.ServerMessage)
 		{
-			this.player1.NetworkAdapter.SendMessage(msg, type);
-			this.player2.NetworkAdapter.SendMessage(msg, type);
+			this.players[0].NetworkAdapter.SendMessage(msg, type);
+			this.players[1].NetworkAdapter.SendMessage(msg, type);
 		}
 
 		/// <summary>
@@ -112,10 +76,12 @@ namespace Connect4LAN.Game
 
 					//fire the event
 					player.NetworkAdapter.SendMessage(true, NetworkMessageType.GameOver);
-					((player1 == player)? player2: player1).NetworkAdapter.SendMessage(false, NetworkMessageType.GameOver);
+					((players[0] == player)? players[1]: players[0]).NetworkAdapter.SendMessage(false, NetworkMessageType.GameOver);
 
 					//set that we indeed have a winner
 					weHaveAWinner = true;
+
+					GameOver?.Invoke(this, player.Name);
 				}
 
 				//
@@ -145,7 +111,12 @@ namespace Connect4LAN.Game
 			return piece;			
 		}
 
-		//calculates the neighbors of a piece
+		/// <summary>
+		/// Calculates the neighbors of a piece.
+		/// </summary>
+		/// <param name="collumn"></param>
+		/// <param name="row"></param>
+		/// <param name="piece"></param>
 		private void calculateNeighbours(int collumn, int row, Piece piece)
 		{
 			piece.IsWinningPiece =
@@ -590,6 +561,31 @@ namespace Connect4LAN.Game
 			}
 		}
 
+		#region [ Eventhandlers ]
+
+		private void OnConnectionLost(object sender, EventArgs args)
+		{
+			Player winnerByElimination = sender == players[0].NetworkAdapter ? players[1] : players[0];
+			Player loser = (Player)sender;
+			winnerByElimination.NetworkAdapter.ConnectionLost -= OnConnectionLost;
+			loser.NetworkAdapter.ConnectionLost -= OnConnectionLost;
+			winnerByElimination.Won($"{loser.Name} disconnected, you won!");
+			// TODO feature extension: Implement re-opening the game to count consecutive wins. Remove the disconnect form .Won if you do this.
+		}
+
+		public void OnReceived(object sender, string msg)
+		{
+			var messageType = NetworkMessage<object>.DeSerialize(msg).MessageType;
+			if (messageType == NetworkMessageType.Move)
+			{
+				Player makingAMove = players.Single(p => p.NetworkAdapter == sender);
+				if (!(makingAMove == players[playersTurn])) return;
+				executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, makingAMove);
+				playersTurn ^= 1;
+			}
+		}
+
+		#endregion
 
 	}
 }

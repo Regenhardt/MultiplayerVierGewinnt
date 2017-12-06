@@ -11,7 +11,7 @@ namespace Connect4LAN.Network
 	/// <summary>
 	/// A Message deliverd across the network
 	/// </summary>
-	struct NetworkMessage <T>
+	public struct NetworkMessage <T>
 	{
 		/// <summary>
 		/// The Type of the Message
@@ -44,6 +44,13 @@ namespace Connect4LAN.Network
 		/// <param name="s"></param>
 		/// <returns></returns>
 		public static NetworkMessage<T> DeSerialize(string s) => new JavaScriptSerializer().Deserialize<NetworkMessage<T>>(s);
+
+		/// <summary>
+		/// Reads our the Networkmessage
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns></returns>
+		public static NetworkMessageType GetNetworkMessageType(string s) => new JavaScriptSerializer().Deserialize<NetworkMessage<object>>(s).MessageType;
 
 		/// <summary>
 		/// Reads out the type of the NetworkMessage

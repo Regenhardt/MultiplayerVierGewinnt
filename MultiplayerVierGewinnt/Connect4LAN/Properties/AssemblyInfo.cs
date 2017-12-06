@@ -8,6 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: InternalsVisibleTo("Connect4LANTests")]
+[assembly: InternalsVisibleTo("Connect4LanServer")]
 [assembly: AssemblyTitle("Connect4LAN")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
