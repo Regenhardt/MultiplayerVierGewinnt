@@ -82,8 +82,11 @@ namespace Connect4LanServer.Network
 				//only react on Lobbymessages
 				case NetworkMessageType.Discover:
 
+					commi.Adapter.SendMessage("", NetworkMessageType.AvailableLobbies);
+					break;
+
 				case NetworkMessageType.CreateLobby:
-					this.lobbies.Add(new Lobby());					
+					this.lobbies.Add(new Lobby(new Player(Colors.Yellow, commi.Name, commi.Adapter)));					
 					break;
 				case NetworkMessageType.JoinLobby:
 					
@@ -157,13 +160,13 @@ namespace Connect4LanServer.Network
 		/// </summary>
 		private class ClientCommunicator
 		{
-			private NetworkAdapter adapter;
+			public NetworkAdapter Adapter { get; }
 
 			public string Name { get; }
 
 			public ClientCommunicator(NetworkAdapter adapter, string playerName)
 			{
-				this.adapter = adapter;
+				this.Adapter = adapter;
 				this.Name = playerName;
 
 				adapter.Received += Adapter_Received;
