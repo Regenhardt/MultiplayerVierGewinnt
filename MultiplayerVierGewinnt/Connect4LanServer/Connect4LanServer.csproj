@@ -65,8 +65,6 @@
     <Compile Include="DedicatedServerViewModel.cs" />
     <Compile Include="Lobby.cs" />
     <Compile Include="Network\DedicatedServer.cs" />
-    <Compile Include="Network\ServerNotFoundException.cs" />
-    <Compile Include="Network\UdpBroadcaster.cs" />
     <Compile Include="View\DedicatedServerView.xaml.cs">
       <DependentUpon>DedicatedServerView.xaml</DependentUpon>
       <SubType>Code</SubType>

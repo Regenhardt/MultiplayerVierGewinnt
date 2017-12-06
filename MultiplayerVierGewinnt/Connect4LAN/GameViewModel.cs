@@ -285,6 +285,7 @@ namespace Connect4LAN
 			SetupVisible = false;
 			ServerSearchVisible = true;
 			dispatcher = Dispatcher.CurrentDispatcher;
+
 		}
 
 		/// <summary>

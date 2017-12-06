@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Connect4LanServer.Network
+namespace Connect4LAN.Network
 {
 	[Serializable]
 	internal class ServerNotFoundException : Exception

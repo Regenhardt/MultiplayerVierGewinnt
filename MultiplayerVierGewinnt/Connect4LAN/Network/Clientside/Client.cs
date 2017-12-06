@@ -33,6 +33,8 @@ namespace Connect4LAN.Network.Clientside
 			}
 		}
 
+		public string ServerIp;
+
 		/// <summary>
 		/// The Name of the player
 		/// </summary>
@@ -84,6 +86,10 @@ namespace Connect4LAN.Network.Clientside
 		/// Indicates when the game is over, is true if user won
 		/// </summary>
 		public event EventHandler<bool> GameOver;
+		/// <summary>
+		/// Fires when no dedicated server could be found.
+		/// </summary>
+		public event EventHandler<string> ServerNotFound;
 
 
 		#endregion [ Events ]
@@ -111,6 +117,26 @@ namespace Connect4LAN.Network.Clientside
 		public void SendMessage(string msg)
 		{
 			base.SendMessage(msg, NetworkMessageType.ChatMessage);
+		}
+
+		public void ConnectToDedicatedServer()
+		{
+			new System.Threading.Thread(FindAndConnectToServer).Start();
+		}
+
+		private void FindAndConnectToServer()
+		{
+			string serverIP;
+
+			try
+			{
+				serverIP = UdpBroadcaster.FindGameServer();
+			}
+			catch (ServerNotFoundException ex)
+			{
+				ServerNotFound?.Invoke(this, ex.Message);
+			}
+			
 		}
 
 		/// <summary>

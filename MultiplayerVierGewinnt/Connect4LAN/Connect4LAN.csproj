@@ -58,6 +58,8 @@
     <Compile Include="Network\Clientside\ILobbyCommunicator.cs" />
     <Compile Include="Network\Clientside\LobbyCommunicationEventArgs.cs" />
     <Compile Include="Network\Opponent.cs" />
+    <Compile Include="Network\ServerNotFoundException.cs" />
+    <Compile Include="Network\UdpBroadcaster.cs" />
     <Compile Include="View\QueryBox.xaml.cs">
       <DependentUpon>QueryBox.xaml</DependentUpon>
     </Compile>

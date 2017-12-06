@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
 
-namespace Connect4LanServer.Network
+namespace Connect4LAN.Network
 {
 	public class UdpBroadcaster : IDisposable
 	{
