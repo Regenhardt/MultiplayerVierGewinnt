@@ -26,13 +26,38 @@ namespace Connect4LanServer
 		/// </summary>
 		public event EventHandler<string> GameFinished;
 
+		/// <summary>
+		/// Enums of possible gamestates
+		/// </summary>
 		public enum GameState
 		{
 			Open,
 			Running,
 			Finished
+		}		
+		
+		#region [ State ]
+
+		GameState state;
+
+		public GameState State
+		{
+			get
+			{
+				return state;
+			}
+			set
+			{
+				if (state != value)
+				{
+					state = value;
+					Notify();
+				}
+			}
 		}
-		public GameState State { get; private set; }
+
+		#endregion 
+
 		public Player[] Players => players;
 
 
@@ -95,7 +120,7 @@ namespace Connect4LanServer
 			HostDisconnected?.Invoke(this);
 		}
 
-		// Not sure this is needed, just in case.
+		// Not sure if this is needed, just in case.
 		#region [ INotifyPropertyChanged ]
 		private void Notify([CallerMemberName]string property = "")
 		{

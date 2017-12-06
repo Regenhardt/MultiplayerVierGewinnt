@@ -88,7 +88,7 @@ namespace Connect4LAN.Network
 					
 					//lobby logic
 					case NetworkMessageType.AvailableLobbies:
-						@out.WriteLine(new NetworkMessage<Dictionary<int, string>> { Message = msg, MessageType = type }.Serialize());
+						@out.WriteLine(new NetworkMessage<Dictionary<string, string>> { Message = msg, MessageType = type }.Serialize());
 						break;
 					case NetworkMessageType.JoinLobby:
 						@out.WriteLine(new NetworkMessage<int> { Message = msg, MessageType = type }.Serialize());

@@ -5,7 +5,7 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:Connect4LanServer"
 		mc:Ignorable="d"
-		Title="MainWindow" Height="350" Width="525"
+		Title="Connnect4LAN Dedicated Server - Controllcenter" Height="350" Width="525"
 		d:DataContext="{d:DesignInstance Type=local:DedicatedServerViewModel}">
 	<Grid>
 		<Grid.RowDefinitions>
@@ -21,21 +21,26 @@
 				<ColumnDefinition />
 				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
-			<TextBlock Grid.Column="0" Text="Runnimg: " />
-			<TextBlock Grid.Column="1" Text="0" />
+			<TextBlock Grid.Column="0" Text="Running: " />
+            <TextBlock Grid.Column="1" Text="{Binding GamesRunning}" />
 			<TextBlock Grid.Column="2" Text="Total: " />
-			<TextBlock Grid.Column="3" Text="1" />
+			<TextBlock Grid.Column="3" Text="{Binding Path=Games.Count}" />
 		</Grid>
 		
 		<!-- Games -->
 		<ListBox Grid.Row="1" VerticalAlignment="Stretch" ItemsSource="{Binding Games}">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
-					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="{Binding Path=Players[0].Name}" Width="auto" HorizontalAlignment="Left" TextAlignment="Left" />
-						<TextBlock Text="{Binding Path=DisplayString}" HorizontalAlignment="Stretch" TextAlignment="Center" />
-						<TextBlock Text="{Binding Path=Players[1].Name}" HorizontalAlignment="Right" TextAlignment="Right" />
-					</StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Path=Players[0].Name}" Width="auto" HorizontalAlignment="Left" TextAlignment="Left" />
+                        <TextBlock Grid.Column="1" Text="{Binding Path=DisplayState}" HorizontalAlignment="Stretch" TextAlignment="Center" />
+						<TextBlock Grid.Column="2" Text="{Binding Path=Players[1].Name}" HorizontalAlignment="Right" TextAlignment="Right" />
+					</Grid>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>

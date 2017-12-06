@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Connect4LanServer
 {
@@ -49,7 +50,20 @@ namespace Connect4LanServer
 
 		private void OnLobbyCreated(object sender, Lobby newLobby)
 		{
-			Games.Add(newLobby);
+			Action addLobbyToList = () =>
+			{
+				Games.Add(newLobby);
+			};
+
+			//run it from the UI thread
+			Application.Current.Dispatcher.Invoke(addLobbyToList);
+
+			newLobby.PropertyChanged += (s, e) =>
+			{
+				if (e.PropertyName == "State")
+					Notify("GamesRunning");
+			};
+
 		}
 
 		#endregion
