@@ -15,7 +15,7 @@ namespace Connect4LAN.Network.Serverside
 	/// 
 	/// Is the user for the Server
 	/// </summary>
-	class Player
+	public class Player
 	{
 		/// <summary>
 		/// 
@@ -29,7 +29,7 @@ namespace Connect4LAN.Network.Serverside
 		{
 			this.Color = color;
 			this.Name = name;
-			this.NetworkAdapter = adapter;			
+			this.NetworkAdapter = adapter ?? throw new ArgumentNullException(nameof(adapter));			
 		}
 
 		#region  [ Properties ]
