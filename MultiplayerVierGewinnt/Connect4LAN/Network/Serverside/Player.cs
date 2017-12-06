@@ -41,5 +41,16 @@ namespace Connect4LAN.Network.Serverside
 
 		#endregion
 
+		#region [ Methods ]
+
+		public void Won(string message = "You won!")
+		{
+			this.NetworkAdapter.SendMessage(message, NetworkMessageType.ServerMessage);
+			this.NetworkAdapter.SendMessage(true, NetworkMessageType.GameOver);
+			this.NetworkAdapter.Disconnect();
+		}
+
+		#endregion
+
 	}
 }

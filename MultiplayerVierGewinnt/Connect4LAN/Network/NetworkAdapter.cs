@@ -204,12 +204,11 @@ namespace Connect4LAN.Network
 		}
 
 		/// <summary>
-		/// Closes the Socket
+		/// Closes the Socket (same as Dispose()).
 		/// </summary>
 		public void Disconnect()
 		{
 			Socket.Close();
-
 			//Event of disconnecting will be set in the Thread wich is reading the íncoming messages
 		}
 
