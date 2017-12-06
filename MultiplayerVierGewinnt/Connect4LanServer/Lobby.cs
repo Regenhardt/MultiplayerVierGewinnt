@@ -39,6 +39,7 @@ namespace Connect4LanServer
 			State = GameState.Open;
 			players = new Connect4LAN.Network.Serverside.Player[2];
 			players[0] = host;
+			host.NetworkAdapter.ConnectionLost += OnHostDisconnected;
 		}
 
 		public void Start(Player opponent)
