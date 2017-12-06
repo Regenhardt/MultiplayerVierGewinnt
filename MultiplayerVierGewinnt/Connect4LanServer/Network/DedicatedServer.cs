@@ -111,7 +111,7 @@ namespace Connect4LanServer.Network
 		private void dealWithUdpRequests(string message)
 		{
 			//replay to the guy
-			socket.SendMessage(, message);
+			socket.SendMessage(UdpBroadcaster.GetLocalIPAdress().ToString(), message);
 		}
 
 		/// <summary>
