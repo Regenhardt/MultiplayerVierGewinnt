@@ -90,11 +90,18 @@ namespace Connect4LanServer.Network
 			{
 				//tell 'im 'bout the lobbies
 				case NetworkMessageType.RequestLobbies:
-					Dictionary<int, string> dict = new Dictionary<int, string>(lobbies.Count);
-					for (int i = 0; i < lobbies.Count; i++)
-						if (lobbies[i].State == Lobby.GameState.Open)
-							dict.Add(i, lobbies[i].Players.First().Name);
-					commi.Adapter.SendMessage(dict, NetworkMessageType.AvailableLobbies);
+					if(lobbies.Count == 0)
+					{
+						commi.Adapter.SendMessage(null, NetworkMessageType.AvailableLobbies);
+					}
+					else
+					{
+						Dictionary<string, string> dict = new Dictionary<string, string>();
+						for (int i = 0; i < lobbies.Count; i++)
+							if (lobbies[i].State == Lobby.GameState.Open)
+								dict.Add("" + i, lobbies[i].Players.First().Name);
+						commi.Adapter.SendMessage(dict, NetworkMessageType.AvailableLobbies);
+					}
 					break;
 
 				//open new lobby
