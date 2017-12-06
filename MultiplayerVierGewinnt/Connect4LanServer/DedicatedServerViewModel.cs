@@ -40,14 +40,14 @@ namespace Connect4LanServer
 		{
 			Server = server;
 			Games = new ObservableCollection<Lobby>();
-			
+			Server.LobbyCreated += OnLobbyCreated;
 		}
 
 		#endregion
 
 		#region [ Eventhandlers ]
 
-		private void OnNewLobbyCreated(object sender, Lobby newLobby)
+		private void OnLobbyCreated(object sender, Lobby newLobby)
 		{
 			Games.Add(newLobby);
 		}

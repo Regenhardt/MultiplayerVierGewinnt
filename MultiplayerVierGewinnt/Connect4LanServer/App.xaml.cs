@@ -13,5 +13,13 @@ namespace Connect4LanServer
 	/// </summary>
 	public partial class App : Application
 	{
+		public void OnAppStartup(object sender, StartupEventArgs e)
+		{
+			var server = new Network.DedicatedServer();
+			var viewModel = new DedicatedServerViewModel(server);
+			var window = new DedicatedServerView(viewModel);
+			window.Show();
+		}
+		
 	}
 }

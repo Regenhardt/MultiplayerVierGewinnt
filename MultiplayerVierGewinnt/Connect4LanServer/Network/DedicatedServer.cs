@@ -12,9 +12,10 @@ using System.Windows.Media;
 
 namespace Connect4LanServer.Network
 {
-
 	class DedicatedServer
 	{
+		public event EventHandler<Lobby> LobbyCreated;
+
 		private UdpBroadcaster socket;
 		private RequestAcceptor server;
 		private List<Lobby> lobbies;
@@ -90,7 +91,9 @@ namespace Connect4LanServer.Network
 
 				//open new lobby
 				case NetworkMessageType.CreateLobby:
-					this.lobbies.Add(new Lobby(new Player(Colors.Yellow, commi.Name, commi.Adapter)));					
+					var lobby = new Lobby(new Player(Colors.Yellow, commi.Name, commi.Adapter));
+					this.lobbies.Add(lobby);
+					LobbyCreated?.Invoke(this, lobby);
 					break;
 
 				//wants to join lobby
