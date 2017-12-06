@@ -175,13 +175,14 @@ namespace Connect4LanServer.Network
 				using (var client = new UdpBroadcaster(43133, true))
 				{
 					//as soon as the a message was recieved, please tell meh
+					string localIP = GetLocalIPAdress().ToString();
 					bool waitingForAnswer = true;
-					client.MessageRecieved += (s, e) => waitingForAnswer = false;
+					client.MessageRecieved += (s, e) => { if (localIP != e) waitingForAnswer = false; };
 					int tries = 0;
 					
 					//so we are not the server, broadcast it to everybody
 					//tell the server about ourself
-					client.SendMessage(UdpBroadcaster.GetLocalIPAdress().ToString());
+					client.SendMessage(localIP);
 
 					//wait for 2.3 seconds for a replay
 					tries = 0;
