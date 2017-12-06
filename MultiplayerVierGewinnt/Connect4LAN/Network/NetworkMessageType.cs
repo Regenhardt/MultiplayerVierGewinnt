@@ -57,6 +57,12 @@ namespace Connect4LAN.Network
 		/// No payload.
 		/// </summary>
 		Discover,
+
+		/// <summary>
+		/// Requests the list of open lobbies from the server.
+		/// No payload.
+		/// </summary>
+		RequestLobbies,
 		
 		/// <summary>
 		/// Queries the server for available lobbies.
