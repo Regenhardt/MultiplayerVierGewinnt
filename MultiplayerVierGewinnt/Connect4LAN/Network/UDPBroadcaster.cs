@@ -76,8 +76,7 @@ namespace Connect4LAN.Network
 						//if socket is null then fire disconneted event
 						if (socket == null)
 							Disconnected?.Invoke(this, EventArgs.Empty);
-
-						System.Diagnostics.Debugger.Break();
+						
 					}
 				}
 			});
