@@ -16,6 +16,6 @@ namespace Connect4LAN.Network.Clientside
 
 		public NetworkMessageType LobbyCommunicationType { get; private set; }
 
-		public dynamic Data { get; private set; }
+		public NetworkMessage<int>? Data { get; private set; }
 	}
 }

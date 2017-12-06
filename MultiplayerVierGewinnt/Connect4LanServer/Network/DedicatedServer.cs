@@ -79,18 +79,25 @@ namespace Connect4LanServer.Network
 
 			switch (e.LobbyCommunicationType)
 			{
-				//only react on Lobbymessages
+				//tell 'im 'bout the lobbies
 				case NetworkMessageType.Discover:
-
-					commi.Adapter.SendMessage("", NetworkMessageType.AvailableLobbies);
+					Dictionary<int, string> dict = new Dictionary<int, string>(lobbies.Count);
+					for (int i = 0; i < lobbies.Count; i++)
+						if (lobbies[i].State == Lobby.GameState.Open)
+							dict.Add(i, lobbies[i].Players.First().Name);
+					commi.Adapter.SendMessage(dict, NetworkMessageType.AvailableLobbies);
 					break;
 
+				//open new lobby
 				case NetworkMessageType.CreateLobby:
 					this.lobbies.Add(new Lobby(new Player(Colors.Yellow, commi.Name, commi.Adapter)));					
 					break;
+
+				//wants to join lobby
 				case NetworkMessageType.JoinLobby:
-					
+					lobbies[e.Data.Value.Message].Start(new Player(Colors.Red, commi.Name, commi.Adapter));
 					break;
+
 				//any other message, do nuttin'
 				default:
 					return;
