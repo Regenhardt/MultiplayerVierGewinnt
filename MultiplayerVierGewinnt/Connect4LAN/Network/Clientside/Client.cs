@@ -45,6 +45,7 @@ namespace Connect4LAN.Network.Clientside
 		/// The color of this player, set by the server
 		/// </summary>
 		public Color Color { get; private set; }
+		public event EventHandler<Dictionary<string, string>> AvailableLobbies;
 
 		#region [ Constructor ]
 
@@ -109,15 +110,29 @@ namespace Connect4LAN.Network.Clientside
 			var msg = NetworkMessage<object>.DeSerialize(serilizedMessage);
 			switch (msg.MessageType)
 			{
-				case NetworkMessageType.ServerMessage:	this.ServerMessageRecieved?.Invoke(this, msg.Message.ToString());	break;
-				case NetworkMessageType.ChatMessage:	this.ChatMessageRecieved?.Invoke(this, msg.Message.ToString()); break;
-				case NetworkMessageType.PlayerName:		if (Name != msg.Message.ToString()) { Name = msg.Message.ToString(); PlayerNamedChanged?.Invoke(this, msg.Message.ToString()); };		break;
-				case NetworkMessageType.Color:			Color = NetworkMessage<Color>.DeSerialize(serilizedMessage).Message; this.ColorChanged?.Invoke(this, Color);		break;
-				case NetworkMessageType.Move:			this.MovementRecieved?.Invoke(this, NetworkMessage<Move>.DeSerialize(serilizedMessage).Message);			break;
-				case NetworkMessageType.PlayerConnected:this.PlayerJoined?.Invoke(this, NetworkMessage<Opponent>.DeSerialize(serilizedMessage).Message); break;
-				case NetworkMessageType.GameOver:		this.GameOver?.Invoke(this, NetworkMessage<bool>.DeSerialize(serilizedMessage).Message); break;
+				case NetworkMessageType.ServerMessage:		this.ServerMessageRecieved?.Invoke(this, msg.Message.ToString());	break;
+				case NetworkMessageType.ChatMessage:		this.ChatMessageRecieved?.Invoke(this, msg.Message.ToString()); break;
+				case NetworkMessageType.PlayerName:			if (Name != msg.Message.ToString()) { Name = msg.Message.ToString(); PlayerNamedChanged?.Invoke(this, msg.Message.ToString()); };		break;
+				case NetworkMessageType.Color:				Color = NetworkMessage<Color>.DeSerialize(serilizedMessage).Message; this.ColorChanged?.Invoke(this, Color);		break;
+				case NetworkMessageType.Move:				this.MovementRecieved?.Invoke(this, NetworkMessage<Move>.DeSerialize(serilizedMessage).Message);			break;
+				case NetworkMessageType.PlayerConnected:	this.PlayerJoined?.Invoke(this, NetworkMessage<Opponent>.DeSerialize(serilizedMessage).Message); break;
+				case NetworkMessageType.GameOver:			this.GameOver?.Invoke(this, NetworkMessage<bool>.DeSerialize(serilizedMessage).Message); break;
+				case NetworkMessageType.AvailableLobbies:	this.AvailableLobbies?.Invoke(this, NetworkMessage<Dictionary<string, string>>.DeSerialize(serilizedMessage).Message); break;
 				default: this.Received?.Invoke(this, serilizedMessage);									break;
 			}
+		}
+
+		public Dictionary<string, string> GetLobbies()
+		{
+			SendMessage(null, NetworkMessageType.RequestLobbies);
+
+			bool lobbiesReceived = false;
+			Dictionary<string, string> lobbies = null;
+			this.AvailableLobbies += (s, ls) => { lobbies = ls; lobbiesReceived = true; };
+
+			while (!lobbiesReceived) System.Threading.Thread.Sleep(10);
+
+			return lobbies;
 		}
 
 		/// <summary>

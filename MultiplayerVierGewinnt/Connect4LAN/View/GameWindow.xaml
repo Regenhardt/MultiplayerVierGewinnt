@@ -290,7 +290,7 @@
 			</Grid>
 
 			<!-- Server search -->
-			<Grid Grid.Column="0" Visibility="{Binding ServerSearchVisible, Converter={StaticResource BoolToVis}}" >
+			<Grid Grid.Column="0" Visibility="{Binding ServerSearchVisible, Converter={StaticResource BoolToVis}}" VerticalAlignment="Center" HorizontalAlignment="Center" >
 				<TextBlock Text="Looking for server..." />
 			</Grid>
 			

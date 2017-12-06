@@ -60,6 +60,9 @@
     <Compile Include="Network\Opponent.cs" />
     <Compile Include="Network\ServerNotFoundException.cs" />
     <Compile Include="Network\UdpBroadcaster.cs" />
+    <Compile Include="View\LobbyChoiceBox.xaml.cs">
+      <DependentUpon>LobbyChoiceBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\QueryBox.xaml.cs">
       <DependentUpon>QueryBox.xaml</DependentUpon>
     </Compile>
@@ -90,6 +93,10 @@
       <DependentUpon>GameWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\LobbyChoiceBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\QueryBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

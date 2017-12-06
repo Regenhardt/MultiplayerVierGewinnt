@@ -28,7 +28,7 @@ namespace Connect4LAN
 		{
 			get
 			{
-				if (hostGameCommand == null) hostGameCommand = new RelayCommand(param => HostAndJoinGame());
+				if (hostGameCommand == null) hostGameCommand = new RelayCommand(param => HostGame());
 				return hostGameCommand;
 			}
 		}
@@ -41,7 +41,7 @@ namespace Connect4LAN
 		{
 			get
 			{
-				if (joinGameCommand == null) joinGameCommand = new RelayCommand(param => JoinGame((Window)param));
+				if (joinGameCommand == null) joinGameCommand = new RelayCommand(param => JoinGame());
 				return joinGameCommand;
 			}
 		}
@@ -257,7 +257,6 @@ namespace Connect4LAN
 		private bool yourTurn;
 		Color ownColor = Colors.Yellow;
 		Color enemyColor = Colors.Red;
-		Network.Serverside.Server server;
 		Network.Clientside.Client client;
 		Game.Gameboard board;
 		Dispatcher dispatcher;
@@ -285,7 +284,7 @@ namespace Connect4LAN
 			SetupVisible = false;
 			ServerSearchVisible = true;
 			dispatcher = Dispatcher.CurrentDispatcher;
-
+			client.ConnectToDedicatedServer();
 		}
 
 		/// <summary>
@@ -333,6 +332,8 @@ namespace Connect4LAN
 			client.Received += MessageToChat;
 			client.ServerMessageRecieved += MessageToChat;
 			client.GameOver += GameOver;
+			client.ConnectedToServer += ConnectedToServer;
+			//client.ServerNotFound
 		}
 
 		#endregion
@@ -350,37 +351,33 @@ namespace Connect4LAN
 		#region [ Methods ]
 
 		/// <summary>
-		/// Hosts a game and then joins it 
+		/// Host a game on the dedicated server.
 		/// </summary>
-		private void HostAndJoinGame()
+		private void HostGame()
 		{
+			client.SendMessage(null, NetworkMessageType.CreateLobby);
 			yourTurn = true;
 			ownColor = Colors.Yellow;
 			enemyColor = Colors.Red;
 			SetupVisible = false;
-			Task.Run((Action)HostGame);
 		}
-
-		/// <summary>
-		/// Starts a server and connect to it.
-		/// </summary>
-		private void HostGame()
-		{
-			if (server != null) server.Stop();
-			server = new Network.Serverside.Server();
-			Connect("localhost");
-		}
-
-
-		private void JoinGame(Window window)
+		
+		private void JoinGame()
 		{
 			yourTurn = false;
 			ownColor = Colors.Red;
 			enemyColor = Colors.Yellow;
 			SetupVisible = false;
-			var ip = client.IP.ToString();
-			var networkPortion = ip.Substring(0, ip.LastIndexOf('.')+1);
-			var query = new View.QueryBox(networkPortion)
+			Dictionary<string, string> lobbies = client.GetLobbies();
+
+			if(lobbies == null)
+			{
+				SetupVisible = true;
+				MessageBox.Show("No lobbies available");
+				return;
+			}
+
+			var query = new View.LobbyChoiceBox(lobbies.Values.ToList())
 			{
 				Owner = Application.Current.MainWindow
 			};
@@ -393,16 +390,9 @@ namespace Connect4LAN
 				return;
 			}
 
+			int lobbyID = int.Parse(lobbies.Single(l => l.Value.Equals(query.SelectedLobby)).Key);
 
-			if (Connect(query.IP))
-			{
-				GameVisible = true;
-			}
-			else
-			{
-				MessageBox.Show("Connection failed!");
-				ResetGame();
-			}
+			client.SendMessage(lobbyID, NetworkMessageType.JoinLobby);
 		}
 
 		/// <summary>
@@ -471,7 +461,8 @@ namespace Connect4LAN
 		private void ResetGame()
 		{
 			GameVisible = false;
-			SetupVisible = true;
+			SetupVisible = false;
+			ServerSearchVisible = true;
 			InitBoard();
 			InitClient();
 			RaisePropertyChanged(null);
@@ -533,6 +524,12 @@ namespace Connect4LAN
 			WriteChatMessage(message);
 			MessageBox.Show(message);
 			ResetGame();
+		}
+
+		private void ConnectedToServer(object sender, EventArgs args)
+		{
+			ServerSearchVisible = false;
+			SetupVisible = true;
 		}
 
 		#endregion
