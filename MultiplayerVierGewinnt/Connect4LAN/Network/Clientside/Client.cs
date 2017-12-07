@@ -125,6 +125,11 @@ namespace Connect4LAN.Network.Clientside
 			}
 		}
 
+		/// <summary>
+		/// Queries the list of available lobbies from the dedicated server.
+		/// Careful, synchronous network request!
+		/// </summary>
+		/// <returns>A dictionary of lobbies, with a stringified number as ID.</returns>
 		public Dictionary<string, string> GetLobbies()
 		{
 			SendMessage(null, NetworkMessageType.RequestLobbies);
