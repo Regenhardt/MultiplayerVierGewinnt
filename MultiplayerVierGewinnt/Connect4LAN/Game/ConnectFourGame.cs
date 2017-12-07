@@ -564,13 +564,18 @@ namespace Connect4LAN.Game
 
 		#region [ Eventhandlers ]
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender">Netowrk adapter</param>
+		/// <param name="args"></param>
 		private void OnConnectionLost(object sender, EventArgs args)
 		{
-			Player winnerByElimination = sender == players[0].NetworkAdapter ? players[1] : players[0];
-			Player loser = (Player)sender;
+			var winnerByElimination = sender == players[0].NetworkAdapter ? players[1] : players[0];
+			var loser =  players.Single(p => p.NetworkAdapter ==  sender);
 			winnerByElimination.NetworkAdapter.ConnectionLost -= OnConnectionLost;
 			loser.NetworkAdapter.ConnectionLost -= OnConnectionLost;
-			winnerByElimination.Won($"{loser.Name} disconnected, you won!");
+			winnerByElimination.Won($"{loser.Name} disconnected, you won by elimination!");
 			// TODO feature extension: Implement re-opening the game to count consecutive wins. Remove the disconnect form .Won if you do this.
 		}
 
@@ -579,11 +584,12 @@ namespace Connect4LAN.Game
 			var messageType = NetworkMessage<object>.DeSerialize(msg).MessageType;
 			if (messageType == NetworkMessageType.Move)
 			{
-				Player makingAMove = players.Single(p => p.NetworkAdapter == sender);
-				if (makingAMove != players[playersTurn])
+				Player playerMakingAMove = players.Single(p => p.NetworkAdapter == sender);
+				if (playerMakingAMove != players[playersTurn])
 					return;
-				executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, makingAMove);
+				executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, playerMakingAMove);
 				playersTurn ^= 1;
+				players[playersTurn].NetworkAdapter.SendMessage("Your turn", NetworkMessageType.ServerMessage);
 			}
 		}
 
