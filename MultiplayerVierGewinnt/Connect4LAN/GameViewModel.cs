@@ -333,7 +333,7 @@ namespace Connect4LAN
 			client.ServerMessageRecieved += MessageToChat;
 			client.GameOver += GameOver;
 			client.ConnectedToServer += ConnectedToServer;
-			//client.ServerNotFound
+			client.GameStarted += GameStarted;
 		}
 
 		#endregion
@@ -530,6 +530,11 @@ namespace Connect4LAN
 		{
 			ServerSearchVisible = false;
 			SetupVisible = true;
+		}
+
+		private void GameStarted(object sender, EventArgs args)
+		{
+			GameVisible = true;
 		}
 
 		#endregion

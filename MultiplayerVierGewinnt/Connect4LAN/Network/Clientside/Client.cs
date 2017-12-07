@@ -101,6 +101,10 @@ namespace Connect4LAN.Network.Clientside
 		/// Fires when the client successfully connected to a server.
 		/// </summary>
 		public event EventHandler ConnectedToServer;
+		/// <summary>
+		/// Fires, when the game starts.
+		/// </summary>
+		public event EventHandler GameStarted;
 
 
 		#endregion [ Events ]
@@ -118,6 +122,7 @@ namespace Connect4LAN.Network.Clientside
 				case NetworkMessageType.PlayerConnected:	this.PlayerJoined?.Invoke(this, NetworkMessage<Opponent>.DeSerialize(serilizedMessage).Message); break;
 				case NetworkMessageType.GameOver:			this.GameOver?.Invoke(this, NetworkMessage<bool>.DeSerialize(serilizedMessage).Message); break;
 				case NetworkMessageType.AvailableLobbies:	this.AvailableLobbies?.Invoke(this, NetworkMessage<Dictionary<string, string>>.DeSerialize(serilizedMessage).Message); break;
+				case NetworkMessageType.GameStarted:		this.GameStarted?.Invoke(this, EventArgs.Empty); break;
 				default: this.Received?.Invoke(this, serilizedMessage);									break;
 			}
 		}
