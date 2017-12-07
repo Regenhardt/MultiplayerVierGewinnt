@@ -575,7 +575,7 @@ namespace Connect4LAN.Game
 			var loser =  players.Single(p => p.NetworkAdapter ==  sender);
 			winnerByElimination.NetworkAdapter.ConnectionLost -= OnConnectionLost;
 			loser.NetworkAdapter.ConnectionLost -= OnConnectionLost;
-			winnerByElimination.Won($"{loser.Name} disconnected, you won by elimination!");
+			winnerByElimination.Won($"{loser.Name} disconnected, you win by elimination!");
 			// TODO feature extension: Implement re-opening the game to count consecutive wins. Remove the disconnect form .Won if you do this.
 		}
 

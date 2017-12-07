@@ -46,7 +46,7 @@ namespace Connect4LAN.Network.Serverside
 
 		#region [ Methods ]
 
-		public void Won(string message = "You won!")
+		public void Won(string message = "You win :)")
 		{
 			this.NetworkAdapter.SendMessage(message, NetworkMessageType.ServerMessage);
 			this.NetworkAdapter.SendMessage(true, NetworkMessageType.GameOver);
