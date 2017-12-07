@@ -38,7 +38,18 @@ namespace Connect4LAN.Network.Clientside
 		/// <summary>
 		/// The Name of the player
 		/// </summary>
-		public string Name { get; set; }
+		public string Name
+		{
+			get { return name; }
+			set
+			{
+				name = value;
+				if(Socket?.Connected == true)
+					SendMessage(name, NetworkMessageType.PlayerName);
+			}
+		}
+		private string name;
+
 		/// <summary>
 		/// The color of this player, set by the server
 		/// </summary>
