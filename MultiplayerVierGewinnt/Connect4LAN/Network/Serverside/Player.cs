@@ -27,9 +27,12 @@ namespace Connect4LAN.Network.Serverside
 		/// <exception cref="ArgumentNullException"/>
 		public Player(Color color, string name, NetworkAdapter adapter )
 		{
+			if (adapter == null)
+				throw new ArgumentNullException(nameof(adapter));
+
 			this.Color = color;
 			this.Name = name;
-			this.NetworkAdapter = adapter ?? throw new ArgumentNullException(nameof(adapter));			
+			this.NetworkAdapter = adapter;			
 		}
 
 		#region  [ Properties ]

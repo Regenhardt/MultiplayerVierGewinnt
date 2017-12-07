@@ -1,4 +1,5 @@
-﻿using Connect4LAN.Network.Clientside;
+﻿using Connect4LAN.Network;
+using Connect4LAN.Network.Clientside;
 using Connect4LAN.Network.Serverside;
 using System;
 using System.Collections.Generic;
@@ -99,25 +100,58 @@ namespace Connect4LanServer
 		{
 			if (State != GameState.Open)
 				throw new InvalidOperationException("The game you tried to join isn't open!");
+			
+			//set oppmmend
 			players[1] = opponent;
+
+			//wire up players
+			players[1].NetworkAdapter.Received += (s, e) => pushMessageToPlayer(players[0], e);
+			players[0].NetworkAdapter.Received += (s, e) => pushMessageToPlayer(players[1], e);
+
+			//start and tell them it started
 			game = new Connect4LAN.Game.ConnectFourGame(players[0], players[1]);
+			players[0].NetworkAdapter.SendMessage(null, NetworkMessageType.GameStarted);
+			players[1].NetworkAdapter.SendMessage(null, NetworkMessageType.GameStarted);
+
+			//listen to finish event
 			game.GameOver += OnGameOver;
-			DisplayState = "vs";
-			players[0].NetworkAdapter.SendMessage(null, Connect4LAN.Network.NetworkMessageType.GameStarted);
-			players[1].NetworkAdapter.SendMessage(null, Connect4LAN.Network.NetworkMessageType.GameStarted);
+			DisplayState = "vs"; ;
+			this.State = GameState.Running;
+		}
+
+		/// <summary>
+		/// Decides on the messagetype wether to psuh to the player or not
+		/// Pushes a message to the other player
+		/// </summary>
+		/// <param name="player"></param>
+		/// <param name="message"></param>
+		private void pushMessageToPlayer(Player player, string serilizedMessage)
+		{
+			var message = NetworkMessage<object>.DeSerialize(serilizedMessage);
+			//send to other wether its a chat message or a movement
+			if (message.MessageType == NetworkMessageType.ChatMessage)
+				player.NetworkAdapter.SendMessage(message.Message, NetworkMessageType.ChatMessage);
+			else if (message.MessageType == NetworkMessageType.Move)
+			{
+				player.NetworkAdapter.SendMessage(NetworkMessage<Move>.DeSerialize(serilizedMessage).Message, NetworkMessageType.Move);
+			}
 		}
 
 		private void OnGameOver (object sender, string winner)
 		{
 			DisplayState = string.Equals(winner, players[0].Name) ? "pwnd" : "got pwnd by";
 			GameFinished?.Invoke(this, winner);
+			State = GameState.Finished;
 		}
 
 		private void OnHostDisconnected(object sender, EventArgs args)
 		{
-			State = GameState.Finished;
-			DisplayState = "Aborted";
-			HostDisconnected?.Invoke(this);
+			if(State != GameState.Finished)
+			{
+				State = GameState.Finished;
+				DisplayState = "Aborted";
+				HostDisconnected?.Invoke(this);
+			}
 		}
 
 		// Not sure if this is needed, just in case.
