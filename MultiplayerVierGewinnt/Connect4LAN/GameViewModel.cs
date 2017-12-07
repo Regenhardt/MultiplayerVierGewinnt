@@ -523,7 +523,7 @@ namespace Connect4LAN
 
 		private void GameOver(object sender, bool iWon)
 		{
-			string message = iWon ? "You won!" : "You lose :(";
+			string message = iWon ? "You win :)" : "You lose :(";
 			WriteChatMessage(message);
 			MessageBox.Show(message);
 			ResetGame();
