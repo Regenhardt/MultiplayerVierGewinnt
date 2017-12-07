@@ -48,16 +48,12 @@ namespace Connect4LanServer.Network
 		/// <param name="client"></param>
 		private void dealWithTcpRequests(TcpClient client)
 		{
-			System.Diagnostics.Debug.WriteLine($"\t\t1. Start {DateTime.Now.TimeOfDay}");
-
 			//temporary set color and name cuz i am lazy
 			NetworkAdapter adapter = new NetworkAdapter(client);
-
-			System.Diagnostics.Debug.WriteLine($"\t\t2. Message wait {DateTime.Now.TimeOfDay}");
+			
 			while (adapter.ReadLastMessage() == null)
 				System.Threading.Thread.Sleep(10);
-
-			System.Diagnostics.Debug.WriteLine($"\t\t3. Message recieved {DateTime.Now.TimeOfDay}");
+			
 			////the first message is always the name
 			var msg = NetworkMessage<string>.DeSerialize(adapter.ReadLastMessage());
 			string name;
@@ -66,19 +62,16 @@ namespace Connect4LanServer.Network
 			else
 				name = "Idiot";
 
-			System.Diagnostics.Debug.WriteLine($"\t\t4. Checkcing players... {DateTime.Now.TimeOfDay}");
 			//check if name is taken
 			while (clients.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
 				name += "_2";
-
-			System.Diagnostics.Debug.WriteLine($"\t\t5. Sending answer... {DateTime.Now.TimeOfDay}");
+			
 			//player.NetworkAdapter.SendMessage(color, NetworkMessageType.Color);
 			adapter.SendMessage(name, NetworkMessageType.PlayerName);
-
-			System.Diagnostics.Debug.WriteLine($"\t\t6. Building communicator... {DateTime.Now.TimeOfDay}");
+			
 			var commi = new ClientCommunicator(adapter, name);
-			System.Diagnostics.Debug.WriteLine($"\t\t7. Adding event {DateTime.Now.TimeOfDay}");
 			commi.LobbyRequestRegisterd += parseLobbyRequest;
+			commi.Adapter.ConnectionLost += (s, e) => this.clients.Remove(clients.Single(p => p.Adapter == s));
 			clients.Add(commi);
 		}
 
