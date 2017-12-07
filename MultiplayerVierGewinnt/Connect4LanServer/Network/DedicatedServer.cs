@@ -79,6 +79,7 @@ namespace Connect4LanServer.Network
 				//check if name is taken
 				while (clients.Any(p => p.Name.Equals((string)e, StringComparison.OrdinalIgnoreCase)))
 					e += "_2";
+				((ClientCommunicator)s).Name = e;
 				((ClientCommunicator)s).Adapter.SendMessage((object)e, NetworkMessageType.PlayerName);
 			};
 			clients.Add(commi);
@@ -204,7 +205,7 @@ namespace Connect4LanServer.Network
 		{
 			public NetworkAdapter Adapter { get; }
 
-			public string Name { get; }
+			public string Name { get; set; }
 
 			public ClientCommunicator(NetworkAdapter adapter, string playerName)
 			{
