@@ -71,8 +71,10 @@ namespace Connect4LanServer.Network
 			
 			var commi = new ClientCommunicator(adapter, name);
 			commi.LobbyRequestRegisterd += parseLobbyRequest;
-			commi.Adapter.ConnectionLost += (s, e) => this.clients.Remove(clients.Single(p => p.Adapter == s));
+			commi.Adapter.ConnectionLost += (s, e) => { lock (client) { if(clients.Any(y => y.Adapter == s)) this.clients.Remove(clients.Single(p => p.Adapter == s)); } };
 			clients.Add(commi);
+
+			
 		}
 
 		private void parseLobbyRequest(object sender, LobbyCommunicationEventArgs e)
