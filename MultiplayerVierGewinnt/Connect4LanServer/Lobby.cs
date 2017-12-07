@@ -96,6 +96,7 @@ namespace Connect4LanServer
 		/// Start the game against the given player.
 		/// </summary>
 		/// <param name="opponent">The player to play against.</param>
+		/// <exception cref="InvalidOperationException">When game is full already.</exception>
 		public void Start(Player opponent)
 		{
 			if (State != GameState.Open)
