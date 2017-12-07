@@ -14,7 +14,7 @@ namespace Connect4LAN.Game
 	/// </summary>
 	class ConnectFourGame
 	{
-		public Player[] players { get; set; }
+		public Player[] players { get; private set; }
 
 		public Gameboard Gameboard { get; private set; }
 
@@ -32,6 +32,7 @@ namespace Connect4LAN.Game
 		public ConnectFourGame(Player player1, Player player2)
 		{
 			//set variables
+			this.players = new Player[2];
 			this.players[0] = player1;
 			this.players[1] = player2;
 			this.Gameboard = new Gameboard();
@@ -579,7 +580,8 @@ namespace Connect4LAN.Game
 			if (messageType == NetworkMessageType.Move)
 			{
 				Player makingAMove = players.Single(p => p.NetworkAdapter == sender);
-				if (!(makingAMove == players[playersTurn])) return;
+				if (makingAMove != players[playersTurn])
+					return;
 				executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, makingAMove);
 				playersTurn ^= 1;
 			}
