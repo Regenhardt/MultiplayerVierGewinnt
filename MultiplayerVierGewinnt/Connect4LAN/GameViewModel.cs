@@ -534,10 +534,9 @@ namespace Connect4LAN
 			Application.Current.Dispatcher.Invoke(() =>
 			{
 				while(!Application.Current.MainWindow.IsVisible)
-					System.Threading.Thread.Sleep(20);
+					System.Threading.Thread.Sleep(100);
 			}
 			);
-			System.Threading.Thread.Sleep(500);
 			ServerSearchVisible = false;
 			SetupVisible = true;
 		}
