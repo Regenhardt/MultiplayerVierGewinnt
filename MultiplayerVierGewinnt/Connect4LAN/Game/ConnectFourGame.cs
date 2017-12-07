@@ -579,11 +579,12 @@ namespace Connect4LAN.Game
 			var messageType = NetworkMessage<object>.DeSerialize(msg).MessageType;
 			if (messageType == NetworkMessageType.Move)
 			{
-				Player makingAMove = players.Single(p => p.NetworkAdapter == sender);
-				if (makingAMove != players[playersTurn])
+				Player playerMakingAMove = players.Single(p => p.NetworkAdapter == sender);
+				if (playerMakingAMove != players[playersTurn])
 					return;
-				executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, makingAMove);
+				executeMove(NetworkMessage<Move>.DeSerialize(msg).Message, playerMakingAMove);
 				playersTurn ^= 1;
+				players[playersTurn].NetworkAdapter.SendMessage("Your turn", NetworkMessageType.ServerMessage);
 			}
 		}
 
