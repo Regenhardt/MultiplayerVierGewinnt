@@ -7,14 +7,10 @@
 		mc:Ignorable="d"
 		Title="Connnect4LAN Dedicated Server - Controllcenter" Height="350" Width="525"
 		d:DataContext="{d:DesignInstance Type=local:DedicatedServerViewModel}">
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="auto" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
-		
-		<!-- Status -->
-		<Grid Grid.Row="0" HorizontalAlignment="Stretch">
+    <DockPanel >
+
+        <!-- Status -->
+		<Grid DockPanel.Dock="Top" Grid.Row="0" HorizontalAlignment="Stretch">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition />
 				<ColumnDefinition />
@@ -28,21 +24,22 @@
 		</Grid>
 		
 		<!-- Games -->
-		<ListBox Grid.Row="1" VerticalAlignment="Stretch" ItemsSource="{Binding Games}">
-			<ListBox.ItemTemplate>
-				<DataTemplate>
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="auto"/>
-							<ColumnDefinition Width="*"/>
-							<ColumnDefinition Width="auto"/>
-						</Grid.ColumnDefinitions>
-						<TextBlock Grid.Column="0" Text="{Binding Path=Players[0].Name}" Width="auto" HorizontalAlignment="Left" TextAlignment="Left" />
-						<TextBlock Grid.Column="1" Text="{Binding Path=DisplayState}" HorizontalAlignment="Stretch" TextAlignment="Center" />
-						<TextBlock Grid.Column="2" Text="{Binding Path=Players[1].Name}" HorizontalAlignment="Right" TextAlignment="Right" />
-					</Grid>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
-	</Grid>
+        <ListView Grid.Row="1" ItemsSource="{Binding Games}" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <TextBlock Grid.Column="0" Text="{Binding Path=Players[0].Name}" DockPanel.Dock="Left"/>
+                        <TextBlock Grid.Column="2" Text="{Binding Path=Players[1].Name}"  DockPanel.Dock="Right"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Path=DisplayState}" HorizontalAlignment="Center"  DockPanel.Dock="Top"/>
+                    </DockPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <!--stretch them-->
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+	</DockPanel>
 </Window>
