@@ -270,21 +270,20 @@ namespace Connect4LAN
 		/// </summary>
 		public GameViewModel()
 		{
-			InitChat();
-			InitBoard();
-			InitClient();
-			IpAddress = client.IP.MapToIPv4().ToString();
 			Name = "Player 1";
 			#if DEBUG
 			if(System.Diagnostics.Debugger.IsAttached)
 				Name = "THIS. IS. DEBUG!";
 			#endif
+			InitChat();
+			InitBoard();
+			InitClient();
+			IpAddress = client.IP.MapToIPv4().ToString();
 			Title = $"Connect4Lan - {Name}";
 			GameVisible = false;
 			SetupVisible = false;
 			ServerSearchVisible = true;
 			dispatcher = Dispatcher.CurrentDispatcher;
-			client.ConnectToDedicatedServer();
 		}
 
 		/// <summary>
@@ -335,6 +334,9 @@ namespace Connect4LAN
 			client.ConnectedToServer += ConnectedToServer;
 			client.GameStarted += GameStarted;
 			client.ServerNotFound += ServerNotFound;
+			if (Name != null)
+				client.Name = Name;
+			client.ConnectToDedicatedServer();
 		}
 
 		#endregion
