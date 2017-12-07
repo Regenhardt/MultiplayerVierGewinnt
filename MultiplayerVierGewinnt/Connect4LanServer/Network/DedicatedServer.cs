@@ -69,9 +69,18 @@ namespace Connect4LanServer.Network
 			//player.NetworkAdapter.SendMessage(color, NetworkMessageType.Color);
 			adapter.SendMessage(name, NetworkMessageType.PlayerName);
 			
+			//build the communicator
 			var commi = new ClientCommunicator(adapter, name);
 			commi.LobbyRequestRegisterd += parseLobbyRequest;
 			commi.Adapter.ConnectionLost += (s, e) => { lock (client) { if(clients.Any(y => y.Adapter == s)) this.clients.Remove(clients.Single(p => p.Adapter == s)); } };
+			//liste for cahgne name request aswell
+			commi.ChangeNameRequested += (s, e) =>
+			{
+				//check if name is taken
+				while (clients.Any(p => p.Name.Equals((string)e, StringComparison.OrdinalIgnoreCase)))
+					e += "_2";
+				((ClientCommunicator)s).Adapter.SendMessage((object)e, NetworkMessageType.PlayerName);
+			};
 			clients.Add(commi);
 
 			
@@ -219,6 +228,9 @@ namespace Connect4LanServer.Network
 					case NetworkMessageType.JoinLobby:
 						LobbyRequestRegisterd?.Invoke(this, new LobbyCommunicationEventArgs(type, NetworkMessage<int>.DeSerialize(e).Message));
 						break;
+					case NetworkMessageType.PlayerName:
+						this.ChangeNameRequested?.Invoke(this, NetworkMessage<string>.DeSerialize(e).Message);
+						break;
 					//any other message, do nuttin'
 					default:
 						return;
@@ -227,6 +239,7 @@ namespace Connect4LanServer.Network
 			}
 
 			public event EventHandler<LobbyCommunicationEventArgs> LobbyRequestRegisterd;
+			public event EventHandler<string> ChangeNameRequested;
 		}
 
 

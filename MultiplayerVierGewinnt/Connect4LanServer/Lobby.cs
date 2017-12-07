@@ -89,7 +89,7 @@ namespace Connect4LanServer
 			players = new Connect4LAN.Network.Serverside.Player[2];
 			players[0] = host;
 			host.NetworkAdapter.ConnectionLost += OnHostDisconnected;
-			DisplayState = "Open";
+			DisplayState = "Open";			
 		}
 
 		/// <summary>
