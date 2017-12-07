@@ -35,8 +35,6 @@ namespace Connect4LAN.Network.Clientside
 
 		public string ServerIp;
 
-		private Dictionary<int, string> LobbyGames;
-
 		/// <summary>
 		/// The Name of the player
 		/// </summary>

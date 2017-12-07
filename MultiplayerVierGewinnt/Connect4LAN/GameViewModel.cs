@@ -334,6 +334,7 @@ namespace Connect4LAN
 			client.GameOver += GameOver;
 			client.ConnectedToServer += ConnectedToServer;
 			client.GameStarted += GameStarted;
+			client.ServerNotFound += ServerNotFound;
 		}
 
 		#endregion
@@ -528,6 +529,13 @@ namespace Connect4LAN
 
 		private void ConnectedToServer(object sender, EventArgs args)
 		{
+			Application.Current.Dispatcher.Invoke(() =>
+			{
+				while(!Application.Current.MainWindow.IsVisible)
+					System.Threading.Thread.Sleep(20);
+			}
+			);
+			System.Threading.Thread.Sleep(500);
 			ServerSearchVisible = false;
 			SetupVisible = true;
 		}
@@ -535,6 +543,11 @@ namespace Connect4LAN
 		private void GameStarted(object sender, EventArgs args)
 		{
 			GameVisible = true;
+		}
+
+		private void ServerNotFound(object sender, string msg)
+		{
+			client.ConnectToDedicatedServer();
 		}
 
 		#endregion

@@ -22,7 +22,7 @@
 				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
 			<TextBlock Grid.Column="0" Text="Running: " />
-            <TextBlock Grid.Column="1" Text="{Binding GamesRunning}" />
+			<TextBlock Grid.Column="1" Text="{Binding GamesRunning}" />
 			<TextBlock Grid.Column="2" Text="Total: " />
 			<TextBlock Grid.Column="3" Text="{Binding Path=Games.Count}" />
 		</Grid>
@@ -31,14 +31,14 @@
 		<ListBox Grid.Row="1" VerticalAlignment="Stretch" ItemsSource="{Binding Games}">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding Path=Players[0].Name}" Width="auto" HorizontalAlignment="Left" TextAlignment="Left" />
-                        <TextBlock Grid.Column="1" Text="{Binding Path=DisplayState}" HorizontalAlignment="Stretch" TextAlignment="Center" />
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="auto"/>
+						</Grid.ColumnDefinitions>
+						<TextBlock Grid.Column="0" Text="{Binding Path=Players[0].Name}" Width="auto" HorizontalAlignment="Left" TextAlignment="Left" />
+						<TextBlock Grid.Column="1" Text="{Binding Path=DisplayState}" HorizontalAlignment="Stretch" TextAlignment="Center" />
 						<TextBlock Grid.Column="2" Text="{Binding Path=Players[1].Name}" HorizontalAlignment="Right" TextAlignment="Right" />
 					</Grid>
 				</DataTemplate>
