@@ -115,7 +115,7 @@ namespace Connect4LanServer.Network
 
 				//wants to join lobby
 				case NetworkMessageType.JoinLobby:
-					lobbies[e.Data.Value.Message].Start(new Player(Colors.Red, commi.Name, commi.Adapter));
+					lobbies[e.Data].Start(new Player(Colors.Red, commi.Name, commi.Adapter));
 					break;
 
 				//any other message, do nuttin'
