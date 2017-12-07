@@ -153,7 +153,9 @@ namespace Connect4LAN.Network.Clientside
 		/// </summary>
 		public void ConnectToDedicatedServer()
 		{
-			new System.Threading.Thread(FindAndConnectToServer).Start();
+			var t = new System.Threading.Thread(FindAndConnectToServer);
+			t.IsBackground = true;
+			t.Start();
 		}
 
 		private void FindAndConnectToServer()
