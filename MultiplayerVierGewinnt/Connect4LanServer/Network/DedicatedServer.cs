@@ -77,10 +77,10 @@ namespace Connect4LanServer.Network
 			commi.ChangeNameRequested += (s, e) =>
 			{
 				//check if name is taken
-				while (clients.Any(p => p.Name.Equals((string)e, StringComparison.OrdinalIgnoreCase)))
+				while (clients.Any(p => p.Name.Equals(e, StringComparison.OrdinalIgnoreCase)))
 					e += "_2";
 				((ClientCommunicator)s).Name = e;
-				((ClientCommunicator)s).Adapter.SendMessage((object)e, NetworkMessageType.PlayerName);
+				((ClientCommunicator)s).Adapter.SendMessage(e, NetworkMessageType.PlayerName);
 			};
 			clients.Add(commi);
 
