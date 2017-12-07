@@ -68,7 +68,7 @@ namespace Connect4LanServer.Network
 
 			System.Diagnostics.Debug.WriteLine($"\t\t4. Checkcing players... {DateTime.Now.TimeOfDay}");
 			//check if name is taken
-			if (clients.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+			while (clients.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
 				name += "_2";
 
 			System.Diagnostics.Debug.WriteLine($"\t\t5. Sending answer... {DateTime.Now.TimeOfDay}");
