@@ -13,6 +13,7 @@ using System.Windows.Media;
 using Connect4LAN.Network;
 using System.Collections.Concurrent;
 using System.Windows.Threading;
+using Connect4LAN.Network.Clientside;
 
 namespace Connect4LAN
 {
@@ -278,7 +279,7 @@ namespace Connect4LAN
 			InitChat();
 			InitBoard();
 			InitClient();
-			IpAddress = client.IP.MapToIPv4().ToString();
+			SetIp(client);
 			Title = $"Connect4Lan - {Name}";
 			GameVisible = false;
 			SetupVisible = false;
@@ -337,6 +338,22 @@ namespace Connect4LAN
 			if (Name != null)
 				client.Name = Name;
 			client.ConnectToDedicatedServer();
+		}
+
+		private void SetIp(Client client)
+		{
+			string ip = "No Ip";
+
+			if (!string.IsNullOrWhiteSpace(client.IP.MapToIPv4().ToString()))
+			{
+				ip = "C: " + client.IP.ToString();
+				if(!string.IsNullOrWhiteSpace(client.ServerIp))
+				{
+					ip += "\nS: " + client.ServerIp;
+				}
+			}
+
+			IpAddress = ip;
 		}
 
 		#endregion
@@ -529,8 +546,9 @@ namespace Connect4LAN
 			ResetGame();
 		}
 
-		private void ConnectedToServer(object sender, EventArgs args)
+		private void ConnectedToServer(object sender, string serverIp)
 		{
+			SetIp(client);
 			Application.Current.Dispatcher.Invoke(() =>
 			{
 				while(!Application.Current.MainWindow.IsVisible)

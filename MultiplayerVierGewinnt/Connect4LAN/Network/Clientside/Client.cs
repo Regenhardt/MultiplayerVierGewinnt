@@ -109,7 +109,7 @@ namespace Connect4LAN.Network.Clientside
 		/// <summary>
 		/// Fires when the client successfully connected to a server.
 		/// </summary>
-		public event EventHandler ConnectedToServer;
+		public event EventHandler<string> ConnectedToServer;
 		/// <summary>
 		/// Fires, when the game starts.
 		/// </summary>
@@ -176,16 +176,16 @@ namespace Connect4LAN.Network.Clientside
 
 		private void FindAndConnectToServer()
 		{
-			string serverIP;
+			string serverIp;
 
 			try
 			{
-				serverIP = UdpBroadcaster.FindGameServer();
-				ServerIp = serverIP;
-				if (!Connect(serverIP))
-					ServerNotFound?.Invoke(this, "Server was found but didn't respond.");
+				serverIp = UdpBroadcaster.FindGameServer();
+				ServerIp = serverIp;
+				if (Connect(serverIp))
+					ConnectedToServer?.Invoke(this, ServerIp);
 				else
-					ConnectedToServer?.Invoke(this, EventArgs.Empty);
+					ServerNotFound?.Invoke(this, "Server was found but didn't respond.");
 			}
 			catch (ServerNotFoundException ex)
 			{
