@@ -542,7 +542,7 @@ namespace Connect4LAN
 		{
 			string message = iWon ? "You win :)" : "You lose :(";
 			WriteChatMessage(message);
-			MessageBox.Show(message);
+			dispatcher.BeginInvoke((Action)(() => MessageBox.Show(Application.Current.MainWindow, message)));
 			ResetGame();
 		}
 
