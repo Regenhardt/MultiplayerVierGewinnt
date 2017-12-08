@@ -24,10 +24,10 @@
 		</Grid>
 		
 		<!-- Games -->
-        <ListView Grid.Row="1" ItemsSource="{Binding Games}" >
+        <ListView Grid.Row="1" ItemsSource="{Binding Games}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid Margin="3,0,5,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="auto"/>
@@ -35,8 +35,8 @@
                         </Grid.ColumnDefinitions>
                         
                         <TextBlock Grid.Column="0" Text="{Binding Path=Players[0].Name}"/>
-                        <TextBlock Grid.Column="1" Text="{Binding Path=DisplayState}" HorizontalAlignment="Center"  />
-                        <TextBlock Grid.Column="2" Text="{Binding Path=Players[1].Name}" HorizontalAlignment="Right"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Path=DisplayState}"       HorizontalAlignment="Center" />
+                        <TextBlock Grid.Column="2" Text="{Binding Path=Players[1].Name}"    HorizontalAlignment="Right"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
