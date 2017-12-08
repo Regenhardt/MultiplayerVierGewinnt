@@ -27,11 +27,17 @@
         <ListView Grid.Row="1" ItemsSource="{Binding Games}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <DockPanel>
-                        <TextBlock Grid.Column="0" Text="{Binding Path=Players[0].Name}" DockPanel.Dock="Left"/>
-                        <TextBlock Grid.Column="2" Text="{Binding Path=Players[1].Name}"  DockPanel.Dock="Right"/>
-                        <TextBlock Grid.Column="1" Text="{Binding Path=DisplayState}" HorizontalAlignment="Center"  DockPanel.Dock="Top"/>
-                    </DockPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Grid.Column="0" Text="{Binding Path=Players[0].Name}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Path=DisplayState}" HorizontalAlignment="Center"  />
+                        <TextBlock Grid.Column="2" Text="{Binding Path=Players[1].Name}" HorizontalAlignment="Right"/>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <!--stretch them-->
