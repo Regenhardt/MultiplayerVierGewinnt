@@ -7,9 +7,9 @@
 		mc:Ignorable="d"
 		Title="Connnect4LAN Dedicated Server - Controllcenter" Height="350" Width="525"
 		d:DataContext="{d:DesignInstance Type=local:DedicatedServerViewModel}">
-    <DockPanel >
+	<DockPanel >
 
-        <!-- Status -->
+		<!-- Status -->
 		<Grid DockPanel.Dock="Top" Grid.Row="0" HorizontalAlignment="Stretch">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition />
