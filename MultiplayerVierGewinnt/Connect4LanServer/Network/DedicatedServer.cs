@@ -84,7 +84,7 @@ namespace Connect4LanServer.Network
 			};
 			clients.Add(commi);
 
-			
+			adapter.SendMessage("connected", NetworkMessageType.ServerMessage);
 		}
 
 		private void parseLobbyRequest(object sender, LobbyCommunicationEventArgs e)
@@ -116,11 +116,14 @@ namespace Connect4LanServer.Network
 					LobbyCreated?.Invoke(this, lobby);
 					//TODO STATS	
 					lobby.PropertyChanged += (s, d) => { Lobby l = s as Lobby; if (d.PropertyName == nameof(l.State) && l.State != Lobby.GameState.Open) lobbies.Remove(l); };
+					commi.Adapter.SendMessage("waiting for opponents...", NetworkMessageType.ServerMessage);
 					break;
 
 				//wants to join lobby
 				case NetworkMessageType.JoinLobby:
+					commi.Adapter.SendMessage("lobby joined", NetworkMessageType.ServerMessage);
 					lobbies[e.Data].Start(new Player(Colors.Red, commi.Name, commi.Adapter));
+
 					break;
 
 				//any other message, do nuttin'
