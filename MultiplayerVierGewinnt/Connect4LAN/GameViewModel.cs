@@ -346,10 +346,10 @@ namespace Connect4LAN
 
 			if (!string.IsNullOrWhiteSpace(client.IP.MapToIPv4().ToString()))
 			{
-				ip = "C: " + client.IP.ToString();
+				ip = "Your IP:\t\t" + client.IP.ToString();
 				if(!string.IsNullOrWhiteSpace(client.ServerIp))
 				{
-					ip += "\nS: " + client.ServerIp;
+					ip += "\nServers IP:\t" + client.ServerIp;
 				}
 			}
 
