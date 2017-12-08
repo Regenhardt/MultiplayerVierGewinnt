@@ -43,9 +43,12 @@ namespace Connect4LAN.Network.Clientside
 			get { return name; }
 			set
 			{
-				name = value;
-				if(Socket?.Connected == true)
-					SendMessage(name, NetworkMessageType.PlayerName);
+				if (name != value)
+				{
+					name = value;
+					if (Socket?.Connected == true)
+						SendMessage(name, NetworkMessageType.PlayerName); 
+				}
 			}
 		}
 		private string name;
@@ -125,7 +128,7 @@ namespace Connect4LAN.Network.Clientside
 			{
 				case NetworkMessageType.ServerMessage:		this.ServerMessageRecieved?.Invoke(this, msg.Message.ToString());	break;
 				case NetworkMessageType.ChatMessage:		this.ChatMessageRecieved?.Invoke(this, msg.Message.ToString()); break;
-				case NetworkMessageType.PlayerName:			if (Name != msg.Message.ToString()) { Name = msg.Message.ToString(); PlayerNamedChanged?.Invoke(this, msg.Message.ToString()); };		break;
+				case NetworkMessageType.PlayerName:			if (Name != msg.Message.ToString()) { name = msg.Message.ToString(); PlayerNamedChanged?.Invoke(this, msg.Message.ToString()); };		break;
 				case NetworkMessageType.Color:				Color = NetworkMessage<Color>.DeSerialize(serilizedMessage).Message; this.ColorChanged?.Invoke(this, Color);		break;
 				case NetworkMessageType.Move:				this.MovementRecieved?.Invoke(this, NetworkMessage<Move>.DeSerialize(serilizedMessage).Message);			break;
 				case NetworkMessageType.PlayerConnected:	this.PlayerJoined?.Invoke(this, NetworkMessage<Opponent>.DeSerialize(serilizedMessage).Message); break;

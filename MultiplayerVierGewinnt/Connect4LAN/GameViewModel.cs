@@ -205,7 +205,6 @@ namespace Connect4LAN
 					if (client != null)
 						client.Name = name;
 					Notify();
-					Notify(nameof(Title));
 				}
 			}
 		}
@@ -530,7 +529,9 @@ namespace Connect4LAN
 
 		private void PlayerNameChanged(object sender, string newName)
 		{
-			Name = newName;
+			name = newName;
+			Notify("Name");
+			Title = $"Connect4Lan - {name}";
 		}
 
 		private void MessageToChat(object sender, string msg)
