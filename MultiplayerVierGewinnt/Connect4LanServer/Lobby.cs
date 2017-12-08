@@ -118,6 +118,8 @@ namespace Connect4LanServer
 			game.GameOver += OnGameOver;
 			DisplayState = "vs"; ;
 			this.State = GameState.Running;
+
+			Notify(null);
 		}
 
 		/// <summary>
